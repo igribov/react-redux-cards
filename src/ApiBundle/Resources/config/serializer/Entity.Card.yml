@@ -1,0 +1,40 @@
+ApiBundle\Entity\Card:
+    exclusion_policy: all
+    access_type: public_method
+    read_only: false
+    properties:
+        id:
+            access_type: property
+            groups:
+              - card_list
+              - card_detail
+            expose: true
+        title:
+            groups:
+              - card_list
+              - card_create
+              - card_update
+              - card_detail
+            expose: true
+        date:
+            type: DateTime
+            groups:
+              - card_list
+              - card_create
+              - card_update
+              - card_detail
+            expose: true
+        description:
+            groups:
+              - card_list
+              - card_create
+              - card_update
+              - card_detail
+            expose: true
+        status:
+            groups:
+              - card_list
+              - card_create
+              - card_update
+              - card_detail
+            expose: true

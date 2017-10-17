@@ -1,0 +1,16 @@
+services:
+    json.decoder:
+      class: ApiBundle\Decoder\JsonDecoder
+
+    content.param_converter.merging:
+        class: ApiBundle\Serializer\ParamConverter\MergingRequestBodyParamConverter
+        arguments:
+            - "@fos_rest.converter.request_body"
+            - "@doctrine"
+        tags:
+            - { name: request.param_converter, converter: merging, priority: -50 }
+
+    statusable.listener:
+        class: ApiBundle\EventHandler\StatusableListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
