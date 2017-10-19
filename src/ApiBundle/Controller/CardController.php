@@ -3,6 +3,7 @@
 namespace ApiBundle\Controller;
 
 use ApiBundle\Entity\Card;
+use ApiBundle\Manager\CardManager;
 use ApiBundle\Repository\CardRepository;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use FOS\RestBundle\View\View;
@@ -21,6 +22,14 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 class CardController extends FOSRestController
 {
     /**
+     * @return CardManager
+     */
+    protected function getManager()
+    {
+        return $this->get('card.manager');
+    }
+
+    /**
      * @SWG\Tag(name="cards")
      * @SWG\Response(
      *     response=200,
@@ -36,9 +45,7 @@ class CardController extends FOSRestController
      */
     public function cgetAction()
     {
-        $manager = $this->container->get('doctrine.orm.entity_manager');
-
-        return $manager->getRepository(Card::class)->findAll();
+        return $this->getManager()->getAll();
     }
 
     /**
@@ -86,18 +93,10 @@ class CardController extends FOSRestController
      */
     public function createAction(Card $card, ConstraintViolationListInterface $validationErrors)
     {
-        $validator = $this->get('validator');
-        $errors = $validator->validate($card);
-
         if ($validationErrors->count()) {
             return View::create($validationErrors, Response::HTTP_BAD_REQUEST);
         }
 
-        /** @var CardRepository $repository */
-        $em = $this->container->get('doctrine.orm.entity_manager');
-        $em->persist($card);
-        $em->flush();
-
-        return $card;
+        return $this->getManager()->save($card);
     }
 }

@@ -2,6 +2,11 @@ services:
     json.decoder:
       class: ApiBundle\Decoder\JsonDecoder
 
+    card.manager:
+      class: ApiBundle\Manager\CardManager
+      arguments:
+           - '@doctrine.orm.entity_manager'
+
     content.param_converter.merging:
         class: ApiBundle\Serializer\ParamConverter\MergingRequestBodyParamConverter
         arguments:
