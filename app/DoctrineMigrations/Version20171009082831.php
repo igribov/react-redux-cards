@@ -16,8 +16,8 @@ class Version20171009082831 extends AbstractMigration
     public function up(Schema $schema)
     {
         $this->abortIf(!in_array($this->connection->getDatabasePlatform()->getName(), ['mysql', 'sqlite']), 'Migration can only be executed safely on \'mysql\' or \'sqlite\'.');
-        $this->addSql("CREATE TABLE card (id INTEGER NOT NULL, title VARCHAR(255) NOT NULL, description VARCHAR(255) NOT NULL, date DATE NOT NULL, status VARCHAR(16) NOT NULL, PRIMARY KEY(id))");
-        $this->addSql("INSERT INTO card (id, title, description, date, status) VALUES (1, 'My new card', 'My new card desc', '2017-10-10', 'todo')");
+        $this->addSql("CREATE TABLE card (id INTEGER NOT NULL, title VARCHAR(255) NOT NULL, description VARCHAR(255) NOT NULL, status VARCHAR(16) NOT NULL, PRIMARY KEY(id))");
+        $this->addSql("INSERT INTO card (id, title, description, status) VALUES (1, 'My new card', 'My new card desc', 'todo')");
     }
 
     /**

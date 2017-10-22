@@ -42,14 +42,6 @@ class Card implements Statusable
     private $description;
 
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="date", type="date")
-     * @Assert\NotBlank(groups={"card_create", "card_update"})
-     */
-    private $date;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="status", type="string", length=16)
@@ -113,30 +105,6 @@ class Card implements Statusable
     public function getDescription()
     {
         return $this->description;
-    }
-
-    /**
-     * Set date
-     *
-     * @param \DateTime $date
-     *
-     * @return Card
-     */
-    public function setDate(\DateTime $date)
-    {
-        $this->date = $date;
-
-        return $this;
-    }
-
-    /**
-     * Get date
-     *
-     * @return \DateTime
-     */
-    public function getDate()
-    {
-        return $this->date;
     }
 
     /**

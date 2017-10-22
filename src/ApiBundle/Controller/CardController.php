@@ -9,6 +9,7 @@ use Symfony\Component\Validator\ConstraintViolationListInterface;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\Post;
+use FOS\RestBundle\Controller\Annotations\Options;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
 use Swagger\Annotations as SWG;
@@ -98,5 +99,14 @@ class CardController extends FOSRestController
         }
 
         return $this->getManager()->save($card);
+    }
+
+    /**
+     * @Options("/card")
+     * @Rest\View(statusCode=200)
+     */
+    public function optionsAction()
+    {
+        return new Response();
     }
 }
