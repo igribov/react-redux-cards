@@ -9,7 +9,8 @@ use Symfony\Component\Validator\ConstraintViolationListInterface;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\Post;
-use FOS\RestBundle\Controller\Annotations\Options;
+use FOS\RestBundle\Controller\Annotations\Put;
+use FOS\RestBundle\Controller\Annotations\Delete;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
 use Swagger\Annotations as SWG;
@@ -102,11 +103,59 @@ class CardController extends FOSRestController
     }
 
     /**
-     * @Options("/card")
-     * @Rest\View(statusCode=200)
+     *
+     * @-ApiDoc(
+     *  description="Update card",
+     *  section="Card",
+     *  input={
+     *      "class"="ApiBundle\Entity\Card",
+     *      "groups"={"card_update"}
+     *  },
+     *  output={
+     *      "class"="ApiBundle\Entity\Card",
+     *      "groups"={"card_detail"}
+     *  }
+     * )
+     * @Put("/card/{id}", requirements={"id" = "\d+"})
+     * @Rest\View(statusCode=201, serializerGroups={"card_detail"})
+     * @ParamConverter("card")
+     * @ParamConverter(
+     *     "newCard",
+     *     converter="merging",
+     *     options={
+     *          "validator"={
+     *              "groups"={"card_update"},
+     *          },
+     *          "deserializationContext"={
+     *              "groups"={"card_update"}
+     *          }
+     *     }
+     * )
+     *
+     * @param Card $card
+     * @param Card $newCard
+     * @return Card|View
      */
-    public function optionsAction()
+    public function updateAction(Card $card, Card $newCard)
     {
-        return new Response();
+        $card = $this->getManager()->merge($card, $newCard);
+        /** @var  ConstraintViolationListInterface $validationErrors */
+        $validationErrors = $this->getManager()->validate($card);
+
+        if ($validationErrors->count()) {
+            return View::create($validationErrors, Response::HTTP_BAD_REQUEST);
+        }
+
+        return $this->getManager()->update($card);
+    }
+
+    /**
+     * @Delete("/card/{id}", requirements={"id" = "\d+"})
+     * @Rest\View(statusCode=204)
+     * @ParamConverter("card")
+     */
+    public function deleteAction(Card $card)
+    {
+        $this->getManager()->delete($card);
     }
 }

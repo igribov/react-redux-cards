@@ -110,8 +110,8 @@ fos_rest:
         default_engine: jms_serializer
     serializer:
         serialize_null: true
-#    exception:
-#        enabled: true
+    exception:
+        enabled: true
 
 sensio_framework_extra:
     request: { converters: true }

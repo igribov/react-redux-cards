@@ -6,6 +6,7 @@ services:
       class: ApiBundle\Manager\CardManager
       arguments:
            - '@doctrine.orm.entity_manager'
+           - '@validator'
 
     content.param_converter.merging:
         class: ApiBundle\Serializer\ParamConverter\MergingRequestBodyParamConverter

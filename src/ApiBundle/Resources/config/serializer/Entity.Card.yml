@@ -8,6 +8,7 @@ ApiBundle\Entity\Card:
             groups:
               - card_list
               - card_detail
+              - card_update
             expose: true
         title:
             groups:
