@@ -125,3 +125,9 @@ nelmio_api_doc:
             title: My Cards App
             description: Basic API for react App!
             version: 1.0.0
+
+assetic:
+    debug:          '%kernel.debug%'
+    use_controller: '%kernel.debug%'
+    filters:
+        cssrewrite: ~

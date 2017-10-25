@@ -1,12 +1,12 @@
+front:
+    resource: '@FrontBundle/Resources/config/routing.yml'
+
 api:
     resource: "@ApiBundle/Controller/"
     type:     rest
     prefix:   api
     options:
         expose: true
-app:
-    resource: '@AppBundle/Controller/'
-    type: annotation
 
 app.swagger_ui:
     resource: "@NelmioApiDocBundle/Resources/config/routing/swaggerui.xml"
