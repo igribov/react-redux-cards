@@ -24,11 +24,11 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 class CardController extends FOSRestController
 {
     /**
-     * @return CardManager
+     * @return object|CardManager
      */
     protected function getManager()
     {
-        return $this->get('card.manager');
+        return $manager = $this->get('card.manager');
     }
 
     /**
