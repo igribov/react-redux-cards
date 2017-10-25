@@ -7,6 +7,7 @@
 /var/cache/*
 !var/cache/.gitkeep
 !/var/logs
+/var/data/*
 !/var/data/data.sqlite
 /var/logs/*
 !var/logs/.gitkeep
