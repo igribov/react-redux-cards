@@ -34,6 +34,7 @@ class MergingRequestBodyParamConverter implements ParamConverterInterface
         $propertyValue = $request->{$converterOptions['requestPropertyContainer']}->get($converterOptions['requestProperty']);
         $propertyName = $converterOptions['entityProperty'];
         $deserializationContext = $options['deserializationContext'] ?? [];
+
         $deserializationContext = array_merge($deserializationContext, [
             'propertyValue' => $propertyValue,
             'propertyName' => $propertyName,

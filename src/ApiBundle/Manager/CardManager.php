@@ -49,34 +49,6 @@ class CardManager
         return $card;
     }
 
-    public function update(Card $card)
-    {
-        $this->entityManager->merge($card);
-        $this->entityManager->flush();
-
-        return $card;
-    }
-
-    /**
-     * @param Card $card
-     * @param Card $updatedCard
-     * @return Card
-     */
-    public function merge(Card $card, Card $updatedCard)
-    {
-        foreach (['title', 'description', 'status'] as $fieldName) {
-            $methodGet = 'get' . ucfirst($fieldName);
-            $methodSet = 'set' . ucfirst($fieldName);
-
-            $value = $updatedCard->{$methodGet}();
-            if($value) {
-                $card->{$methodSet}($value);
-            }
-        }
-
-        return $card;
-    }
-
     /**
      * @param Card $card
      * @return \Symfony\Component\Validator\ConstraintViolationListInterface

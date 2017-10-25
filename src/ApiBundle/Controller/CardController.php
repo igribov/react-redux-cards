@@ -117,10 +117,9 @@ class CardController extends FOSRestController
      *  }
      * )
      * @Put("/card/{id}", requirements={"id" = "\d+"})
-     * @Rest\View(statusCode=201, serializerGroups={"card_detail"})
-     * @ParamConverter("card")
+     * @Rest\View(statusCode=200, serializerGroups={"card_detail"}, serializerEnableMaxDepthChecks=true)
      * @ParamConverter(
-     *     "newCard",
+     *     "card",
      *     converter="merging",
      *     options={
      *          "validator"={
@@ -133,20 +132,16 @@ class CardController extends FOSRestController
      * )
      *
      * @param Card $card
-     * @param Card $newCard
+     * @param ConstraintViolationListInterface $validationErrors
      * @return Card|View
      */
-    public function updateAction(Card $card, Card $newCard)
+    public function updateAction(Card $card, ConstraintViolationListInterface $validationErrors)
     {
-        $card = $this->getManager()->merge($card, $newCard);
-        /** @var  ConstraintViolationListInterface $validationErrors */
-        $validationErrors = $this->getManager()->validate($card);
-
         if ($validationErrors->count()) {
             return View::create($validationErrors, Response::HTTP_BAD_REQUEST);
         }
 
-        return $this->getManager()->update($card);
+        return $this->getManager()->save($card);
     }
 
     /**

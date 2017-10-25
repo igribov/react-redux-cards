@@ -33,3 +33,16 @@ services:
     # AppBundle\Service\ExampleService:
     #     arguments:
     #         $someArgument: 'some_value'
+
+    # Redefine object constructor for JMS serializer
+    jms_serializer.object_constructor:
+        alias: jms_serializer.initialized_object_constructor
+
+    jms_serializer.initialized_object_constructor:
+         class: ApiBundle\Serializer\ObjectConstructor\InitializedObjectConstructor
+         arguments:
+            - "@jms_serializer.default_object_constructor"
+            - "@doctrine"
+
+    jms_serializer.default_object_constructor:
+         class: ApiBundle\Serializer\ObjectConstructor\DefaultObjectConstructor

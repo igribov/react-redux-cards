@@ -8,17 +8,8 @@ ApiBundle\Entity\Card:
             groups:
               - card_list
               - card_detail
-              - card_update
             expose: true
         title:
-            groups:
-              - card_list
-              - card_create
-              - card_update
-              - card_detail
-            expose: true
-        date:
-            type: DateTime
             groups:
               - card_list
               - card_create
