@@ -8,8 +8,6 @@ printf "Start Composer install : \n"
 $COMPOSER_CMD install
 printf "Start Migrations execute: \n"
 $DIR/console doctrine:migration:migrate
-cd $DIR/../src/FrontBundle/FrontSrc
-printf "Start Frontend build: \n"
-$YARN_CMD install
-printf "Start Webpack build: \n"
-$YARN_CMD build-resources
+
+printf "Start Assets install: \n"
+$DIR/console assets:install
