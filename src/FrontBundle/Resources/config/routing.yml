@@ -3,3 +3,9 @@ index:
     defaults:
         _controller: FrameworkBundle:Template:template
         template:    'FrontBundle:static:index.html.twig'
+
+card_create:
+    path: /card/create
+    defaults:
+        _controller: FrameworkBundle:Template:template
+        template:    'FrontBundle:static:index.html.twig'
