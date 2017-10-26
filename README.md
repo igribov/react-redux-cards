@@ -6,7 +6,7 @@ A Symfony project created on October 9, 2017, 7:23 am.
 2) NodeJS and Yarn required for frontend rebuild
 
 Deploy:
- - git clone http://gitlab.com/gribov/cards
+ - git clone https://gitlab.com/gribov/cards.git
  - cd cards
  - ./bin/deploy.sh
  - OR composer install & ./bin/console assets:install
