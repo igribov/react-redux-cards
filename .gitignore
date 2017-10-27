@@ -23,5 +23,5 @@
 /.settings/
 /.dbeaver-data-sources.xml
 /Scripts/
-/src/FrontBundle/FrontSrc/node_modules/*
+/src/FrontBundle/FrontSrc/node_modules
 app/Resources/
