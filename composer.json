@@ -41,7 +41,8 @@
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",
-        "symfony/phpunit-bridge": "^3.0"
+        "symfony/phpunit-bridge": "^3.0",
+        "heroku/heroku-buildpack-php": "*"
     },
     "scripts": {
         "symfony-scripts": [
@@ -54,7 +55,8 @@
         ],
         "post-install-cmd": [
             "touch var/data/data.sqlite",
-            "@symfony-scripts"
+            "@symfony-scripts",
+            "./bin/console d:m:m"
         ],
         "post-update-cmd": [
             "@symfony-scripts"
