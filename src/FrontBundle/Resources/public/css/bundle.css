@@ -457,10 +457,10 @@
   background-color: #adff2f;
 }
 .fade-enter-active {
-  animation: fadein-animation 2s;
+  animation: fadein-animation 0.5s;
 }
 .fade-leave-active {
-  animation: fadeout-animation 2s;
+  animation: fadeout-animation 0.5s;
 }
 @-moz-keyframes fadein-animation {
   from {

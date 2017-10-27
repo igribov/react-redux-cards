@@ -2,7 +2,6 @@
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 COMPOSER_CMD=$(which composer)
-YARN_CMD=$(which yarn)
 
 printf "Start Composer install : \n"
 $COMPOSER_CMD install
