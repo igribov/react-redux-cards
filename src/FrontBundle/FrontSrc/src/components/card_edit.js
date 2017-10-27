@@ -13,9 +13,7 @@ class CardEdit extends Component {
   }
 
   onDeleteButtonClick() {
-    this.props.deleteCard(this.props.card);
-    this.props.history.push('/');
-
+    this.props.deleteCard(this.props.card, () => this.props.history.push('/'));
   }
 
   render() {

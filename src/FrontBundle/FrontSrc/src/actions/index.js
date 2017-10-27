@@ -55,10 +55,8 @@ export function updateCard(card, callback) {
   };
 }
 
-export function deleteCard(card) {
-
-  console.log('deleteCard', card);
-	const request = axios.delete(`${ROOT_URL}/card/${card.id}`);
+export function deleteCard(card, callback=()=>{}) {
+	const request = axios.delete(`${ROOT_URL}/card/${card.id}`).then(callback);
 
 	return {
 		type: DELETE_CARD,
