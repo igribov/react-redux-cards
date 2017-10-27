@@ -54,7 +54,6 @@
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget"
         ],
         "post-install-cmd": [
-            "touch var/db/data.sqlite",
             "@symfony-scripts",
             "./bin/console d:m:m"
         ],
