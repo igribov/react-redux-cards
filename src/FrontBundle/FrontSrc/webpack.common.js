@@ -2,7 +2,7 @@ const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const webpack = require('webpack');
 
 const api_arg = process.argv.indexOf("--api_host");
-const API_HOST = (api_arg > -1 ? process.argv[api_arg + 1] : false) || 'http://localhost:8000';
+const API_HOST = (api_arg > -1 ? process.argv[api_arg + 1] : false) || 'https://young-shelf-87369.herokuapp.com';
 
 module.exports = {
   entry: [
