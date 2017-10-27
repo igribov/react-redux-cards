@@ -1,0 +1,145 @@
+server {
+    listen 80;
+    listen [::]:80;
+    server_name www.gq.ru;
+    index index.php index.html index.htm;
+
+    set $frontend /var/www/prod/frontend/current/web;
+    set $backend /var/www/prod/backend/current/web;
+    root $frontend;
+
+    error_page 404 /html/404.html;
+    error_page 500 502 503 504 /html/error.html;
+    #add_header Last-Modified $sent_http_Expires;
+
+    location = / {
+        try_files = @backend;
+    }
+
+    location / {
+        try_files $uri $uri/ @backend;
+        include cache_settings;
+    }
+
+    location ~ metadata\.canonical {
+        return 404;
+    }
+
+    location = /404 {
+        return 404;
+    }
+
+    location /api/ {
+        root $backend;
+        include php_settings;
+    }
+
+    location /bundles/ {
+        root $backend;
+        include cache_settings;
+    }
+
+    location /verstkaio/ {
+        root $backend;
+        #include cache_settings;
+    }
+
+    location = /js/fos_js_routes.js {
+        root $backend;
+        expires 1d;
+    }
+
+    location /ng_admin_generator/ {
+        root $backend;
+        include cache_settings;
+    }
+
+    location = /sitemap.xml {
+        root $backend/sitemap/;
+    }
+
+    location /sitemap/ {
+        root $backend;
+    }
+
+    location /data/ {
+        root $backend;
+    }
+
+    location /feed/ {
+        root $backend;
+    }
+
+    location = /newsletter_open.gif {
+        try_files no-such-file @backend;
+    }
+
+    location ~ ^(.*/)index.php/?$ {
+        return 301 $1$is_args$args;
+    }
+
+    location ~ ^/taste/girls/\d+/$ {
+        return 301 /girls/;
+    }
+
+    location ~ ^/girls/\d+/ {
+        return 301 /girls/;
+    }
+
+    location ~ ^/style(/style/.*)$ {
+        return 301 $1;
+    }
+
+    location @backend {
+        root $backend;
+        include php_settings;
+
+        fastcgi_intercept_errors on;
+        recursive_error_pages on;
+        error_page 418 = @prerender;
+        error_page 404 /html/404.html;
+        error_page 500 502 503 504 /html/error.html;
+    }
+
+#    location @spa_render {
+#        error_page 503 =503;
+#        error_page 404 =404;
+#
+#        if ($prerender = 1) {
+#            rewrite .* /$scheme://$host$request_uri? break;
+#            proxy_pass http://prerender;
+#        }
+#        if ($prerender = 0) {
+#           rewrite .* /$prerender_fallback_file break;
+#        }
+#    }
+
+    location @prerender {
+        error_page 422 = @prerender_proxy;
+        error_page 433 = @prerender_fallback;
+
+        if ($prerender = 1) {
+            return 422;
+        }
+
+        if ($prerender = 0) {
+            return 433;
+        }
+    }
+
+    location @prerender_proxy {
+        add_header Access-Control-Allow-Origin "*" always;
+
+        rewrite .* /$scheme://$host$uri break;
+        proxy_pass http://prerender;
+    }
+
+    location @prerender_fallback {
+        try_files there_is_no_such_file /$prerender_fallback_file;
+    }
+
+    include oldgq_proxy;
+
+    error_log /var/log/nginx/prod_error.log;
+    access_log /var/log/nginx/prod_access.log main_ext;
+}
