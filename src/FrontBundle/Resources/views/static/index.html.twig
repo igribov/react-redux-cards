@@ -5,6 +5,7 @@
     {% stylesheets '@FrontBundle/Resources/public/css/bundle.css' filter='cssrewrite' %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
+    <link rel="stylesheet" href="/bundles/front/css/bundle.css" />
     <link rel="stylesheet" href="https://cdn.rawgit.com/twbs/bootstrap/48938155eb24b4ccdde09426066869504c6dab3c/dist/css/bootstrap.min.css">
 </head>
 <body>
@@ -14,4 +15,6 @@
     {% javascripts '@FrontBundle/Resources/public/js/bundle.js' %}
         <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
+    <script src="/bundles/front/js/bundle.js"></script>
+
 </html>
