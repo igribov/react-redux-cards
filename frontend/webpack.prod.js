@@ -10,8 +10,8 @@ const common = require('./webpack.common.js');
 const prodConfig = {
   output: {
     path: 'dist',
-    publicPath: '/',
-    filename: 'js/bundle.js'
+    publicPath: '/public/',
+    filename: 'public/js/bundle.js'
   },
   plugins: [
     new CleanWebpackPlugin(['dist']),

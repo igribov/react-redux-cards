@@ -38,6 +38,6 @@ module.exports = {
     new webpack.DefinePlugin({
       API_HOST: JSON.stringify(API_HOST)
     }),
-    new ExtractTextPlugin("css/bundle.css")
+    new ExtractTextPlugin("public/css/bundle.css")
   ]
 };
