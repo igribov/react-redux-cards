@@ -10,7 +10,7 @@ const resourceDir = path.resolve(path.join(__dirname, '..', 'web'));
 const prodConfig = {
   output: {
     path: resourceDir,
-    publicPath: '/public/',
+    publicPath: '/',
     filename: 'public/js/bundle.js'
   },
   plugins: [
