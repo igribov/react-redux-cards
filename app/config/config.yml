@@ -111,6 +111,7 @@ fos_rest:
         serialize_null: true
     exception:
         enabled: true
+        enabled: true
 
 sensio_framework_extra:
     request: { converters: true }
