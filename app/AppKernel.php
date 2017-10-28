@@ -21,7 +21,6 @@ class AppKernel extends Kernel
             new Symfony\Bundle\AsseticBundle\AsseticBundle(),
             new Nelmio\CorsBundle\NelmioCorsBundle(),
             new AppBundle\AppBundle(),
-            new FrontBundle\FrontBundle(),
             new ApiBundle\ApiBundle(),
         ];
 
