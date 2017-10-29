@@ -11,6 +11,7 @@ const devConfig = {
   devtool: 'inline-source-map',
   devServer: {
     historyApiFallback: true,
+    port: 9000,
     contentBase: './dist'
   }
 };

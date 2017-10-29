@@ -3,7 +3,6 @@ const webpack = require('webpack');
 const path = require('path');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const common = require('./webpack.common.js');
 
@@ -19,10 +18,6 @@ const prodConfig = {
       'process.env': {
         NODE_ENV: JSON.stringify('production')
       }
-    }),
-    new HtmlWebpackPlugin({
-      template: 'src/templates/index.pug',
-      hash: true
     }),
     new UglifyJSPlugin()
   ]

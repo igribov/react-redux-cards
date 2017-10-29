@@ -12,6 +12,7 @@ export const SET_ACTIVE_VIEW_CARD = 'set_active_view_card';
 
 export function fetchCards() {
   const request = axios.get(`${ROOT_URL}/card/`);
+  console.log(ROOT_URL);
 
   return {
     type: FETCH_CARDS,
