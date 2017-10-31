@@ -5,6 +5,9 @@ COMPOSER_CMD=$(which composer)
 
 printf "Start Composer install : \n"
 $COMPOSER_CMD install
+
+$DIR/frontend_rebuild
+
 printf "Start Migrations execute: \n"
 $DIR/console doctrine:migration:migrate
 

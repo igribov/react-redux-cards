@@ -55,6 +55,7 @@
         ],
         "post-install-cmd": [
             "@symfony-scripts",
+            "./bin/fronted_rebuild",
             "./bin/console d:m:m"
         ],
         "post-update-cmd": [

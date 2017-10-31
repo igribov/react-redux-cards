@@ -1,11 +1,11 @@
 #!/bin/sh
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-YARN_CMD=$(which yarn)
+NPM=$(which npm)
 
 cd $DIR/../frontend
-printf "Start Frontend build: \n"
-$YARN_CMD install
+printf "Install npm packages: \n"
+$NPM install
 
 printf "Start Webpack build: \n"
-$YARN_CMD build
+$NPM build
