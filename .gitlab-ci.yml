@@ -1,7 +1,13 @@
-production:
-  type: deploy
+stages:
+  - production
+
+production_deploy:
+  environment:
+    name: production
+    url: https://young-shelf-87369.herokuapp.com
+  stage: production
   script:
-  - gem install dpl
-  - dpl --provider=heroku --app=young-shelf-87369 --api-key=$HEROKU_PRODUCTION_API_KEY
+    - gem install dpl
+    - dpl --provider=heroku --app=young-shelf-87369 --api-key=$HEROKU_PRODUCTION_API_KEY
   only:
-  - tags
+    - master
