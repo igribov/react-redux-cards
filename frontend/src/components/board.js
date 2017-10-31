@@ -7,7 +7,7 @@ import {bindActionCreators} from 'redux';
 
 const COLUMNS_CONFIG = {
 	backlog: {
-		title: "Бэклог"
+		title: "Backlog"
 	},
 	todo: {
 		title: "Сделать",
