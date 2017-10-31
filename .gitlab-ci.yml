@@ -1,3 +1,2 @@
 before_script:
   - echo "This is CO/CI!"
-  - php -v
