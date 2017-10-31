@@ -145,6 +145,7 @@ class CardController extends FOSRestController
     }
 
     /**
+     * @param Card $card
      * @Delete("/card/{id}", requirements={"id" = "\d+"})
      * @Rest\View(statusCode=204)
      * @ParamConverter("card")
