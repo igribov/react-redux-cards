@@ -8,7 +8,8 @@
     "start": "NODE_ENV=dev node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --config webpack.dev.js --api_host http://localhost:8000",
     "build": "NODE_ENV=prod node ./node_modules/webpack/bin/webpack --config webpack.prod.js --api_host https://young-shelf-87369.herokuapp.com",
     "test": "mocha --compilers js:babel-core/register --require ./test/test_helper.js --recursive ./test",
-    "test:watch": "npm run test -- --watch"
+    "test:watch": "npm run test -- --watch",
+    "postinstall": "NODE_ENV=prod node ./node_modules/webpack/bin/webpack --config webpack.prod.js --api_host https://young-shelf-87369.herokuapp.com"
   },
   "author": "",
   "license": "ISC",
