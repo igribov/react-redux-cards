@@ -2,8 +2,9 @@ cards react simple application
 =============
 
 A Symfony project created on October 9, 2017, 7:23 am.
-1)Composer required for deploy
-2)NodeJS and Yarn required for frontend rebuild
+1) Composer required for deploy
+2) NodeJS and NPM required for frontend build
+
 
 Deploy:
  - git clone https://gitlab.com/gribov/cards.git
@@ -11,4 +12,9 @@ Deploy:
  - ./bin/deploy.sh
  - OR composer install & ./bin/console assets:install
  
-Fronted rebuild : ./bin/fronted_rebuild.sh
+Deploy to heroku:
+  - heroku buildpacks:add heroku/nodejs
+  - heroku buildpacks:add heroku/php
+  - heroku config:set NPM_CONFIG_PRODUCTION=false, for devDependencies
+ 
+Fronted rebuild : ./bin/fronted_build
