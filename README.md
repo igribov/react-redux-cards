@@ -17,5 +17,6 @@ Deploy to heroku:
   - heroku buildpacks:add heroku/php
   - heroku config:set NPM_CONFIG_PRODUCTION=false
   - heroku addons:create cleardb:ignite
+  - heroku config:set HEROKU_URL=$(heroku info -s | grep web_url | cut -d= -f2)
  
 Fronted rebuild : ./bin/fronted_build
