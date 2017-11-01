@@ -27,4 +27,7 @@ Add two remote links from heroku git repos
   - heroku addons:create cleardb:ignite --app cards-staging
   - heroku config:set HEROKU_URL=$(heroku info -s | grep web_url | cut -d= -f2) --app cards-staging
  
+Fork database: 
+  - heroku addons:create cleardb:ignite --fork=`heroku config:get CLEARDB_DATABASE_URL --app cards-production` --app cards-staging
+  
 Fronted rebuild : ./bin/fronted_build
