@@ -7,7 +7,7 @@ import {bindActionCreators} from 'redux';
 
 const COLUMNS_CONFIG = {
 	backlog: {
-		title: "Backlog"
+		title: "Бэклог"
 	},
 	todo: {
 		title: "Сделать",
@@ -30,7 +30,7 @@ class Board extends Component {
 
   render() {
     const navLinks = [
-      { title: 'Create', to: '/card/create' }
+      { title: 'Создать', to: '/card/create' }
     ];
 
     return (
