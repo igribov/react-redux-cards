@@ -15,6 +15,7 @@ Deploy:
 Deploy to heroku:
   - heroku buildpacks:add heroku/nodejs
   - heroku buildpacks:add heroku/php
-  - heroku config:set NPM_CONFIG_PRODUCTION=false, for devDependencies
+  - heroku config:set NPM_CONFIG_PRODUCTION=false
+  - heroku addons:create cleardb:ignite
  
 Fronted rebuild : ./bin/fronted_build
