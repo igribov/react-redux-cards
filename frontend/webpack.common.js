@@ -3,7 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 const api_arg = process.argv.indexOf("--api_host");
 let API_HOST = (api_arg > -1 ? process.argv[api_arg + 1] : false) || process.env.HEROKU_URL || 'http://localhost:8080';
-API_HOST = API_HOST + (API_HOST.endsWith('/') ? '' : '/');
+API_HOST = API_HOST.endsWith('/') ? API_HOST.substr(0, API_HOST.length - 1) : API_HOST;
 
 
 console.log('API_HOST -> ', API_HOST);
