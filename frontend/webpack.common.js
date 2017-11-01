@@ -2,9 +2,10 @@ const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 const api_arg = process.argv.indexOf("--api_host");
-// todo move it to define plugin
-const API_HOST = (api_arg > -1 ? process.argv[api_arg + 1] : false) || process.env.HEROKU_URL || 'http://localhost:8080';
-//const API_HOST = (api_arg > -1 ? process.argv[api_arg + 1] : false) || 'http://localhost:8000';
+let API_HOST = (api_arg > -1 ? process.argv[api_arg + 1] : false) || process.env.HEROKU_URL || 'http://localhost:8080';
+API_HOST = API_HOST + (API_HOST.endsWith('/') ? '' : '/');
+
+
 console.log('API_HOST -> ', API_HOST);
 
 module.exports = {
