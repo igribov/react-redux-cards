@@ -13,6 +13,7 @@ production_deploy:
   only:
     - master
 
+# on test staging deploy
 staging_deploy:
   environment:
     name: staging
