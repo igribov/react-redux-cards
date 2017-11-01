@@ -1,4 +1,5 @@
 stages:
+  - staging
   - production
 
 production_deploy:
@@ -10,4 +11,17 @@ production_deploy:
     - gem install dpl
     - dpl --provider=heroku --app=cards-production --api-key=$HEROKU_PRODUCTION_API_KEY
   only:
+    - master
+
+staging_deploy:
+  environment:
+    name: staging
+    url: https://cards-staging.herokuapp.com
+  stage: staging
+  script:
+    - gem install dpl
+    - dpl --provider=heroku --app=cards-staging --api-key=$HEROKU_PRODUCTION_API_KEY
+  only:
+    - branches
+  except:
     - master
