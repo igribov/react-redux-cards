@@ -21,7 +21,7 @@ class Version20171009082831 extends AbstractMigration
             case 'mysql':
                 $this->addSql("CREATE TABLE card (id INTEGER NOT NULL AUTO_INCREMENT, title VARCHAR(255) NOT NULL, description VARCHAR(255) NOT NULL, status VARCHAR(16) NOT NULL, PRIMARY KEY(id))");
                 break;
-            default: // sqlite
+            case 'sqlite':
                 $this->addSql("CREATE TABLE card (id INTEGER NOT NULL, title VARCHAR(255) NOT NULL, description VARCHAR(255) NOT NULL, status VARCHAR(16) NOT NULL, PRIMARY KEY(id))");
         }
 
