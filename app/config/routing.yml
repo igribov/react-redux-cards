@@ -1,3 +1,10 @@
+user:
+    resource: "@UserBundle/Controller/"
+    type:     rest
+    prefix:   user
+    options:
+        expose: true
+
 api:
     resource: "@ApiBundle/Controller/"
     type:     rest

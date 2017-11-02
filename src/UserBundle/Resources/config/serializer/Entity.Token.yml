@@ -1,0 +1,16 @@
+UserBundle\Entity\Token:
+    exclusion_policy: all
+    access_type: public_method
+    read_only: false
+    properties:
+        accessToken:
+            groups: [token_detail]
+            expose: true
+        refreshToken:
+            groups: [token_detail]
+            expose: true
+    virtual_properties:
+        getExpiresIn:
+            serialized_name: expires_in
+            type: integer
+            groups: [token_detail]

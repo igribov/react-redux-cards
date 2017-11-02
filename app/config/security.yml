@@ -2,10 +2,14 @@
 # https://symfony.com/doc/current/security.html
 security:
 
+    encoders:
+        UserBundle\Entity\User:
+            algorithm: bcrypt
+            cost: 12
     # https://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
     providers:
-        in_memory:
-            memory: ~
+        token_user_provider:
+            id: auth.user_provider.token
 
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs
@@ -13,8 +17,8 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
-        main:
-            anonymous: ~
+        #main:
+            #anonymous: ~
             # activate different ways to authenticate
 
             # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
@@ -22,3 +26,20 @@ security:
 
             # https://symfony.com/doc/current/security/form_login_setup.html
             #form_login: ~
+        token_secure:
+            pattern: '^/'
+            anonymous: true
+            stateless: true
+            guard:
+                provider: token_user_provider
+                authenticators:
+                    - auth.authenticator.token
+
+    role_hierarchy:
+        ROLE_ADMIN:
+            - ROLE_USER
+        ROLE_USER:
+            - ROLE_RESTRICTED
+
+    access_control:
+        - { path: '^/admin', roles: 'ROLE_ADMIN' }

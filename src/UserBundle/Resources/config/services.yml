@@ -1,0 +1,44 @@
+services:
+
+    auth.em:
+        class: Doctrine\ORM\EntityManager
+        factory: ['@doctrine', getManagerForClass]
+        arguments:
+            - UserBundle\Entity\User
+
+    user.repository.token:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@auth.em', getRepository]
+        arguments:
+            - UserBundle\Entity\Token
+
+    auth.authenticator.token:
+        class: UserBundle\Security\TokenAuthenticator
+        arguments:
+            - '@user.repository.token'
+
+    auth.repository.user:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@auth.em', getRepository]
+        arguments:
+            - UserBundle\Entity\User
+
+    auth.user_provider.token:
+        class: UserBundle\Security\TokenUserProvider
+        arguments:
+            - '@auth.repository.user'
+
+    user.authenticator.password:
+        class: UserBundle\Security\PasswordAuthenticator
+        arguments:
+            - '@security.password_encoder'
+
+    user.manager:
+      class: UserBundle\Manager\UserManager
+      arguments:
+           - '@doctrine.orm.entity_manager'
+
+    user.controller.user:
+        class: UserBundle\Controller\UserController
+        arguments:
+            - '@user.manager'

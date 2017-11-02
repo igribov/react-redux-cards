@@ -1,0 +1,44 @@
+UserBundle\Entity\User:
+    exclusion_policy: all
+    access_type: public_method
+    read_only: false
+    callback_methods:
+        pre_serialize: [preSerialize]
+    properties:
+        id:
+            access_type: property
+            groups:
+                - user_list
+                - user_detail
+                - card_list
+                - card_detail
+            expose: true
+        name:
+            groups:
+                - user_create
+                - user_update
+                - user_list
+                - user_detail
+                - card_list
+                - card_detail
+            expose: true
+        email:
+            groups:
+                - user_create
+                - user_list
+                - user_detail
+            expose: true
+        roles:
+            groups:
+                - user_create
+                - user_update
+                - user_list
+                - user_detail
+            type: array
+            expose: true
+            read_only: false
+        token:
+            groups:
+                - user_detail
+            expose: true
+            read_only: true
