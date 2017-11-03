@@ -5,6 +5,7 @@ namespace ApiBundle\Entity;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 use ApiBundle\Interfaces\Statusable;
+use UserBundle\Entity\User;
 
 /**
  * Card
@@ -48,6 +49,16 @@ class Card implements Statusable
      * @Assert\Length(max=16)
      */
     private $status;
+
+    /**
+     * @var User
+     *
+     * @ORM\ManyToOne(targetEntity="UserBundle\Entity\User")
+     * @ORM\JoinColumn(nullable=false)
+     *
+     * @Assert\NotBlank()
+     */
+    protected $user;
 
     /**
      * Get id
@@ -129,6 +140,30 @@ class Card implements Statusable
     public function getStatus()
     {
         return $this->status;
+    }
+
+    /**
+     * Set user
+     *
+     * @param User $user
+     *
+     * @return Card
+     */
+    public function setUser(User $user)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return User
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 
     /**

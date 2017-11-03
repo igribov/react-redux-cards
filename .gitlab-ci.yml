@@ -23,6 +23,6 @@ staging_deploy:
     - gem install dpl
     - dpl --provider=heroku --app=cards-staging --api-key=$HEROKU_API_KEY
   only:
-    - branches
+    - /^dev-.*/
   except:
     - master

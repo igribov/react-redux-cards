@@ -4,33 +4,69 @@ namespace Application\Migrations;
 
 use Doctrine\DBAL\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use UserBundle\Entity\Token;
+use UserBundle\Entity\User;
 
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-class Version20171102134553 extends AbstractMigration
+class Version20171102134553 extends AbstractMigration implements ContainerAwareInterface
 {
+    use ContainerAwareTrait;
+
     /**
      * @param Schema $schema
      */
     public function up(Schema $schema)
     {
-        $platform = $this->connection->getDatabasePlatform()->getName();
-        $this->abortIf(!in_array($platform, ['mysql', 'sqlite']), 'Migration can only be executed safely on \'mysql\' or \'sqlite\'.');
+        $userTable = $schema->createTable('user');
+        $userTable->addColumn('id', 'integer', ['autoincrement' => true]);
+        $userTable->setPrimaryKey(['id']);
+        $userTable->addColumn('email', 'string', ['length' => 255, 'notnull' => true]);
+        $userTable->addColumn('username', 'string', ['length' => 100, 'notnull' => true]);
+        $userTable->addColumn('name', 'string', ['length' => 255, 'notnull' => true]);
+        $userTable->addColumn('password_hash', 'string', ['length' => 60]);
+        $userTable->addColumn('roles', 'integer', ['default' => 0, 'notnull' => true]);
+        $userTable->addUniqueIndex(['email', 'username']);
 
-        $this->addSql("CREATE TABLE user (id INTEGER NOT NULL " . ( $platform === 'mysql' ? 'AUTO_INCREMENT' : '' ). ", email VARCHAR(255) NOT NULL COLLATE BINARY, username VARCHAR(100) NOT NULL, name VARCHAR(255) NOT NULL, password_hash VARCHAR(60) DEFAULT NULL, roles INTEGER UNSIGNED DEFAULT 0 NOT NULL, PRIMARY KEY(id))");
-        $this->addSql("CREATE UNIQUE INDEX UNIQ_8D93D649AA08CB10 ON user (username)");
-        $this->addSql("CREATE UNIQUE INDEX UNIQ_8D93D649E7927C74 ON user (email)");
+        $tokenTable = $schema->createTable('token');
+        $tokenTable->addColumn('id', 'integer', ['autoincrement' => true]);
+        $tokenTable->setPrimaryKey(['id']);
+        $tokenTable->addColumn('user_id', 'integer', ['notnull' => true]);
+        $tokenTable->addColumn('access_token', 'string', ['length' => 32, 'notnull' => true]);
+        $tokenTable->addColumn('refresh_token', 'string', ['length' => 32, 'notnull' => true]);
+        $tokenTable->addColumn('expires_at', 'datetime', ['notnull' => true]);
+        $tokenTable->addUniqueIndex(['access_token', 'refresh_token']);
+        $tokenTable->addIndex(['user_id']);
+        $tokenTable->addForeignKeyConstraint($userTable, ['user_id'], ['id'], ['onUpdate' => 'CASCADE', 'onDelete' => 'CASCADE']);
+    }
 
-        $this->addSql("CREATE TABLE token (id INTEGER NOT NULL " . ( $platform === 'mysql' ? 'AUTO_INCREMENT' : '' ). ", user_id INTEGER NOT NULL, access_token VARCHAR(32) NOT NULL, refresh_token VARCHAR(32) NOT NULL, expires_at DATETIME NOT NULL, PRIMARY KEY(id))");
-        $this->addSql("CREATE UNIQUE INDEX UNIQ_5F37A13BB6A2DD68 ON token (access_token)");
-        $this->addSql("CREATE UNIQUE INDEX UNIQ_5F37A13BC74F2195 ON token (refresh_token)");
-        $this->addSql("CREATE INDEX IDX_5F37A13BA76ED395 ON token (user_id)");
+    /**
+     * @param Schema $schema
+     */
+    public function postUp(Schema $schema)
+    {
+        /** @var EntityManagerInterface $em */
+        $em = $this->container->get('doctrine.orm.entity_manager');
+        $user = new User();
+        $user->setEmail('igribov@text.ru');
+        $user->setUsername('igribov');
+        $user->setName('Gribov Ilya');
+        $user->setPasswordHash('sdagasdfgsfdgfsd');
+        $user->setRoles([User::ROLE_ADMIN]);
 
-        $this->addSql("INSERT INTO user (id, email, username, name, password_hash, roles ) 
-                        VALUES (1, 'igribov@email.ru', 'igribov', 'Ilya Gribov', 'sdgdsgdfg4refer', 4)");
-        $this->addSql("INSERT INTO token (id, user_id, access_token, refresh_token, expires_at) 
-                        VALUES (1, 1, 'access_token_232', 'refr_token_232', '2017-10-10 12:00:00')");
+        $token = new Token();
+        $token->setUser($user);
+        $token->setAccessToken('accesstoken123456789123456789012');
+        $token->setRefreshToken('refresh_token_12345678912345678922');
+        $token->setExpiresAt(new \DateTime('+1 month'));
+
+        $em->persist($user);
+        $em->persist($token);
+        $em->flush();
     }
 
     /**
@@ -38,10 +74,7 @@ class Version20171102134553 extends AbstractMigration
      */
     public function down(Schema $schema)
     {
-        $platform = $this->connection->getDatabasePlatform()->getName();
-        $this->abortIf(!in_array($platform, ['mysql', 'sqlite']), 'Migration can only be executed safely on \'mysql\' or \'sqlite\'.');
-
-        $this->addSql("DROP table user");
-        $this->addSql("DROP table token");
+        $schema->dropTable('user');
+        $schema->dropTable('token');
     }
 }

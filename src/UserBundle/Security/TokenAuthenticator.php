@@ -37,8 +37,6 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
     {
         $tokenHeader = $request->headers->get('Authorization');
 
-        dump($tokenHeader);die;
-
         if (!preg_match('~^Bearer\s(\w{32})$~', $tokenHeader, $accessToken)) {
             return null;
         }

@@ -30,11 +30,12 @@ class CardManager
     }
 
     /**
-     * @return Card[]
+     * @param array $filters
+     * @return array
      */
-    public function getAll()
+    public function getAll(array $filters = [])
     {
-        return $this->repository->findAll();
+        return $this->repository->findBy($filters);
     }
 
     /**

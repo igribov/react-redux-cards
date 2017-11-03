@@ -97,7 +97,7 @@ fos_rest:
     format_listener:
         enabled: true
         rules:
-            - { path: '^/api', fallback_format: json }
+            - { path: '^/(api|user)', fallback_format: json }
             - { path: '^/', stop: true }
 
 #    param_fetcher_listener: force

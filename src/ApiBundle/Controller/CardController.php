@@ -14,6 +14,7 @@ use FOS\RestBundle\Controller\Annotations\Delete;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
 use Swagger\Annotations as SWG;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration as Extra;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -42,12 +43,13 @@ class CardController extends FOSRestController
      *     )
      * )
      *
+     * @Extra\Security("has_role(constant('UserBundle\\Entity\\User::ROLE_USER'))")
      * @Get("/card/")
      * @Rest\View(serializerGroups={"card_list"})
      */
     public function cgetAction()
     {
-        return $this->getManager()->getAll();
+        return $this->getManager()->getAll(['user' => $this->getUser()]);
     }
 
     /**

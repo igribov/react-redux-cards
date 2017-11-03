@@ -13,6 +13,15 @@ UserBundle\Entity\User:
                 - card_list
                 - card_detail
             expose: true
+        username:
+            groups:
+                - user_create
+                - user_update
+                - user_list
+                - user_detail
+                - card_list
+                - card_detail
+            expose: true
         name:
             groups:
                 - user_create
