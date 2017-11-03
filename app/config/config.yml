@@ -100,7 +100,7 @@ fos_rest:
             - { path: '^/(api|user)', fallback_format: json }
             - { path: '^/', stop: true }
 
-#    param_fetcher_listener: force
+    param_fetcher_listener: force
 #    routing_loader:
 #        default_format: null
 #        include_format: false

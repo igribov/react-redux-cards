@@ -2,6 +2,7 @@
 
 namespace UserBundle\Manager;
 
+use UserBundle\Entity\Token;
 use UserBundle\Entity\User;
 use UserBundle\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -9,7 +10,7 @@ use Doctrine\ORM\EntityManagerInterface;
 class UserManager
 {
     /** @var  EntityManagerInterface */
-    protected $entityManager;
+    protected $em;
 
     /** @var UserRepository  */
     protected $repository;
@@ -20,7 +21,7 @@ class UserManager
      */
     public function __construct(EntityManagerInterface $entityManager)
     {
-        $this->entityManager = $entityManager;
+        $this->em = $entityManager;
         $this->repository = $entityManager->getRepository(User::class);
     }
 
@@ -38,8 +39,8 @@ class UserManager
      */
     public function save(User $user)
     {
-        $this->entityManager->persist($user);
-        $this->entityManager->flush();
+        $this->em->persist($user);
+        $this->em->flush();
 
         return $user;
     }
@@ -49,7 +50,7 @@ class UserManager
      */
     public function delete(User $user)
     {
-        $this->entityManager->remove($user);
-        $this->entityManager->flush();
+        $this->em->remove($user);
+        $this->em->flush();
     }
 }

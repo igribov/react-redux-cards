@@ -6,6 +6,17 @@ services:
         arguments:
             - UserBundle\Entity\User
 
+    user.manager:
+      class: UserBundle\Manager\UserManager
+      arguments:
+           - '@doctrine.orm.entity_manager'
+
+    auth.manager:
+      class: UserBundle\Manager\AuthManager
+      arguments:
+           - '@doctrine.orm.entity_manager'
+           - '@user.manager'
+
     user.repository.token:
         class: Doctrine\ORM\EntityRepository
         factory: ['@auth.em', getRepository]
@@ -32,11 +43,6 @@ services:
         class: UserBundle\Security\PasswordAuthenticator
         arguments:
             - '@security.password_encoder'
-
-    user.manager:
-      class: UserBundle\Manager\UserManager
-      arguments:
-           - '@doctrine.orm.entity_manager'
 
     user.controller.user:
         class: UserBundle\Controller\UserController
