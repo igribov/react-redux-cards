@@ -16,9 +16,17 @@ class Version20171102134552 extends AbstractMigration
      */
     public function up(Schema $schema)
     {
-        $schema->dropTable('user');
-        $schema->dropTable('token');
-        $schema->dropTable('cards');
+        if($schema->hasTable('user')) {
+            $schema->dropTable('user');
+        }
+        
+        if($schema->hasTable('token')) {
+            $schema->dropTable('token');
+        }
+
+        if($schema->hasTable('cards')) {
+            $schema->dropTable('cards');
+        }
     }
 
     public function down(Schema $schema)
