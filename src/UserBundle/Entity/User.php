@@ -6,12 +6,19 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints as DoctrineAssert;
 
 /**
  * User
  *
  * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="UserBundle\Repository\UserRepository")
+ * @DoctrineAssert\UniqueEntity(
+ *     "email",
+ *     groups = {"user_create", "user_update", "user_signup", "user_change_email"},
+ *     message="user.email.already_exists"
+ * )
  */
 class User implements AdvancedUserInterface, EquatableInterface
 {
@@ -46,14 +53,32 @@ class User implements AdvancedUserInterface, EquatableInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="username", type="string", length=100, unique=true)
+     * @ORM\Column(name="username", type="string", length=100, nullable=true)
+     *
+     * @Assert\NotBlank(
+     *     groups = {"user_create", "user_update"}
+     * )
+     * @Assert\Length(
+     *     min = 1,
+     *     max = 100,
+     *     groups = {"user_create", "user_update"}
+     * )
      */
     private $username;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255)
+     * @ORM\Column(name="name", type="string", length=255, nullable=true)
+     *
+     * @Assert\NotBlank(
+     *     groups = {"user_create", "user_update"}
+     * )
+     * @Assert\Length(
+     *     min = 1,
+     *     max = 100,
+     *     groups = {"user_create", "user_update"}
+     * )
      */
     private $name;
 
@@ -67,7 +92,29 @@ class User implements AdvancedUserInterface, EquatableInterface
     /**
      * @var string
      *
+     * @Assert\NotBlank(
+     *     groups = {"user_create", "user_password_update", "user_signup"}
+     * )
+     * @Assert\Length(
+     *     min = 8,
+     *     groups = {"user_create", "user_update", "user_password_update", "user_signup"}
+     * )
+     */
+    protected $passwordPlain;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="email", type="string", length=255, unique=true)
+     *
+     * @Assert\NotBlank(
+     *     groups = {"user_create", "user_update", "user_signup", "user_change_email"},
+     *     message="user.email.not_blank"
+     * )
+     * @Assert\Email(
+     *     groups = {"user_create", "user_update", "user_signup", "user_change_email"},
+     *     message="user.email.invalid_email"
+     * )
      */
     private $email;
 
@@ -79,12 +126,12 @@ class User implements AdvancedUserInterface, EquatableInterface
     private $roles;
 
     /**
-     * @var array
-     *
-     * @-ORM\Column(name="roless", type="array")
+     * User constructor.
      */
-    //private $roless;
-
+    public function __construct()
+    {
+        $this->roles = self::ROLES[self::ROLE_RESTRICTED];
+    }
 
     /**
      * Get id
@@ -228,6 +275,25 @@ class User implements AdvancedUserInterface, EquatableInterface
     }
 
     /**
+     * @return string
+     */
+    public function getPasswordPlain()
+    {
+        return $this->passwordPlain;
+    }
+
+    /**
+     * @param string $password
+     * @return $this
+     */
+    public function setPasswordplain(string $password)
+    {
+        $this->passwordPlain = $password;
+
+        return $this;
+    }
+
+    /**
      * @inheritDoc
      */
     public function eraseCredentials()
@@ -311,7 +377,6 @@ class User implements AdvancedUserInterface, EquatableInterface
      */
     public function preSerialize()
     {
-
     }
 }
 

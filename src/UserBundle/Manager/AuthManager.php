@@ -4,7 +4,8 @@ namespace UserBundle\Manager;
 
 use UserBundle\Entity\Token;
 use UserBundle\Entity\User;
-use UserBundle\Repository\UserRepository;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use UserBundle\TokenGenerator\TokenGeneratorInterface;
 use Doctrine\ORM\EntityManagerInterface;
 
 class AuthManager
@@ -15,14 +16,26 @@ class AuthManager
     /** @var  UserManager */
     protected $userManager;
 
+    /** @var  UserPasswordEncoderInterface */
+    protected $passwordEncoder;
+
+    /** @var  TokenGeneratorInterface */
+    protected $tokenGenerator;
+
     /**
      * AuthManager constructor.
      * @param UserManager $userManager
      */
-    public function __construct(EntityManagerInterface $entityManager, UserManager $userManager)
-    {
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        UserManager $userManager,
+        UserPasswordEncoderInterface $passwordEncoder,
+        TokenGeneratorInterface $tokenGenerator
+    ) {
         $this->em = $entityManager;
         $this->userManager = $userManager;
+        $this->passwordEncoder = $passwordEncoder;
+        $this->tokenGenerator = $tokenGenerator;
     }
 
     /**
@@ -52,12 +65,34 @@ class AuthManager
     public function createAccessToken(User $user)
     {
         $token = new Token();
-        $token->setAccessToken('new_access_token_123456789012345');
-        $token->setRefreshToken('new_refresh_token_12345678901234');
+        // todo add accesstoken generator
+        $token->setAccessToken($this->tokenGenerator->generate());
+        $token->setRefreshToken($this->tokenGenerator->generate());
         $token->setUser($user);
         $this->em->persist($token);
         $this->em->flush();
 
         return $token;
+    }
+
+    public function isEmailExists($email)
+    {
+        return $this->em->getRepository(User::class)->findOneBy(['email' => $email]);
+    }
+
+    /**
+     * User signup
+     *
+     * @param User $user
+     * @param string|null $referrer
+     *
+     * @return Token
+     */
+    public function signup(User $user, $referrer = null)
+    {
+        $user->setPasswordHash($this->passwordEncoder->encodePassword($user, $user->getPasswordPlain()));
+        $this->userManager->save($user);
+
+        return $this->createAccessToken($user);
     }
 }

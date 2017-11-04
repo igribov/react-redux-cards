@@ -18,6 +18,7 @@ UserBundle\Entity\User:
                 - user_create
                 - user_update
                 - user_list
+                - user_signup
                 - user_detail
                 - card_list
                 - card_detail
@@ -36,6 +37,14 @@ UserBundle\Entity\User:
                 - user_create
                 - user_list
                 - user_detail
+                - user_signup
+            expose: true
+        passwordPlain:
+            groups:
+                - user_create
+                - user_updateo
+                - user_signup
+            type: string
             expose: true
         roles:
             groups:
@@ -43,6 +52,7 @@ UserBundle\Entity\User:
                 - user_update
                 - user_list
                 - user_detail
+                - user_signup
             type: array
             expose: true
             read_only: false

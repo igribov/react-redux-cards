@@ -2,6 +2,7 @@
 namespace UserBundle\Controller;
 
 use FOS\RestBundle\Request\ParamFetcher;
+use Symfony\Component\HttpFoundation\Request;
 use UserBundle\Entity\Token;
 use UserBundle\Entity\User;
 use UserBundle\Manager\AuthManager;
@@ -29,14 +30,74 @@ class AuthController extends FOSRestController
     }
 
     /**
+     * Get token
      *
+     * @-ApiDoc(
+     *  section="User",
+     *  requirements={
+     *      {
+     *          "name"="email",
+     *          "dataType"="string"
+     *      },
+     *      {
+     *          "name"="password",
+     *          "dataType"="string"
+     *      }
+     *  },
+     *  output={
+     *      "class"="UserBundle\Entity\Token",
+     *      "groups"={"token_detail"}
+     * },
+     *  statusCodes={
+     *      200="Success"
+     *  })
      * @Rest\Post("/login")
-     * @Rest\View(serializerGroups={"user_registration"})
+     * @Rest\View(serializerGroups={"token_detail"})
      */
     public function loginAction()
     {
-        die('');
-        return ['test'];
+        return $this->getManager()->createAccessToken($this->getUser());
+    }
+
+    /**
+     * Signup
+     *
+     * @Rest\Post("/signup")
+     * @Extra\ParamConverter(
+     *     "user",
+     *     converter="merging",
+     *     options={
+     *          "validator"={
+     *              "groups"={"user_signup"},
+     *          },
+     *          "deserializationContext"={
+     *              "groups"={"user_signup"}
+     *          }
+     *     }
+     *  )
+     * @Rest\View(statusCode=201, serializerGroups={"token_detail"})
+     *
+     * @param User $user
+     * @param Request $request
+     * @param ConstraintViolationListInterface $validationErrors
+     * @return Token|View
+     *
+     * todo possibly should be moved to "Create user" action after dynamic groups implementation
+     */
+    public function sugnupAction(User $user, Request $request, ConstraintViolationListInterface $validationErrors)
+    {
+        if ($validationErrors->count()) {
+            return View::create($validationErrors, 400);
+        }
+
+        if ($this->getManager()->isEmailExists($user->getEmail())) {
+            return View::create(['message' => 'User with that email already registered'], 400);
+        }
+
+        $referrer = $request->headers->get('Referer');
+        $accessToken = $this->getManager()->signup($user, $referrer);
+
+        return $accessToken;
     }
 
     /**

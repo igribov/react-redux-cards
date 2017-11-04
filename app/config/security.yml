@@ -10,6 +10,8 @@ security:
     providers:
         token_user_provider:
             id: auth.user_provider.token
+        email_user_provider:
+            id: auth.user_provider.email
 
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs
@@ -17,15 +19,15 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
-        #main:
-            #anonymous: ~
-            # activate different ways to authenticate
+        password_secure:
+            pattern: '^/user/login'
+            anonymous: false
+            stateless: true
+            guard:
+                provider: email_user_provider
+                authenticators:
+                    - user.authenticator.password
 
-            # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
-            #http_basic: ~
-
-            # https://symfony.com/doc/current/security/form_login_setup.html
-            #form_login: ~
         token_secure:
             pattern: '^/'
             anonymous: true

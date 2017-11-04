@@ -1,6 +1,6 @@
 <?php
 
-namespace AuthBundle\Security;
+namespace UserBundle\Security;
 
 use AuthBundle\Entity\Token;
 use AuthBundle\Repository\TokenRepository;

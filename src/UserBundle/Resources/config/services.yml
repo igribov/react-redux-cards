@@ -16,6 +16,8 @@ services:
       arguments:
            - '@doctrine.orm.entity_manager'
            - '@user.manager'
+           - '@security.password_encoder'
+           - '@auth.token_generator.random'
 
     user.repository.token:
         class: Doctrine\ORM\EntityRepository
@@ -39,10 +41,21 @@ services:
         arguments:
             - '@auth.repository.user'
 
+    auth.user_provider.email:
+        class: UserBundle\Security\EmailUserProvider
+        arguments:
+            - '@auth.repository.user'
+
     user.authenticator.password:
         class: UserBundle\Security\PasswordAuthenticator
         arguments:
             - '@security.password_encoder'
+
+    auth.token_generator.random:
+        class: UserBundle\TokenGenerator\RandomTokenGenerator
+
+    auth.token_generator.secure:
+        class: UserBundle\TokenGenerator\SecureTokenGenerator
 
     user.controller.user:
         class: UserBundle\Controller\UserController

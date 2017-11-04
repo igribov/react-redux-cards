@@ -26,11 +26,11 @@ class Version20171102134553 extends AbstractMigration implements ContainerAwareI
         $userTable->addColumn('id', 'integer', ['autoincrement' => true]);
         $userTable->setPrimaryKey(['id']);
         $userTable->addColumn('email', 'string', ['length' => 255, 'notnull' => true]);
-        $userTable->addColumn('username', 'string', ['length' => 100, 'notnull' => true]);
-        $userTable->addColumn('name', 'string', ['length' => 255, 'notnull' => true]);
-        $userTable->addColumn('password_hash', 'string', ['length' => 60]);
-        $userTable->addColumn('roles', 'integer', ['default' => 0, 'notnull' => true]);
-        $userTable->addUniqueIndex(['email', 'username']);
+        $userTable->addColumn('username', 'string', ['length' => 100, 'default' => null, 'notnull' => false]);
+        $userTable->addColumn('name', 'string', ['length' => 100, 'default' => null, 'notnull' => false]);
+        $userTable->addColumn('password_hash', 'string', ['length' => 60, 'default' => null, 'notnull' => false]);
+        $userTable->addColumn('roles', 'integer', ['default' => '0', 'notnull' => true, 'unsigned' => true]);
+        $userTable->addUniqueIndex(['email']);
 
         $tokenTable = $schema->createTable('token');
         $tokenTable->addColumn('id', 'integer', ['autoincrement' => true]);
@@ -53,15 +53,15 @@ class Version20171102134553 extends AbstractMigration implements ContainerAwareI
         $em = $this->container->get('doctrine.orm.entity_manager');
         $user = new User();
         $user->setEmail('igribov@text.ru');
-        $user->setUsername('igribov');
-        $user->setName('Gribov Ilya');
-        $user->setPasswordHash('sdagasdfgsfdgfsd');
+        //$user->setUsername('igribov');
+        //$user->setName('Gribov Ilya');
+        $user->setPasswordHash('$2y$12$H2scXyPDJ0/.xUEKwMG2Q.6Cctdp2z9dfeQRRadmRJ7bb.9rzoqhm'); // pass
         $user->setRoles([User::ROLE_ADMIN]);
 
         $token = new Token();
         $token->setUser($user);
         $token->setAccessToken('accesstoken123456789123456789012');
-        $token->setRefreshToken('refresh_token_12345678912345678922');
+        $token->setRefreshToken('refresh1token1123456789123456789');
         $token->setExpiresAt(new \DateTime('+1 month'));
 
         $em->persist($user);

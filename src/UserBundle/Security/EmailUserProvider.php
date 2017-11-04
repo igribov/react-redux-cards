@@ -1,8 +1,8 @@
 <?php
 
-namespace AuthBundle\Security;
+namespace UserBundle\Security;
 
-use AuthBundle\Entity\User;
+use UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -13,6 +13,10 @@ class EmailUserProvider implements UserProviderInterface
     /** @var EntityRepository */
     protected $repository;
 
+    /**
+     * EmailUserProvider constructor.
+     * @param EntityRepository $repository
+     */
     public function __construct(EntityRepository $repository)
     {
         if (!$this->supportsClass($repository->getClassName())) {
