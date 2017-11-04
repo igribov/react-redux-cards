@@ -16,10 +16,18 @@ class Version20171102134552 extends AbstractMigration
      */
     public function up(Schema $schema)
     {
+        $this->clearSchema($schema);
+    }
+
+    /**
+     * @param $schema
+     */
+    private function clearSchema(Schema $schema)
+    {
         if($schema->hasTable('user')) {
             $schema->dropTable('user');
         }
-        
+
         if($schema->hasTable('token')) {
             $schema->dropTable('token');
         }
