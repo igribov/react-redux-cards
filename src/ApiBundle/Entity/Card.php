@@ -2,6 +2,7 @@
 
 namespace ApiBundle\Entity;
 
+use ApiBundle\Interfaces\HasOwnerInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 use ApiBundle\Interfaces\Statusable;
@@ -13,7 +14,7 @@ use UserBundle\Entity\User;
  * @ORM\Table(name="card")
  * @ORM\Entity(repositoryClass="ApiBundle\Repository\CardRepository")
  */
-class Card implements Statusable
+class Card implements Statusable, HasOwnerInterface
 {
     /**
      * @var int
@@ -161,7 +162,7 @@ class Card implements Statusable
      *
      * @return User
      */
-    public function getUser()
+    public function getUser():User
     {
         return $this->user;
     }

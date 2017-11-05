@@ -5,6 +5,7 @@ namespace ApiBundle\Controller;
 use ApiBundle\Entity\Card;
 use ApiBundle\Manager\CardManager;
 use ApiBundle\Repository\CardRepository;
+use ApiBundle\Security\Voter\PersonalDataVoter;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\Controller\Annotations\Get;
@@ -43,11 +44,32 @@ class CardController extends FOSRestController
      *     )
      * )
      *
+     * @Extra\Security("has_role(constant('UserBundle\\Entity\\User::ROLE_ADMIN'))")
+     * @Get("/card/all/")
+     * @Rest\View(serializerGroups={"card_list"})
+     */
+    public function cgetAction()
+    {
+        // todo fix path of route
+        return $this->getManager()->getAll();
+    }
+
+    /**
+     * @SWG\Tag(name="cards")
+     * @SWG\Response(
+     *     response=200,
+     *     description="Returns list of card model",
+     *     @SWG\Schema(
+     *         type="array",
+     *         @Model(type=Card::class, groups={"card_list"})
+     *     )
+     * )
+     *
      * @Extra\Security("has_role(constant('UserBundle\\Entity\\User::ROLE_USER'))")
      * @Get("/card/")
      * @Rest\View(serializerGroups={"card_list"})
      */
-    public function cgetAction()
+    public function cgetOwnAction()
     {
         return $this->getManager()->getAll(['user' => $this->getUser()]);
     }
@@ -55,6 +77,7 @@ class CardController extends FOSRestController
     /**
      * @Get("/card/{id}", requirements={"id" = "\d+"})
      * @Rest\View(serializerGroups={"card_detail"})
+     * @Extra\Security("is_granted(constant('ApiBundle\\Security\\Voter\\PersonalDataVoter::VIEW'), card)")
      * @ParamConverter("card")
      */
     public function getAction(Card $card)
@@ -132,7 +155,7 @@ class CardController extends FOSRestController
      *          }
      *     }
      * )
-     *
+     * @Extra\Security("is_granted(constant('ApiBundle\\Security\\Voter\\PersonalDataVoter::UPDATE'), card)")
      * @param Card $card
      * @param ConstraintViolationListInterface $validationErrors
      * @return Card|View
@@ -151,6 +174,7 @@ class CardController extends FOSRestController
      * @Delete("/card/{id}", requirements={"id" = "\d+"})
      * @Rest\View(statusCode=204)
      * @ParamConverter("card")
+     * @Extra\Security("is_granted(constant('ApiBundle\\Security\\Voter\\PersonalDataVoter::UPDATE'), card)")
      */
     public function deleteAction(Card $card)
     {

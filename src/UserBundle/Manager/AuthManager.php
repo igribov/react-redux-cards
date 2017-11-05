@@ -65,7 +65,6 @@ class AuthManager
     public function createAccessToken(User $user)
     {
         $token = new Token();
-        // todo add accesstoken generator
         $token->setAccessToken($this->tokenGenerator->generate());
         $token->setRefreshToken($this->tokenGenerator->generate());
         $token->setUser($user);

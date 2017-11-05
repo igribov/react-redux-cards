@@ -8,6 +8,13 @@ services:
            - '@doctrine.orm.entity_manager'
            - '@validator'
 
+    personal_data.voter:
+      class: ApiBundle\Security\Voter\PersonalDataVoter
+      arguments:
+           - '@security.access.decision_manager'
+      tags: [ security.voter ]
+
+
     content.param_converter.merging:
         class: ApiBundle\Serializer\ParamConverter\MergingRequestBodyParamConverter
         arguments:
