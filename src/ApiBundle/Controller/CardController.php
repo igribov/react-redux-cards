@@ -123,6 +123,8 @@ class CardController extends FOSRestController
         if ($validationErrors->count()) {
             return View::create($validationErrors, Response::HTTP_BAD_REQUEST);
         }
+        //todo set user to card. rewrite this variant
+        $card->setUser($this->getUser());
 
         return $this->getManager()->save($card);
     }
