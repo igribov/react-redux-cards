@@ -1,5 +1,5 @@
 import axios from 'axios';
-
+import HttpService from '../services/HttpService';
 const ROOT_URL = `${API_HOST}/api`;
 const API_KEY = '?key=igribov_hash_hash';
 
@@ -10,9 +10,10 @@ export const DELETE_CARD = 'delete_card';
 export const CREATE_CARD = 'create_card';
 export const SET_ACTIVE_VIEW_CARD = 'set_active_view_card';
 
+const httpService = new HttpService({ headers: {'Authorization' : 'Bearer accesstoken123456789123456789012'} });
+
 export function fetchCards() {
-  const request = axios.get(`${ROOT_URL}/card/`);
-  console.log(ROOT_URL);
+  const request = httpService.get('card/');
 
   return {
     type: FETCH_CARDS,
@@ -21,7 +22,7 @@ export function fetchCards() {
 }
 
 export function fetchCard(id) {
-  const request = axios.get(`${ROOT_URL}/card/${id}`);
+  const request = httpService.get(`card/${id}`);
 
   return {
     type: FETCH_CARD,
@@ -29,16 +30,8 @@ export function fetchCard(id) {
   };
 }
 
-export function setActiveDate(date) {
-  return {
-    type: SET_ACTIVE_DATE,
-    payload: date
-  };
-}
-
 export function createCard(card) {
-
-  const request = axios.post(`${ROOT_URL}/card`, card);
+  const request = httpService.post(`card/${id}`);
 
   return {
     type: CREATE_CARD,
@@ -47,8 +40,7 @@ export function createCard(card) {
 }
 
 export function updateCard(card, callback) {
-
-  const request = axios.put(`${ROOT_URL}/card/${card.id}`, card);
+  const request = httpService.put(`card/${card.id}`, card);
 
   return {
     type: UPDATE_CARD,
@@ -57,7 +49,7 @@ export function updateCard(card, callback) {
 }
 
 export function deleteCard(card, callback=()=>{}) {
-	const request = axios.delete(`${ROOT_URL}/card/${card.id}`).then(callback);
+  const request = httpService.del(`card/${card.id}`).then(() => callback());
 
 	return {
 		type: DELETE_CARD,
