@@ -31,7 +31,7 @@ export function fetchCard(id) {
 }
 
 export function createCard(card) {
-  const request = httpService.post(`card/${id}`);
+  const request = httpService.post(`card`, card);
 
   return {
     type: CREATE_CARD,
