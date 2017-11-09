@@ -6,6 +6,7 @@
   "repository": "git@github.com:StephenGrider/ReduxSimpleStarter.git",
   "scripts": {
     "dev": "NODE_ENV=dev node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --config webpack.dev.js --api_host http://localhost:8000",
+    "dev_heroku": "NODE_ENV=dev node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --config webpack.dev.js --api_host https://cards-staging.herokuapp.com",
     "build": "NODE_ENV=prod node ./node_modules/webpack/bin/webpack --config webpack.prod.js",
     "test": "mocha --compilers js:babel-core/register --require ./test/test_helper.js --recursive ./test",
     "test:watch": "npm run test -- --watch"
