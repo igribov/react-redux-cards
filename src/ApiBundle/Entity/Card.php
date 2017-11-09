@@ -46,8 +46,8 @@ class Card implements Statusable, HasOwnerInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="status", type="string", length=16)
-     * @Assert\Length(max=16)
+     * @ORM\Column(name="status", type="string", length=20)
+     * @Assert\Length(max=20)
      */
     private $status;
 

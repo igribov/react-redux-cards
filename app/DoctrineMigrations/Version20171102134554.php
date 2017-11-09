@@ -51,7 +51,7 @@ class Version20171102134554 extends AbstractMigration implements ContainerAwareI
         $cardTable->addIndex(['user_id']);
         $cardTable->addColumn('title', 'string', ['length' => 255, 'notnull' => true]);
         $cardTable->addColumn('description', 'text', ['notnull' => true]);
-        $cardTable->addColumn('status', 'string', ['length' => 10, 'notnull' => true, 'default' => 'backlog']);
+        $cardTable->addColumn('status', 'string', ['length' => 20, 'notnull' => true, 'default' => 'backlog']);
         $cardTable->addForeignKeyConstraint($schema->getTable('user'), ['user_id'], ['id'], ['onUpdate' => 'CASCADE', 'onDelete' => 'CASCADE']);
     }
 
