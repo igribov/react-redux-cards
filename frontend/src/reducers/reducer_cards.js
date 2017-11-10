@@ -25,15 +25,12 @@ export default function CardsReduser(state = {}, action) {
       return {...state, [action.payload.data.id]: action.payload.data};
 
     case UPDATE_CARD_SUCCESS:
-      console.log(action.payload);
       return {...state, [action.payload.data.id]: action.payload.data};
 
     case CREATE_CARD_SUCCESS:
-      console.log(action);
       return {...state, [action.payload.data.id]: action.payload.data};
 
     case DELETE_CARD_SUCCESS:
-      console.log(action.payload);
       return state;
 
     case FETCH_CARDS_FAIL:
