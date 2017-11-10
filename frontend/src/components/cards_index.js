@@ -53,8 +53,12 @@ class CardsIndex extends Component {
 	}
 }
 
+function mapStateToProps({cards}) {
+  return {cards};
+}
+
 function mapDispatchToProps(dispatch) {
 	return bindActionCreators({updateCard}, dispatch);
 }
 
-export default connect(({cards}) => ({cards}), mapDispatchToProps)(DragDropContext(HTML5Backend)(CardsIndex));
+export default connect(mapStateToProps, mapDispatchToProps)(DragDropContext(HTML5Backend)(CardsIndex));

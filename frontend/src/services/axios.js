@@ -1,0 +1,6 @@
+import axios from 'axios';
+
+export default axios.create({
+  baseURL: API_HOST + '/api',
+  responseType: 'json'
+});

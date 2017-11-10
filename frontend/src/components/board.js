@@ -39,7 +39,6 @@ class Board extends Component {
         <div className="board">
             <CardsIndex cards={this.props.cards} configuration={COLUMNS_CONFIG}/>
         </div>
-
       </div>
     );
   }
