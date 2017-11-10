@@ -1,12 +1,13 @@
-import React, { Component} from 'react';
-import { connect } from 'react-redux';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
 import CardForm from './card_form';
 import {fetchCard, deleteCard} from '../actions';
+import NotFound from './not_found';
 
 class CardEdit extends Component {
 
   componentDidMount() {
-    if(!this.props.card) {
+    if (!this.props.card) {
       const id = this.props.match.params.id;
       this.props.fetchCard(id);
     }
@@ -17,30 +18,36 @@ class CardEdit extends Component {
   }
 
   render() {
-    return (
-      <div className="container">
-        <h3>Edit card</h3>
-        <button
-          className="btn btn-danger"
-          onClick={this.onDeleteButtonClick.bind(this)}
-        >
-          Delete
-        </button>
+    if (this.props.error) return <NotFound />;
 
-        <div className="col-md-8">
-          <CardForm
-            initialValues={this.props.card}
-            onAfterSubmit={() => this.props.history.push('/')}/>
+    if (!this.props.card && !this.props.error) return <div className="container">Load ...</div>;
+
+    return (
+        <div className="container">
+          <h3>Edit card</h3>
+          <button
+            className="btn btn-danger"
+            onClick={this.onDeleteButtonClick.bind(this)}
+          >
+            Delete
+          </button>
+
+          <div className="col-md-8">
+            <CardForm
+              initialValues={this.props.card}
+              onAfterSubmit={() => this.props.history.push('/')}/>
+          </div>
         </div>
-      </div>
-    );
+      );
   }
 }
 
 function mapStateToProps({cards}, {match: {params: {id}}}) {
+
   return {
-    card: cards[id]
+    card: cards[id],
+    error: cards.error
   };
 }
 
-export default connect(mapStateToProps,{fetchCard, deleteCard})(CardEdit);
+export default connect(mapStateToProps, {fetchCard, deleteCard})(CardEdit);
