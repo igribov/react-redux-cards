@@ -23,36 +23,13 @@ class Version20171102134554 extends AbstractMigration implements ContainerAwareI
      */
     public function up(Schema $schema)
     {
-        $userTable = $schema->createTable('user');
-        $userTable->addColumn('id', 'integer', ['autoincrement' => true]);
-        $userTable->setPrimaryKey(['id']);
-        $userTable->addColumn('email', 'string', ['length' => 255, 'notnull' => true]);
-        $userTable->addColumn('username', 'string', ['length' => 100, 'default' => null, 'notnull' => false]);
-        $userTable->addColumn('name', 'string', ['length' => 100, 'default' => null, 'notnull' => false]);
-        $userTable->addColumn('password_hash', 'string', ['length' => 60, 'default' => null, 'notnull' => false]);
-        $userTable->addColumn('roles', 'integer', ['default' => '0', 'notnull' => true, 'unsigned' => true]);
-        $userTable->addUniqueIndex(['email']);
+        // todo add driver validation MySql only
 
-        $tokenTable = $schema->createTable('token');
-        $tokenTable->addColumn('id', 'integer', ['autoincrement' => true]);
-        $tokenTable->setPrimaryKey(['id']);
-        $tokenTable->addColumn('user_id', 'integer', ['notnull' => true]);
-        $tokenTable->addColumn('access_token', 'string', ['length' => 32, 'notnull' => true]);
-        $tokenTable->addColumn('refresh_token', 'string', ['length' => 32, 'notnull' => true]);
-        $tokenTable->addColumn('expires_at', 'datetime', ['notnull' => true]);
-        $tokenTable->addUniqueIndex(['access_token', 'refresh_token']);
-        $tokenTable->addIndex(['user_id']);
-        $tokenTable->addForeignKeyConstraint($userTable, ['user_id'], ['id'], ['onUpdate' => 'CASCADE', 'onDelete' => 'CASCADE']);
-
-        $cardTable = $schema->createTable('card');
-        $cardTable->addColumn('id', 'integer', ['autoincrement' => true]);
-        $cardTable->setPrimaryKey(['id']);
-        $cardTable->addColumn('user_id', 'integer', ['notnull' => true]);
-        $cardTable->addIndex(['user_id']);
-        $cardTable->addColumn('title', 'string', ['length' => 255, 'notnull' => true]);
-        $cardTable->addColumn('description', 'text', ['notnull' => true]);
-        $cardTable->addColumn('status', 'string', ['length' => 20, 'notnull' => true, 'default' => 'backlog']);
-        $cardTable->addForeignKeyConstraint($schema->getTable('user'), ['user_id'], ['id'], ['onUpdate' => 'CASCADE', 'onDelete' => 'CASCADE']);
+        $this->addSql('CREATE TABLE card (id INT AUTO_INCREMENT NOT NULL, user_id INT NOT NULL, title VARCHAR(255) NOT NULL, description TEXT NOT NULL, status VARCHAR(20) NOT NULL, INDEX IDX_161498D3A76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE token (id INT AUTO_INCREMENT NOT NULL, user_id INT NOT NULL, access_token VARCHAR(32) NOT NULL, refresh_token VARCHAR(32) NOT NULL, expires_at DATETIME NOT NULL, UNIQUE INDEX UNIQ_5F37A13BB6A2DD68 (access_token), UNIQUE INDEX UNIQ_5F37A13BC74F2195 (refresh_token), INDEX IDX_5F37A13BA76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE user (id INT AUTO_INCREMENT NOT NULL, username VARCHAR(100) NOT NULL, name VARCHAR(255) DEFAULT NULL, password_hash VARCHAR(60) DEFAULT NULL, email VARCHAR(255) NOT NULL, roles INT UNSIGNED DEFAULT 0 NOT NULL, UNIQUE INDEX UNIQ_8D93D649E7927C74 (email), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
+        $this->addSql('ALTER TABLE card ADD CONSTRAINT FK_161498D3A76ED395 FOREIGN KEY (user_id) REFERENCES user (id)');
+        $this->addSql('ALTER TABLE token ADD CONSTRAINT FK_5F37A13BA76ED395 FOREIGN KEY (user_id) REFERENCES user (id)');
     }
 
     /**
@@ -64,7 +41,7 @@ class Version20171102134554 extends AbstractMigration implements ContainerAwareI
         $em = $this->container->get('doctrine.orm.entity_manager');
         $user = new User();
         $user->setEmail('igribov@text.ru');
-        //$user->setUsername('igribov');
+        $user->setUsername('igribov');
         //$user->setName('Gribov Ilya');
         $user->setPasswordHash('$2y$12$H2scXyPDJ0/.xUEKwMG2Q.6Cctdp2z9dfeQRRadmRJ7bb.9rzoqhm'); // pass
         $user->setRoles([User::ROLE_ADMIN]);

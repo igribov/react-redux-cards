@@ -53,7 +53,7 @@ class User implements AdvancedUserInterface, EquatableInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="username", type="string", length=100, nullable=true)
+     * @ORM\Column(name="username", type="string", length=100)
      *
      * @Assert\NotBlank(
      *     groups = {"user_create", "user_update"}
@@ -71,12 +71,9 @@ class User implements AdvancedUserInterface, EquatableInterface
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=true)
      *
-     * @Assert\NotBlank(
-     *     groups = {"user_create", "user_update"}
-     * )
      * @Assert\Length(
      *     min = 1,
-     *     max = 100,
+     *     max = 255,
      *     groups = {"user_create", "user_update"}
      * )
      */
