@@ -60,4 +60,3 @@ const connectMonitorTarget = (connect, monitor) => ({
 });
 
 export default DropTarget(CARD_TYPE, cardDropTarget, connectMonitorTarget)(BoardColumn);
-

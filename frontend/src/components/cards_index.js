@@ -6,7 +6,7 @@ import HTML5Backend from 'react-dnd-html5-backend';
 import BoardColumn from './board_column';
 import {updateCard} from '../actions';
 import {bindActionCreators} from 'redux';
-
+import { toast } from 'react-toastify';
 
 class CardsIndex extends Component {
 

@@ -26,7 +26,7 @@ class Card implements Statusable, HasOwnerInterface
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
@@ -35,7 +35,7 @@ class Card implements Statusable, HasOwnerInterface
      * @Assert\NotBlank(groups={"card_create", "card_update"})
      * @Assert\Length(max=255, groups={"card_create", "card_update"})
      */
-    private $title;
+    protected $title;
 
     /**
      * @var string
@@ -44,7 +44,7 @@ class Card implements Statusable, HasOwnerInterface
      * @Assert\NotBlank(groups={"card_create", "card_update"})
      * @Assert\Length(max=255, groups={"card_create", "card_update"})
      */
-    private $description;
+    protected $description;
 
     /**
      * @var string
@@ -52,7 +52,7 @@ class Card implements Statusable, HasOwnerInterface
      * @ORM\Column(name="status", type="string", length=20)
      * @Assert\Length(max=20)
      */
-    private $status;
+    protected $status;
 
     /**
      * @var User

@@ -35,10 +35,11 @@ export default function CardsReduser(state = {}, action) {
 
     case FETCH_CARDS_FAIL:
     case FETCH_CARD_FAIL:
+      return { 'error': action.error };
     case CREATE_CARD_FAIL:
     case UPDATE_CARD_FAIL:
     case DELETE_CARD_FAIL:
-      return {'error': action.error};
+      return state;
 
     default:
       return state;

@@ -14,6 +14,11 @@ class CardForm extends Component {
     this.onSubmit = this.onSubmit.bind(this);
   }
 
+  onSubmit(values) {
+    const methodName = values.id ? 'update' : 'create';
+    this.props[`${methodName}Card`](values).then(this.props.onAfterSubmit());
+  }
+
   renderInput(field) {
     const {meta: {touched, error}} = field;
     const hasDanger = touched && error;
@@ -70,17 +75,6 @@ class CardForm extends Component {
         </div>
       </div>
     );
-  }
-
-  onSubmit(values) {
-    if(!values.id) {
-      this.props.dispatch(this.props.createCard(values))
-        .then(() => this.props.onAfterSubmit());
-
-    } else {
-      this.props.dispatch(this.props.updateCard(values))
-        .then(() => this.props.onAfterSubmit());
-    }
   }
 
   render() {

@@ -21,17 +21,14 @@ class CardEdit extends Component {
   render() {
     if (this.props.error) return <NotFound />;
 
-    if (!this.props.card && !this.props.error) return <div className="container">Load ...</div>;
+    if (!this.props.card && !this.props.error) return <div className="container">Загрузка ...</div>;
 
     return (
         <div className="container">
           <h3>Edit card</h3>
           <button
             className="btn btn-danger"
-            onClick={this.onDeleteButtonClick.bind(this)}
-          >
-            Delete
-          </button>
+            onClick={this.onDeleteButtonClick.bind(this)}>Удалить</button>
 
           <div className="col-md-8">
             <CardForm
@@ -44,7 +41,6 @@ class CardEdit extends Component {
 }
 
 function mapStateToProps({cards}, {match: {params: {id}}}) {
-
   return {
     card: cards[id],
     error: cards.error
