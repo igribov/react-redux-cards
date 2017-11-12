@@ -6,6 +6,7 @@ use ApiBundle\Entity\Card;
 use ApiBundle\Manager\CardManager;
 use ApiBundle\Repository\CardRepository;
 use ApiBundle\Security\Voter\PersonalDataVoter;
+use FOS\RestBundle\Request\ParamFetcher;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\Controller\Annotations\Get;
@@ -67,11 +68,21 @@ class CardController extends FOSRestController
      *
      * @Extra\Security("has_role(constant('UserBundle\\Entity\\User::ROLE_USER'))")
      * @Get("/card/")
+     *
+     * @Rest\QueryParam(name="limit", requirements="\d+", strict=true, nullable=false, allowBlank=false, description="How many results to return")
+     * @Rest\QueryParam(name="offset", requirements="\d+", strict=true, nullable=true, description="Offset")
+     * @Rest\QueryParam(name="order_by", requirements="[.\w]+", strict=true, nullable=true, description="Order by")
+     *
      * @Rest\View(serializerGroups={"card_list"})
      */
-    public function cgetOwnAction()
+    public function cgetOwnAction(ParamFetcher $paramFetcher)
     {
-        return $this->getManager()->getAll(['user' => $this->getUser()]);
+        return $this->getManager()->getAll(
+            $paramFetcher->get('order_by'),
+            $paramFetcher->get('limit'),
+            $paramFetcher->get('offset'),
+            ['user' => $this->getUser()]
+        );
     }
 
     /**
