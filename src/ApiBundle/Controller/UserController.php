@@ -14,6 +14,7 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
 use Swagger\Annotations as SWG;
 use Nelmio\ApiDocBundle\Annotation\Model;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration as Extra;
 use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
@@ -42,6 +43,7 @@ class UserController extends FOSRestController
      * )
      *
      * @Get("/user/")
+     * @Extra\Security("has_role(constant('UserBundle\\Entity\\User::ROLE_ADMIN'))")
      * @Rest\View(serializerGroups={"user_list"})
      */
     public function cgetAction()
@@ -52,6 +54,7 @@ class UserController extends FOSRestController
     /**
      * @Get("/user/{id}", requirements={"id" = "\d+"})
      * @Rest\View(serializerGroups={"user_detail"})
+     * @Extra\Security("has_role(constant('UserBundle\\Entity\\User::ROLE_ADMIN'))")
      * @ParamConverter("user")
      */
     public function getAction(User $user)
@@ -90,6 +93,7 @@ class UserController extends FOSRestController
      *
      * @param User $user
      * @param ConstraintViolationListInterface $validationErrors
+     * @Extra\Security("has_role(constant('UserBundle\\Entity\\User::ROLE_ADMIN'))")
      * @return User|View
      */
     public function createAction(User $user, ConstraintViolationListInterface $validationErrors)
@@ -129,7 +133,7 @@ class UserController extends FOSRestController
      *          }
      *     }
      * )
-     *
+     * @Extra\Security("has_role(constant('UserBundle\\Entity\\User::ROLE_ADMIN'))")
      * @param User $user
      * @param ConstraintViolationListInterface $validationErrors
      * @return User|View
@@ -146,6 +150,7 @@ class UserController extends FOSRestController
     /**
      * @param User $user
      * @Delete("/user/{id}", requirements={"id" = "\d+"})
+     * @Extra\Security("has_role(constant('UserBundle\\Entity\\User::ROLE_ADMIN'))")
      * @Rest\View(statusCode=204)
      * @ParamConverter("user")
      */

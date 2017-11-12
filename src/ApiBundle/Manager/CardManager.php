@@ -30,12 +30,16 @@ class CardManager
     }
 
     /**
-     * @param array $filters
+     * @param null $orderBy
+     * @param null $limit
+     * @param null $offset
+     * @param array $criteria
      * @return array
      */
-    public function getAll(array $filters = [])
+    public function getAll($orderBy = null, $limit = null, $offset = null, array $criteria = [])
     {
-        return $this->repository->findBy($filters);
+        // todo fix order by
+        return $this->repository->findBy($criteria, null, $limit, $offset);
     }
 
     /**

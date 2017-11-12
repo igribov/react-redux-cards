@@ -37,9 +37,9 @@ class Card implements Statusable, HasOwnerInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="string", length=255)
+     * @ORM\Column(name="description", type="text", length=1000)
      * @Assert\NotBlank(groups={"card_create", "card_update"})
-     * @Assert\Length(max=255, groups={"card_create", "card_update"})
+     * @Assert\Length(max=1000, groups={"card_create", "card_update"})
      */
     private $description;
 
