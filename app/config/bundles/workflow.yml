@@ -1,0 +1,32 @@
+framework:
+    workflows:
+        card_state:
+            type: 'workflow'
+            marking_store:
+                type: 'single_state'
+                arguments:
+                    - 'status'
+            supports:
+                - ApiBundle\Entity\Card
+            places:
+                - backlog
+                - todo
+                - in_progress
+                - done
+                - closed
+            transitions:
+                start_todo:
+                    from: backlog
+                    to: todo
+                start_progress:
+                    from: todo
+                    to: in_progress
+                complete:
+                    from: in_progress
+                    to: done
+                close:
+                    from: done
+                    to: closed
+                reject:
+                    from: done
+                    to: in_progress

@@ -4,6 +4,7 @@ namespace ApiBundle\EventHandler;
 
 use ApiBundle\Interfaces\Statusable;
 use Doctrine\ORM\Event\LifecycleEventArgs;
+use Symfony\Component\Workflow\Workflow;
 
 /**
  * Class GuidListener
@@ -11,7 +12,17 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
  */
 class StatusableListener
 {
-    const DEFAULT_STATUS = 'backlog';
+    /** @var Workflow  */
+    protected $workflow;
+
+    /**
+     * StatusableListener constructor.
+     * @param $workflow
+     */
+    public function __construct(Workflow $workflow)
+    {
+        $this->workflow = $workflow;
+    }
 
     /**
      * @param LifecycleEventArgs $event
@@ -23,6 +34,6 @@ class StatusableListener
             return;
         }
 
-        $entity->setStatus(self::DEFAULT_STATUS);
+        $entity->setStatus($this->workflow->getDefinition()->getInitialPlace());
     }
 }

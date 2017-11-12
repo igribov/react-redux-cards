@@ -5,7 +5,9 @@ namespace ApiBundle\Entity;
 use ApiBundle\Interfaces\HasOwnerInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
+use ApiBundle\Validator\Constraints as CustomAssert;
 use ApiBundle\Interfaces\Statusable;
+use Symfony\Component\Workflow\Marking;
 use UserBundle\Entity\User;
 
 /**
@@ -13,6 +15,7 @@ use UserBundle\Entity\User;
  *
  * @ORM\Table(name="card")
  * @ORM\Entity(repositoryClass="ApiBundle\Repository\CardRepository")
+ * @CustomAssert\Statusable(groups={"card_create", "card_update"})
  */
 class Card implements Statusable, HasOwnerInterface
 {
