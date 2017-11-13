@@ -2,6 +2,13 @@ imports:
     - { resource: parameters_env.php }
     - { resource: config.yml }
 
+monolog:
+    handlers:
+        nested:
+            type:  stream
+            path:  "php://stderr"
+            level: debug
+
 framework:
     test: ~
     session:
