@@ -79,7 +79,8 @@ class CardController extends FOSRestController
     {
         return $this->getManager()->getAll(
             $paramFetcher->get('order_by'),
-            $paramFetcher->get('limit'),
+            //$paramFetcher->get('limit'),
+            null,
             $paramFetcher->get('offset'),
             ['user' => $this->getUser()]
         );

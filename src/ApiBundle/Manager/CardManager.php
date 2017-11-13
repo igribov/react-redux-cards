@@ -39,7 +39,7 @@ class CardManager
     public function getAll($orderBy = null, $limit = null, $offset = null, array $criteria = [])
     {
         // todo fix order by
-        return $this->repository->findBy($criteria, null, $limit, $offset);
+        return $this->repository->findBy($criteria);
     }
 
     /**
