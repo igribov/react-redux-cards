@@ -5,7 +5,7 @@ import {connect} from 'react-redux';
 import {fetchCards} from '../actions';
 import {bindActionCreators} from 'redux';
 
-const COLUMNS_CONFIG = {
+export const COLUMNS_CONFIG = {
 	backlog: {
 		title: "Бэклог"
 	},
