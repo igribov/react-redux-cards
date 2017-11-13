@@ -1,17 +1,43 @@
 import React, {Component} from 'react';
-import {Field, reduxForm} from 'redux-form';
+import {Field, reduxForm, SubmissionError} from 'redux-form';
 import {Link} from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import {connect} from 'react-redux';
-import moment from 'moment';
+//import moment from 'moment';
+import _ from 'lodash';
 import 'react-datepicker/dist/react-datepicker.css';
 import { createCard, updateCard } from '../actions';
+import { COLUMNS_CONFIG } from './board';
+
+const CARD_STATUSES = _.reduce(COLUMNS_CONFIG, (res, conf, key) => {
+  return {...res, [key]: conf.title };
+}, {});
+
+export const FORM_TYPE_CREATE = 'FORM_TYPE_CREATE';
+export const FORM_TYPE_UPDATE = 'FORM_TYPE_UPDATE';
+
 
 class CardForm extends Component {
 
   constructor(props) {
     super(props);
     this.onSubmit = this.onSubmit.bind(this);
+  }
+
+  onSubmit(values) {
+    const methodName = values.id ? 'update' : 'create';
+
+    return this.props[`${methodName}Card`](values)
+      .then(({error}) => {
+        if(error && error.response.status == 400) {
+          const formErrors = _.reduce(error.response.data, (res, item) => {
+            return { ...res, [item.property_path] : item.message };
+          }, {});
+
+          throw new SubmissionError(formErrors);
+        }
+        this.props.onAfterSubmit();
+      });
   }
 
   renderInput(field) {
@@ -26,6 +52,28 @@ class CardForm extends Component {
           type={field.type || 'text'}
           {...field.input}
         />
+        <div className="text-help">
+          {hasDanger ? error : ''}
+        </div>
+      </div>
+    );
+  }
+
+  renderSelect(field) {
+    const {meta: {touched, error}} = field;
+    const hasDanger = touched && error;
+
+    return (
+      <div className={`form-group ${hasDanger ? ' has-danger' : ''}`}>
+        <label>{field.label}</label>
+        <select
+          className="form-control"
+          {...field.input}
+        >
+          {
+            _.map(field.options, (opt, val) => <option value={val} key={val}>{opt}</option>)
+          }
+        </select>
         <div className="text-help">
           {hasDanger ? error : ''}
         </div>
@@ -72,20 +120,10 @@ class CardForm extends Component {
     );
   }
 
-  onSubmit(values) {
-    if(!values.id) {
-      this.props.dispatch(this.props.createCard(values))
-        .then(() => this.props.onAfterSubmit());
-
-    } else {
-      this.props.dispatch(this.props.updateCard(values))
-        .then(() => this.props.onAfterSubmit());
-    }
-  }
-
   render() {
-    const {handleSubmit} = this.props;
-
+    const {handleSubmit, formType} = this.props;
+    console.log(formType);
+    // todo delete id field from form
     return (
       <form onSubmit={handleSubmit(this.onSubmit)}>
         <Field
@@ -94,18 +132,29 @@ class CardForm extends Component {
           component={this.renderInput}
         />
         <Field
-          label="Title For Task"
+          label="Заголовок"
           name="title"
           component={this.renderInput}
         />
+        {
+          (formType === FORM_TYPE_UPDATE) ?
+            <Field
+              label="Статус"
+              name="status"
+              options={CARD_STATUSES}
+              component={this.renderSelect}
+            />
+            :
+            null
+        }
         <Field
-          label="Description"
+          label="Описание"
           name="description"
           component={this.renderTextarea}
         />
-        <button type="submit" className="btn btn-primary">Submit</button>
+        <button type="submit" className="btn btn-primary">Отправить</button>
         &nbsp;
-        <Link to="/" className="btn btn-danger">Cancel</Link>
+        <Link to="/" className="btn btn-danger">Отмена</Link>
       </form>
     );
   }
@@ -114,10 +163,10 @@ class CardForm extends Component {
 function validate(values) {
   const errors = {};
   if (!values.title) {
-    errors.title = 'Enter a title';
+    errors.title = 'Введите заголовок';
   }
   if (!values.description) {
-    errors.description = 'Enter a description';
+    errors.description = 'Введите описание';
   }
 
   // if errors is empty, the form is ready to submit

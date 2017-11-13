@@ -24,7 +24,7 @@ export function fetchCards() {
   return {
     type: FETCH_CARDS,
     payload: {
-      request:{
+      request: {
         url:'card/'
       }
     }
@@ -36,7 +36,7 @@ export function fetchCard(id) {
   return {
     type: FETCH_CARD,
     payload: {
-      request:{
+      request: {
         url:'card/' + id
       }
     }

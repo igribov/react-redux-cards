@@ -6,7 +6,7 @@ import HTML5Backend from 'react-dnd-html5-backend';
 import BoardColumn from './board_column';
 import {updateCard} from '../actions';
 import {bindActionCreators} from 'redux';
-
+import { toast } from 'react-toastify';
 
 class CardsIndex extends Component {
 
@@ -17,8 +17,13 @@ class CardsIndex extends Component {
 	}
 
 	onCardDrop(card, newStatus) {
-		card.status = newStatus;
-		this.props.updateCard(card);
+		const cardData = _.clone(card);
+    cardData.status = newStatus;
+		this.props.updateCard(cardData).then(res => {
+			if(!res.error && res.payload) {
+				card = _.merge(card, res.payload.data);
+			}
+		});
 	}
 
 	renderBoardColumn(cards = [], config) {

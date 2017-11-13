@@ -2,7 +2,9 @@
 
 namespace ApiBundle\Interfaces;
 
-interface Statusable
+use Symfony\Component\Workflow\MarkingStore\MarkingStoreInterface;
+
+interface Statusable //extends MarkingStoreInterface
 {
     /**
      * @param $status

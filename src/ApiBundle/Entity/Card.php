@@ -5,7 +5,9 @@ namespace ApiBundle\Entity;
 use ApiBundle\Interfaces\HasOwnerInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
+use ApiBundle\Validator\Constraints as CustomAssert;
 use ApiBundle\Interfaces\Statusable;
+use Symfony\Component\Workflow\Marking;
 use UserBundle\Entity\User;
 
 /**
@@ -13,6 +15,7 @@ use UserBundle\Entity\User;
  *
  * @ORM\Table(name="card")
  * @ORM\Entity(repositoryClass="ApiBundle\Repository\CardRepository")
+ * @CustomAssert\Statusable(groups={"card_create", "card_update"})
  */
 class Card implements Statusable, HasOwnerInterface
 {
@@ -23,7 +26,7 @@ class Card implements Statusable, HasOwnerInterface
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
@@ -32,7 +35,7 @@ class Card implements Statusable, HasOwnerInterface
      * @Assert\NotBlank(groups={"card_create", "card_update"})
      * @Assert\Length(max=255, groups={"card_create", "card_update"})
      */
-    private $title;
+    protected $title;
 
     /**
      * @var string
@@ -41,7 +44,7 @@ class Card implements Statusable, HasOwnerInterface
      * @Assert\NotBlank(groups={"card_create", "card_update"})
      * @Assert\Length(max=1000, groups={"card_create", "card_update"})
      */
-    private $description;
+    protected $description;
 
     /**
      * @var string
@@ -49,7 +52,7 @@ class Card implements Statusable, HasOwnerInterface
      * @ORM\Column(name="status", type="string", length=20)
      * @Assert\Length(max=20)
      */
-    private $status;
+    protected $status;
 
     /**
      * @var User

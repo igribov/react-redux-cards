@@ -6,8 +6,6 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {setActiveViewCard} from "../actions";
 
-const CARD_STATUS_DONE = 'done';
-
 class Card extends Component {
 
 	onViewButtonClick() {

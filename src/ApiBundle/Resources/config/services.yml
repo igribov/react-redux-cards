@@ -25,5 +25,15 @@ services:
 
     statusable.listener:
         class: ApiBundle\EventHandler\StatusableListener
+        arguments:
+            - '@workflow.card_state'
         tags:
             - { name: doctrine.event_listener, event: prePersist }
+
+    statusable.validator:
+        class: ApiBundle\Validator\Constraints\StatusableValidator
+        arguments:
+            - '@doctrine'
+            - '@workflow.card_state'
+        tags:
+            - { name: validator.constraint_validator }
