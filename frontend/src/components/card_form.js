@@ -1,11 +1,18 @@
 import React, {Component} from 'react';
-import {Field, reduxForm} from 'redux-form';
+import {Field, reduxForm, SubmissionError} from 'redux-form';
 import {Link} from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import {connect} from 'react-redux';
-import moment from 'moment';
+//import moment from 'moment';
+import _ from 'lodash';
 import 'react-datepicker/dist/react-datepicker.css';
 import { createCard, updateCard } from '../actions';
+import { COLUMNS_CONFIG } from './board';
+
+const CARD_STATUSES = _.reduce(COLUMNS_CONFIG, (res, conf, key) => {
+  return {...res, [key]: conf.title };
+}, {});
+
 
 class CardForm extends Component {
 
@@ -16,7 +23,18 @@ class CardForm extends Component {
 
   onSubmit(values) {
     const methodName = values.id ? 'update' : 'create';
-    this.props[`${methodName}Card`](values).then(this.props.onAfterSubmit());
+
+    return this.props[`${methodName}Card`](values)
+      .then(({error}) => {
+        if(error && error.response.status == 400) {
+          const formErrors = _.reduce(error.response.data, (res, item) => {
+            return { ...res, [item.property_path] : item.message };
+          }, {});
+
+          throw new SubmissionError(formErrors);
+        }
+        this.props.onAfterSubmit();
+      });
   }
 
   renderInput(field) {
@@ -31,6 +49,28 @@ class CardForm extends Component {
           type={field.type || 'text'}
           {...field.input}
         />
+        <div className="text-help">
+          {hasDanger ? error : ''}
+        </div>
+      </div>
+    );
+  }
+
+  renderSelect(field) {
+    const {meta: {touched, error}} = field;
+    const hasDanger = touched && error;
+
+    return (
+      <div className={`form-group ${hasDanger ? ' has-danger' : ''}`}>
+        <label>{field.label}</label>
+        <select
+          className="form-control"
+          {...field.input}
+        >
+          {
+            _.map(field.options, (opt, val) => <option value={val} key={val}>{opt}</option>)
+          }
+        </select>
         <div className="text-help">
           {hasDanger ? error : ''}
         </div>
@@ -79,7 +119,7 @@ class CardForm extends Component {
 
   render() {
     const {handleSubmit} = this.props;
-
+    // todo delete id field from form
     return (
       <form onSubmit={handleSubmit(this.onSubmit)}>
         <Field
@@ -88,18 +128,24 @@ class CardForm extends Component {
           component={this.renderInput}
         />
         <Field
-          label="Title For Task"
+          label="Заголовок"
           name="title"
           component={this.renderInput}
         />
         <Field
-          label="Description"
+          label="Статус"
+          name="status"
+          options={CARD_STATUSES}
+          component={this.renderSelect}
+        />
+        <Field
+          label="Описание"
           name="description"
           component={this.renderTextarea}
         />
-        <button type="submit" className="btn btn-primary">Submit</button>
+        <button type="submit" className="btn btn-primary">Отправить</button>
         &nbsp;
-        <Link to="/" className="btn btn-danger">Cancel</Link>
+        <Link to="/" className="btn btn-danger">Отмена</Link>
       </form>
     );
   }

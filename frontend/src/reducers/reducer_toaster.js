@@ -20,7 +20,7 @@ export default function ToasterReduser(state = {}, action) {
 
     case UPDATE_CARD_SUCCESS:
     case CREATE_CARD_SUCCESS:
-      console.log('CREATE_CARD_SUCCESS=>', action);
+      //console.log('CREATE_CARD_SUCCESS=>', action);
       return { success: { message: 'Success ' + action.type } };
 
     default:
