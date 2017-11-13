@@ -69,7 +69,7 @@ class CardController extends FOSRestController
      * @Extra\Security("has_role(constant('UserBundle\\Entity\\User::ROLE_USER'))")
      * @Get("/card/")
      *
-     * @Rest\QueryParam(name="limit", requirements="\d+", strict=true, nullable=false, allowBlank=false, description="How many results to return")
+     * @-Rest\QueryParam(name="limit", requirements="\d+", strict=true, nullable=false, allowBlank=false, description="How many results to return")
      * @Rest\QueryParam(name="offset", requirements="\d+", strict=true, nullable=true, description="Offset")
      * @Rest\QueryParam(name="order_by", requirements="[.\w]+", strict=true, nullable=true, description="Order by")
      *
