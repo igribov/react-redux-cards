@@ -17,8 +17,13 @@ class CardsIndex extends Component {
 	}
 
 	onCardDrop(card, newStatus) {
-		card.status = newStatus;
-		this.props.updateCard(card);
+		const cardData = _.clone(card);
+    cardData.status = newStatus;
+		this.props.updateCard(cardData).then(res => {
+			if(!res.error && res.payload) {
+				card = _.merge(card, res.payload.data);
+			}
+		});
 	}
 
 	renderBoardColumn(cards = [], config) {

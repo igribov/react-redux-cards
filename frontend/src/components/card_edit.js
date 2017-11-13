@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import CardForm from './card_form';
 import {fetchCard, deleteCard} from '../actions';
 import NotFound from './not_found';
+import {FORM_TYPE_UPDATE} from './card_form';
 
 class CardEdit extends Component {
 
@@ -25,13 +26,14 @@ class CardEdit extends Component {
 
     return (
         <div className="container">
-          <h3>Edit card</h3>
+          <h3>Редактирование</h3>
           <button
             className="btn btn-danger"
             onClick={this.onDeleteButtonClick.bind(this)}>Удалить</button>
 
           <div className="col-md-8">
             <CardForm
+              formType={FORM_TYPE_UPDATE}
               initialValues={this.props.card}
               onAfterSubmit={() => this.props.history.push('/')}/>
           </div>

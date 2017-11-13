@@ -21,10 +21,8 @@ class Toaster extends Component {
 
     return <ToastContainer
           position="top-right"
-          autoClose={2000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
+          autoClose={1000}
+          newestOnTop={true}
           pauseOnHover/>
   }
 }

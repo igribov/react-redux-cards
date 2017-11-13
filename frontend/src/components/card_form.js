@@ -13,6 +13,9 @@ const CARD_STATUSES = _.reduce(COLUMNS_CONFIG, (res, conf, key) => {
   return {...res, [key]: conf.title };
 }, {});
 
+export const FORM_TYPE_CREATE = 'FORM_TYPE_CREATE';
+export const FORM_TYPE_UPDATE = 'FORM_TYPE_UPDATE';
+
 
 class CardForm extends Component {
 
@@ -118,7 +121,8 @@ class CardForm extends Component {
   }
 
   render() {
-    const {handleSubmit} = this.props;
+    const {handleSubmit, formType} = this.props;
+    console.log(formType);
     // todo delete id field from form
     return (
       <form onSubmit={handleSubmit(this.onSubmit)}>
@@ -132,12 +136,17 @@ class CardForm extends Component {
           name="title"
           component={this.renderInput}
         />
-        <Field
-          label="Статус"
-          name="status"
-          options={CARD_STATUSES}
-          component={this.renderSelect}
-        />
+        {
+          (formType === FORM_TYPE_UPDATE) ?
+            <Field
+              label="Статус"
+              name="status"
+              options={CARD_STATUSES}
+              component={this.renderSelect}
+            />
+            :
+            null
+        }
         <Field
           label="Описание"
           name="description"
@@ -154,10 +163,10 @@ class CardForm extends Component {
 function validate(values) {
   const errors = {};
   if (!values.title) {
-    errors.title = 'Enter a title';
+    errors.title = 'Введите заголовок';
   }
   if (!values.description) {
-    errors.description = 'Enter a description';
+    errors.description = 'Введите описание';
   }
 
   // if errors is empty, the form is ready to submit
