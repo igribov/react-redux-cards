@@ -3,6 +3,7 @@ import _ from 'lodash';
 import {connect} from 'react-redux';
 import {DragDropContext} from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
+import { default as TouchBackend } from 'react-dnd-touch-backend';
 import BoardColumn from './board_column';
 import {updateCard} from '../actions';
 import {bindActionCreators} from 'redux';
@@ -66,4 +67,4 @@ function mapDispatchToProps(dispatch) {
 	return bindActionCreators({updateCard}, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(DragDropContext(HTML5Backend)(CardsIndex));
+export default connect(mapStateToProps, mapDispatchToProps)(DragDropContext(TouchBackend)(CardsIndex)); //TouchBackend
