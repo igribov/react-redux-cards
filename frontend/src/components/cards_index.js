@@ -7,7 +7,7 @@ import { default as TouchBackend } from 'react-dnd-touch-backend';
 import BoardColumn from './board_column';
 import {updateCard} from '../actions';
 import {bindActionCreators} from 'redux';
-import { toast } from 'react-toastify';
+import {IS_MOBILE} from '../services/mobile_detector';
 
 class CardsIndex extends Component {
 
@@ -18,6 +18,9 @@ class CardsIndex extends Component {
 	}
 
 	onCardDrop(card, newStatus) {
+		if (newStatus === card.status) {
+			return;
+		}
 		const cardData = _.clone(card);
     cardData.status = newStatus;
 		this.props.updateCard(cardData).then(res => {
@@ -67,4 +70,4 @@ function mapDispatchToProps(dispatch) {
 	return bindActionCreators({updateCard}, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(DragDropContext(TouchBackend)(CardsIndex)); //TouchBackend
+export default connect(mapStateToProps, mapDispatchToProps)(DragDropContext(IS_MOBILE ? TouchBackend : HTML5Backend)(CardsIndex));
