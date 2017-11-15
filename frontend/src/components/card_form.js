@@ -16,7 +16,6 @@ const CARD_STATUSES = _.reduce(COLUMNS_CONFIG, (res, conf, key) => {
 export const FORM_TYPE_CREATE = 'FORM_TYPE_CREATE';
 export const FORM_TYPE_UPDATE = 'FORM_TYPE_UPDATE';
 
-
 class CardForm extends Component {
 
   constructor(props) {
@@ -121,8 +120,7 @@ class CardForm extends Component {
   }
 
   render() {
-    const {handleSubmit, formType} = this.props;
-    console.log(formType);
+    const {handleSubmit, crateForm, updateForm} = this.props;
     // todo delete id field from form
     return (
       <form onSubmit={handleSubmit(this.onSubmit)}>
@@ -137,7 +135,7 @@ class CardForm extends Component {
           component={this.renderInput}
         />
         {
-          (formType === FORM_TYPE_UPDATE) ?
+          updateForm ?
             <Field
               label="Статус"
               name="status"
@@ -152,9 +150,9 @@ class CardForm extends Component {
           name="description"
           component={this.renderTextarea}
         />
-        <button type="submit" className="btn btn-primary">Отправить</button>
+        <button type="submit" className="btn btn-primary">{updateForm ? 'Update' : 'Create'}</button>
         &nbsp;
-        <Link to="/" className="btn btn-danger">Отмена</Link>
+        <Link to="/" className="btn btn-danger">Cancel</Link>
       </form>
     );
   }
@@ -162,12 +160,12 @@ class CardForm extends Component {
 
 function validate(values) {
   const errors = {};
-  if (!values.title) {
-    errors.title = 'Введите заголовок';
-  }
-  if (!values.description) {
-    errors.description = 'Введите описание';
-  }
+
+  ['title', 'description'].forEach((requiredFiled) => {
+    if (!values[requiredFiled]) {
+      errors[requiredFiled] = 'Enter ' + requiredFiled;
+    }
+  });
 
   // if errors is empty, the form is ready to submit
   return errors;

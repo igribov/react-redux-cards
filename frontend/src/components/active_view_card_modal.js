@@ -7,10 +7,14 @@ const ActiveViewCardModal = (props) => {
 	const {card} = props;
 
 	return (
-		<div>
+		<div className="col-md-6 col-sx-12 col-s-12">
 			<h4>{card.title}</h4>
-			<date>{card.date}</date>
-			<p>{card.description}</p>
+			<table className="table">
+				<tbody>
+          <tr key="status"><td>Status</td><td>{card.status}</td></tr>
+          <tr key="description"><td>Description</td><td>{card.description}</td></tr>
+				</tbody>
+			</table>
 		</div>
 	);
 };

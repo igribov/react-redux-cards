@@ -22,18 +22,18 @@ class CardEdit extends Component {
   render() {
     if (this.props.error) return <NotFound />;
 
-    if (!this.props.card && !this.props.error) return <div className="container">Загрузка ...</div>;
+    if (!this.props.card && !this.props.error) return <div className="container">Loading ...</div>;
 
     return (
         <div className="container">
-          <h3>Редактирование</h3>
+          <h3>Edit card</h3>
           <button
             className="btn btn-danger"
             onClick={this.onDeleteButtonClick.bind(this)}>Удалить</button>
 
           <div className="col-md-8">
             <CardForm
-              formType={FORM_TYPE_UPDATE}
+              update={true}
               initialValues={this.props.card}
               onAfterSubmit={() => this.props.history.push('/')}/>
           </div>

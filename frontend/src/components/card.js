@@ -33,7 +33,7 @@ class Card extends Component {
           </span>
 					&nbsp;
 					<Link className="btn btn-default edit-link" to={`/card/edit/${card.id}`}>&#x270E;</Link>
-					<a href="#" onClick={this.onViewButtonClick.bind(this)}>View</a>
+					<Link className="btn btn-default edit-view" to="" onClick={this.onViewButtonClick.bind(this)}>&#x1f441;</Link>
 				</div>
 			</li>
 		);

@@ -1,0 +1,2 @@
+user.email.not_blank: Email can not be empty
+user.email.already_exists: Email already registered

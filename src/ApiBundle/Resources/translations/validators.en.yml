@@ -1,0 +1,1 @@
+status.invalid: Can not change status from "%from_status%" to "%to_status%"

@@ -7,18 +7,21 @@ import {bindActionCreators} from 'redux';
 
 export const COLUMNS_CONFIG = {
 	backlog: {
-		title: "Бэклог"
+		title: "Backlog"
 	},
 	todo: {
-		title: "Сделать",
+		title: "ToDo",
 		maxLoad: 6,
 	},
 	in_progress: {
-		title: "В прогрессе",
+		title: "In Progress",
 		maxLoad: 4,
 	},
 	done: {
-		title: "Сделано",
+		title: "Done",
+	},
+	close: {
+		title: "Close",
 	}
 };
 
@@ -30,7 +33,7 @@ class Board extends Component {
 
   render() {
     const navLinks = [
-      { title: 'Создать', to: '/card/create' }
+      { title: 'New Card', to: '/card/create' }
     ];
 
     return (

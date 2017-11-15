@@ -12,9 +12,8 @@ class BoardColumn extends Component {
       transitionLeaveTimeout: 0
     };
     const isBustedMax = this.props.cards.length >= this.props.maxLoad;
-    const {title, cards, status, maxLoad, connectDropTarget} = this.props;
-
-    const className = `col-md-3 col-s-3 col-xs-3 board-column column-${status}`;
+    const {title, colWidth = 1, cards, status, maxLoad, connectDropTarget} = this.props;
+    const className = `col-md-${colWidth} col-s-${colWidth} col-xs-${colWidth} board-column column-${status}`;
 
     const cardsInBoard = _.map(cards, card => <Card key={card.id} card={card}/>);
 

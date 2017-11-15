@@ -15,7 +15,6 @@ import ActiveViewCardModal from './components/active_view_card_modal';
 import reducers from './reducers';
 
 import './style/style.styl';
-import './style/bootstrap.min.css';
 const createStoreWithMiddleware = applyMiddleware(promise, axiosMiddleware(client))(createStore);
 
 ReactDOM.render(
