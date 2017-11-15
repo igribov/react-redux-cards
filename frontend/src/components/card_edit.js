@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import CardForm from './card_form';
 import {fetchCard, deleteCard} from '../actions';
 import NotFound from './not_found';
-import {FORM_TYPE_UPDATE} from './card_form';
+import ButtonsBar from '../containers/buttons_bar';
 
 class CardEdit extends Component {
 
@@ -24,21 +24,31 @@ class CardEdit extends Component {
 
     if (!this.props.card && !this.props.error) return <div className="container">Loading ...</div>;
 
-    return (
-        <div className="container">
-          <h3>Edit card</h3>
-          <button
-            className="btn btn-danger"
-            onClick={this.onDeleteButtonClick.bind(this)}>Удалить</button>
+    const navLinks = [
+      {
+        title: 'Back',
+        to: '/'
+      },
+      {
+        title: 'Delete',
+        to: '#',
+        onClick: this.onDeleteButtonClick.bind(this),
+        className: 'btn btn-danger'
+      }
+    ];
 
-          <div className="col-md-8">
-            <CardForm
-              update={true}
-              initialValues={this.props.card}
-              onAfterSubmit={() => this.props.history.push('/')}/>
-          </div>
+    return (
+      <div className="container">
+        <ButtonsBar links={navLinks}/>
+        <div className="col-md-8">
+          <h3>Edit card</h3>
+          <CardForm
+            update={true}
+            initialValues={this.props.card}
+            onAfterSubmit={() => this.props.history.push('/')}/>
         </div>
-      );
+      </div>
+    );
   }
 }
 

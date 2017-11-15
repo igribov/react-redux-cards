@@ -124,20 +124,25 @@ class CardForm extends Component {
     // todo delete id field from form
     return (
       <form onSubmit={handleSubmit(this.onSubmit)}>
+        {
+          updateForm ?
+            <Field
+              name="id"
+              type="hidden"
+              component={this.renderInput}
+            />
+            :
+            null
+        }
         <Field
-          name="id"
-          type="hidden"
-          component={this.renderInput}
-        />
-        <Field
-          label="Заголовок"
+          label="Title"
           name="title"
           component={this.renderInput}
         />
         {
           updateForm ?
             <Field
-              label="Статус"
+              label="Status"
               name="status"
               options={CARD_STATUSES}
               component={this.renderSelect}
@@ -146,7 +151,7 @@ class CardForm extends Component {
             null
         }
         <Field
-          label="Описание"
+          label="Description"
           name="description"
           component={this.renderTextarea}
         />

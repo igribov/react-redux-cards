@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import CardsIndex from "./cards_index";
-import Navbar from "./navbar";
+import ButtonsBar from "../containers/buttons_bar";
 import {connect} from 'react-redux';
 import {fetchCards} from '../actions';
 import {bindActionCreators} from 'redux';
@@ -20,7 +20,7 @@ export const COLUMNS_CONFIG = {
 	done: {
 		title: "Done",
 	},
-	close: {
+	closed: {
 		title: "Close",
 	}
 };
@@ -33,12 +33,12 @@ class Board extends Component {
 
   render() {
     const navLinks = [
-      { title: 'New Card', to: '/card/create' }
+      { title: 'New Card', to: '/card/create' },
     ];
 
     return (
       <div className="container">
-        <Navbar links={navLinks} />
+        <ButtonsBar links={navLinks} />
         <div className="board">
             <CardsIndex cards={this.props.cards} configuration={COLUMNS_CONFIG}/>
         </div>
