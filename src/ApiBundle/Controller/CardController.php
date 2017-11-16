@@ -84,7 +84,7 @@ class CardController extends FOSRestController
         );*/
         // todo fix it horrible thing
         $criteria = [];
-        if ($paramFetcher->has('status')) {
+        if ($paramFetcher->get('status')) {
           $criteria['status'] = $paramFetcher->get('status');
         }
         $criteria['user'] = $this->getUser();
