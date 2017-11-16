@@ -18,20 +18,27 @@ import {registerServiceWorker} from './pwa/services';
 registerServiceWorker();
 
 import './style/style.styl';
+
 const createStoreWithMiddleware = applyMiddleware(promise, axiosMiddleware(client))(createStore);
+/**/
 
 ReactDOM.render(
   <Provider store={createStoreWithMiddleware(reducers)}>
     <div>
       <Toaster />
       <BrowserRouter>
-        <Switch>
-          <Route exact path="/card/create" component={CardCreate}/>
-          <Route exact path="/card/edit/:id" component={CardEdit}/>
-          <Route exact path="/" component={Board}/>
-          <Route exact path="/404" component={NotFound}/>
-          <Redirect to="/404" />
-        </Switch>
+        <div>
+          <Route path="*" component={Navigation}/>
+          <div className="app container-fluid">
+            <Switch>
+              <Route exact path="/card/create" component={CardCreate}/>
+              <Route exact path="/card/edit/:id" component={CardEdit}/>
+              <Route exact path="/" component={Board}/>
+              <Route exact path="/404" component={NotFound}/>
+              <Redirect to="/404"/>
+            </Switch>
+          </div>
+        </div>
       </BrowserRouter>
       <ActiveViewCardModal />
     </div>

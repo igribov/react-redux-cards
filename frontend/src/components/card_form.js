@@ -49,8 +49,7 @@ class CardForm extends Component {
         <input
           className="form-control"
           type={field.type || 'text'}
-          {...field.input}
-        />
+          {...field.input} />
         <div className="text-help">
           {hasDanger ? error : ''}
         </div>
@@ -65,10 +64,7 @@ class CardForm extends Component {
     return (
       <div className={`form-group ${hasDanger ? ' has-danger' : ''}`}>
         <label>{field.label}</label>
-        <select
-          className="form-control"
-          {...field.input}
-        >
+        <select className="form-control" {...field.input}>
           {
             _.map(field.options, (opt, val) => <option value={val} key={val}>{opt}</option>)
           }
@@ -129,32 +125,28 @@ class CardForm extends Component {
             <Field
               name="id"
               type="hidden"
-              component={this.renderInput}
-            />
+              component={this.renderInput} />
             :
             null
         }
         <Field
           label="Title"
           name="title"
-          component={this.renderInput}
-        />
+          component={this.renderInput} />
         {
           updateForm ?
             <Field
               label="Status"
               name="status"
               options={CARD_STATUSES}
-              component={this.renderSelect}
-            />
+              component={this.renderSelect} />
             :
             null
         }
         <Field
           label="Description"
           name="description"
-          component={this.renderTextarea}
-        />
+          component={this.renderTextarea} />
         <button type="submit" className="btn btn-primary">{updateForm ? 'Update' : 'Create'}</button>
         &nbsp;
         <Link to="/" className="btn btn-danger">Cancel</Link>

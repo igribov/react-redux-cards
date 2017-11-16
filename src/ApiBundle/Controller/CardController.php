@@ -72,17 +72,29 @@ class CardController extends FOSRestController
      * @-Rest\QueryParam(name="limit", requirements="\d+", strict=true, nullable=false, allowBlank=false, description="How many results to return")
      * @Rest\QueryParam(name="offset", requirements="\d+", strict=true, nullable=true, description="Offset")
      * @Rest\QueryParam(name="order_by", requirements="[.\w]+", strict=true, nullable=true, description="Order by")
+     * @Rest\QueryParam(name="status", requirements="[.\w]+", map=true, strict=true, nullable=true, description="Status")
      *
      * @Rest\View(serializerGroups={"card_list"})
      */
-    public function cgetOwnAction(ParamFetcher $paramFetcher)
+    public function cgetByUserAction(ParamFetcher $paramFetcher)
     {
+        /*$criteria = array_intersect_key(
+            $paramFetcher->all(),
+            array_flip(['status'])
+        );*/
+        // todo fix it horrible thing
+        $criteria = [];
+        if ($paramFetcher->get('status')) {
+          $criteria['status'] = $paramFetcher->get('status');
+        }
+        $criteria['user'] = $this->getUser();
+
         return $this->getManager()->getAll(
             $paramFetcher->get('order_by'),
             //$paramFetcher->get('limit'),
             null,
             $paramFetcher->get('offset'),
-            ['user' => $this->getUser()]
+            $criteria
         );
     }
 
