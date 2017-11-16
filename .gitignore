@@ -27,3 +27,4 @@
 /Scripts/
 /src/FrontBundle/FrontSrc/node_modules
 app/Resources/
+frontend/dist

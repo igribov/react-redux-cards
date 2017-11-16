@@ -4,11 +4,6 @@ const path = require('path');
 const common = require('./webpack.common.js');
 
 const devConfig = {
-  output: {
-    path: path.join(__dirname, 'dist'),
-    publicPath: '/',
-    filename: 'js/bundle.js'
-  },
   devtool: 'inline-source-map',
   devServer: {
     historyApiFallback: true,

@@ -13,6 +13,9 @@ import axiosMiddleware from './middlewares/axios_middleware';
 import client from './services/axios';
 import ActiveViewCardModal from './components/active_view_card_modal';
 import reducers from './reducers';
+import {registerServiceWorker} from './pwa/services';
+
+registerServiceWorker();
 
 import './style/style.styl';
 const createStoreWithMiddleware = applyMiddleware(promise, axiosMiddleware(client))(createStore);
