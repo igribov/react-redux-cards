@@ -1,21 +1,18 @@
 import axiosService from '../services/axios';
 import axiosMiddleware from 'redux-axios-middleware';
+import {apiIdbRequestInterceptor, apiIdbResponseInterceptor} from '../idb/';
 
 const middlewareConfig =  {
   interceptors: {
     request: [
-      (getState, config) => {
-        config.headers['Authorization'] = 'Bearer ' + 'accesstoken123456789123456789012';
+      (getState, req) => {
+        req.headers['Authorization'] = 'Bearer ' + 'accesstoken123456789123456789012';
 
-        return config
-      }
+        return req;
+      },
+      apiIdbRequestInterceptor
     ],
-    response: [
-      (res, req) => {
-        console.log(res, req);
-        return res;
-      }
-    ]
+    response: []
   }
 };
 
