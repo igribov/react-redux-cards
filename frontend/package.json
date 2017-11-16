@@ -30,6 +30,7 @@
     "pug": "^2.0.0-rc.4",
     "pug-loader": "^2.3.0",
     "react-addons-test-utils": "^0.14.7",
+    "serviceworker-webpack-plugin": "^0.2.3",
     "style-loader": "^0.18.2",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.1",
@@ -44,6 +45,7 @@
     "lodash": "^3.10.1",
     "moment": "^2.18.1",
     "react": "^0.14.3",
+    "react-bootstrap": "^0.31.5",
     "react-datepicker": "^0.55.0",
     "react-dnd": "^2.5.3",
     "react-dnd-html5-backend": "^2.5.3",
@@ -58,7 +60,6 @@
     "redux-axios-middleware": "^4.0.0",
     "redux-dialog": "0.0.9",
     "redux-form": "^6.6.3",
-    "redux-promise": "^0.5.3",
-    "serviceworker-webpack-plugin": "^0.2.3"
+    "redux-promise": "^0.5.3"
   }
 }
