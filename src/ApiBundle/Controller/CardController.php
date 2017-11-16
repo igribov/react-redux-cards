@@ -78,10 +78,15 @@ class CardController extends FOSRestController
      */
     public function cgetByUserAction(ParamFetcher $paramFetcher)
     {
-        $criteria = array_intersect_key(
+        /*$criteria = array_intersect_key(
             $paramFetcher->all(),
             array_flip(['status'])
-        );
+        );*/
+        // todo fix it horrible thing
+        $criteria = [];
+        if ($paramFetcher->has('status')) {
+          $criteria['status'] = $paramFetcher->get('status');
+        }
         $criteria['user'] = $this->getUser();
 
         return $this->getManager()->getAll(
