@@ -1,23 +1,41 @@
 import React, {Component} from 'react';
-import {Navbar, Nav, NavItem, NavDropdown, MenuItem} from 'react-bootstrap/lib/';
+import {Navbar, Nav, NavItem, NavbarBrand, NavbarToggler, Collapse} from 'reactstrap';
 import {NavLink} from 'react-router-dom'
+import {LinkContainer} from 'react-router-bootstrap'
 
-export default (props) => (
-  <Navbar className="app-navigation" inverse collapseOnSelect>
-    <Navbar.Header>
-      <Navbar.Brand>
-        <NavLink to="/">Cards App</NavLink>
-      </Navbar.Brand>
-      <Navbar.Toggle />
-    </Navbar.Header>
-    <Navbar.Collapse>
-      <Nav pullRight>
-        <NavDropdown title="User" id="basic-nav-dropdown">
-          <MenuItem >SignOut</MenuItem>
-          <MenuItem divider/>
-          <MenuItem >Profile</MenuItem>
-        </NavDropdown>
-      </Nav>
-    </Navbar.Collapse>
-  </Navbar>
-);
+
+export default class Navigation extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.toggleNavbar = this.toggleNavbar.bind(this);
+    this.state = {
+      collapsed: true
+    };
+  }
+
+  toggleNavbar() {
+    this.setState({
+      collapsed: !this.state.collapsed
+    });
+  }
+  render() {
+    return (
+      <div>
+        <Navbar color="faded" light className="navbar-toggleable-md">
+          <LinkContainer to="/">
+            <NavbarBrand className="mr-auto">Cards App</NavbarBrand>
+          </LinkContainer>
+          <NavbarToggler onClick={this.toggleNavbar} className="navbar-toggler-right"/>
+          <Collapse isOpen={!this.state.collapsed} navbar>
+            <Nav className="right" navbar>
+              <NavItem>
+                <NavLink className="nav-link" to="/profile/">Profile</NavLink>
+              </NavItem>
+            </Nav>
+          </Collapse>
+        </Navbar>
+      </div>
+    );
+  }
+}

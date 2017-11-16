@@ -26,14 +26,12 @@ class Card extends Component {
 				key={card.id}>
 				<div className="task-card">
 					<span className="card__title">{card.title}</span>
-					<span
-						className={"label label-primary card__status card__status-" + card.status}
-					>
-            {card.status}
-          </span>
+					<span className={"badge badge-default card__status card__status-" + card.status}>
+            			{card.status}
+          			</span>
 					&nbsp;
 					<Link className="btn btn-default edit-link" to={`/card/edit/${card.id}`}>&#x270E;</Link>
-					<a href="#" onClick={this.onViewButtonClick.bind(this)}>View</a>
+					<Link className="btn btn-default edit-view" to="" onClick={this.onViewButtonClick.bind(this)}>&#x1f441;</Link>
 				</div>
 			</li>
 		);
@@ -43,16 +41,10 @@ class Card extends Component {
 
 const cardSource = {
 	canDrag(props) {
-		// You can disallow drag based on props
 		return true;
-		//return props.card.status !== CARD_STATUS_DONE;
 	},
 
 	isDragging(props, monitor) {
-		// If your component gets unmounted while dragged
-		// (like a card in Kanban board dragged between lists)
-		// you can implement something like this to keep its
-		// appearance dragged:
 		return monitor.getItem().id === props.card.id;
 	},
 

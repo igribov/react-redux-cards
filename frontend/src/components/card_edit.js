@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import CardForm from './card_form';
 import {fetchCard, deleteCard} from '../actions';
 import NotFound from './not_found';
-import {FORM_TYPE_UPDATE} from './card_form';
+import ButtonToolbar from "../containers/button_tool_bar";
 
 class CardEdit extends Component {
 
@@ -22,23 +22,33 @@ class CardEdit extends Component {
   render() {
     if (this.props.error) return <NotFound />;
 
-    if (!this.props.card && !this.props.error) return <div className="container">Загрузка ...</div>;
+    if (!this.props.card && !this.props.error) return <div className="container">Loading ...</div>;
+
+    const buttons = [
+      {
+        title: 'Back',
+        to: '/',
+        color: 'primary'
+      },
+      {
+        title: 'Delete',
+        to: '#',
+        onClick: this.onDeleteButtonClick.bind(this),
+        color: 'danger'
+      }
+    ];
 
     return (
-        <div className="container">
-          <h3>Редактирование</h3>
-          <button
-            className="btn btn-danger"
-            onClick={this.onDeleteButtonClick.bind(this)}>Удалить</button>
-
-          <div className="col-md-8">
-            <CardForm
-              formType={FORM_TYPE_UPDATE}
-              initialValues={this.props.card}
-              onAfterSubmit={() => this.props.history.push('/')}/>
-          </div>
+      <div className="container-fluid">
+        <div className="container-fluid">
+          <ButtonToolbar buttons={buttons}/>
         </div>
-      );
+        <CardForm
+          updateForm={true}
+          initialValues={this.props.card}
+          onAfterSubmit={() => this.props.history.push('/')}/>
+      </div>
+    );
   }
 }
 

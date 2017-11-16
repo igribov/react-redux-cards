@@ -1,16 +1,19 @@
 import React, {Component} from 'react';
-import {ButtonToolbar, Button} from 'react-bootstrap/lib/';
+import {Button} from 'reactstrap';
 import {NavLink} from 'react-router-dom';
 import {LinkContainer} from 'react-router-bootstrap';
 
 export default (props) => (
-  <ButtonToolbar>
+  <div className="row">
     {
       props.buttons.map(buttonConf => (
         <LinkContainer key={buttonConf.to} to={buttonConf.to}>
-          <Button bsStyle={buttonConf.bsStyle || "default"} bsSize="small">{buttonConf.title}</Button>
-        </LinkContainer>
-      ))
+          <Button 
+            color={buttonConf.color || "secondary"}
+            onClick={buttonConf.onClick}>
+            {buttonConf.title}
+          </Button>
+        </LinkContainer>))
     }
-  </ButtonToolbar>
+  </div>
 );

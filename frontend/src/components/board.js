@@ -6,53 +6,53 @@ import {fetchCards} from '../actions';
 import {bindActionCreators} from 'redux';
 
 export const COLUMNS_CONFIG = {
-	backlog: {
-		title: "Backlog"
-	},
-	todo: {
-		title: "ToDo",
-		maxLoad: 6,
-	},
-	in_progress: {
-		title: "In Progress",
-		maxLoad: 4,
-	},
-	done: {
-		title: "Done",
-	},
-	closed: {
-		title: "Closed",
-	}
+  backlog: {
+    title: "Backlog"
+  },
+  todo: {
+    title: "ToDo",
+    maxLoad: 6,
+  },
+  in_progress: {
+    title: "In Progress",
+    maxLoad: 4,
+  },
+  done: {
+    title: "Done",
+  },
+  closed: {
+    title: "Closed",
+  }
 };
 
 class Board extends Component {
 
   componentDidMount() {
-      this.props.fetchCards();
+    this.props.fetchCards();
   }
 
   render() {
     const buttons = [
-      { title: 'Create', to: '/card/create' }
+      {title: 'Create', to: '/card/create'}
     ];
 
     return (
-      <div>
-        <ButtonToolbar buttons={buttons} />
-        <div className="board">
-            <CardsIndex cards={this.props.cards} configuration={COLUMNS_CONFIG}/>
+      <div className="container-fluid">
+        <div className="container-fluid">
+          <ButtonToolbar buttons={buttons}/>
         </div>
+        <CardsIndex cards={this.props.cards} configuration={COLUMNS_CONFIG}/>
       </div>
     );
   }
 }
 
 function mapStateToProps({cards}) {
-    return {cards};
+  return {cards};
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({fetchCards}, dispatch);
+  return bindActionCreators({fetchCards}, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Board);

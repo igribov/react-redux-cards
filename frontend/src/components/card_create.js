@@ -1,24 +1,23 @@
-import React, { Component} from 'react';
-
+import React from 'react';
+import ButtonToolbar from "../containers/button_tool_bar";
 import { connect } from 'react-redux';
 import CardForm from './card_form';
-import {FORM_TYPE_CREATE} from './card_form';
 
-class CardCreate extends Component {
+const buttons = [
+    {
+      title: 'Back',
+      to: '/',
+      color: 'primary'
+    }
+];
 
-  render() {
-    return (
-      <div className="container">
-        <h3>Создание задачи</h3>
-        <div className="col-md-8">
-          <CardForm
-            formType={FORM_TYPE_CREATE}
-            onAfterSubmit={() => this.props.history.push('/')}
-          />
-        </div>
-      </div>
-    );
-  }
-}
+const CardCreate = (props) => (
+  <div className="container-fluid">
+    <div className="container-fluid">
+      <ButtonToolbar buttons={buttons}/>
+    </div>
+    <CardForm onAfterSubmit={() => props.history.push('/')} />
+  </div>
+);
 
 export default connect()(CardCreate);

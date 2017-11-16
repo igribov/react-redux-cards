@@ -17,7 +17,8 @@ import Navigation from './containers/navbar';
 import './style/style.styl';
 
 const createStoreWithMiddleware = applyMiddleware(promise, axiosMiddleware(client))(createStore);
-//<Route path="/" component={Navigation}/>
+/**/
+
 ReactDOM.render(
   <Provider store={createStoreWithMiddleware(reducers)}>
     <div>
@@ -25,7 +26,7 @@ ReactDOM.render(
       <BrowserRouter>
         <div>
           <Route path="*" component={Navigation}/>
-          <div className="app">
+          <div className="app container-fluid">
             <Switch>
               <Route exact path="/card/create" component={CardCreate}/>
               <Route exact path="/card/edit/:id" component={CardEdit}/>
