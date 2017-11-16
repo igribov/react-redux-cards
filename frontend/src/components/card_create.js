@@ -1,32 +1,23 @@
-import React, { Component} from 'react';
-
+import React from 'react';
+import ButtonToolbar from "../containers/button_tool_bar";
 import { connect } from 'react-redux';
 import CardForm from './card_form';
-import ButtonsBar from '../containers/buttons_bar';
 
-class CardCreate extends Component {
+const buttons = [
+    {
+      title: 'Back',
+      to: '/',
+      color: 'primary'
+    }
+];
 
-  render() {
-
-    const navLinks = [
-      {
-        title: 'Back',
-        to: '/'
-      }
-    ];
-
-    return (
-      <div className="container">
-        <ButtonsBar links={navLinks}/>
-        <div className="col-md-8">
-          <h3>Create card</h3>
-          <CardForm
-            onAfterSubmit={() => this.props.history.push('/')}
-          />
-        </div>
-      </div>
-    );
-  }
-}
+const CardCreate = (props) => (
+  <div className="container-fluid">
+    <div className="container-fluid">
+      <ButtonToolbar buttons={buttons}/>
+    </div>
+    <CardForm onAfterSubmit={() => props.history.push('/')} />
+  </div>
+);
 
 export default connect()(CardCreate);

@@ -14,10 +14,12 @@ import client from './services/axios';
 import ActiveViewCardModal from './components/active_view_card_modal';
 import reducers from './reducers';
 import {registerServiceWorker} from './pwa/services';
+import Navigation from './containers/navbar';
 
 registerServiceWorker();
 
 import './style/style.styl';
+
 const createStoreWithMiddleware = applyMiddleware(promise, axiosMiddleware(client))(createStore);
 
 ReactDOM.render(
@@ -25,13 +27,18 @@ ReactDOM.render(
     <div>
       <Toaster />
       <BrowserRouter>
-        <Switch>
-          <Route exact path="/card/create" component={CardCreate}/>
-          <Route exact path="/card/edit/:id" component={CardEdit}/>
-          <Route exact path="/" component={Board}/>
-          <Route exact path="/404" component={NotFound}/>
-          <Redirect to="/404" />
-        </Switch>
+        <div>
+          <Route path="*" component={Navigation}/>
+          <div className="app container-fluid">
+            <Switch>
+              <Route exact path="/card/create" component={CardCreate}/>
+              <Route exact path="/card/edit/:id" component={CardEdit}/>
+              <Route exact path="/" component={Board}/>
+              <Route exact path="/404" component={NotFound}/>
+              <Redirect to="/404"/>
+            </Switch>
+          </div>
+        </div>
       </BrowserRouter>
       <ActiveViewCardModal />
     </div>

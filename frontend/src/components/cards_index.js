@@ -31,13 +31,13 @@ class CardsIndex extends Component {
   }
 
   renderBoardColumn(cards = [], config) {
+
     return (
       <BoardColumn
         key={config.status}
         {...config}
         cards={cards}
-        onDrop={(card) => this.onCardDrop(card, config.status)}
-      />
+        onDrop={(card) => this.onCardDrop(card, config.status)}/>
     );
   }
 
@@ -49,16 +49,15 @@ class CardsIndex extends Component {
     _.each(boardConfiguration, (conf, statusCode) => {
       groupedData[statusCode] = _.filter(cards, card => (card.status === statusCode))
     });
-    const colWidth = Math.floor(12 / Object.keys(boardConfiguration).length) < 1 ? 1 : Math.floor(12 / Object.keys(boardConfiguration).length);
 
     return (
-      <div>
-        {
-          _.map(groupedData, (data, statusCode) => {
-            return this.renderBoardColumn(data, {colWidth, status: statusCode, ...boardConfiguration[statusCode]})
-          })
-        }
-      </div>
+        <div className="row">
+          {
+            _.map(groupedData, (data, statusCode) => {
+              return this.renderBoardColumn(data, {status: statusCode, ...boardConfiguration[statusCode]})
+            })
+          }
+        </div>
     );
   }
 }
