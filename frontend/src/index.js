@@ -13,23 +13,28 @@ import axiosMiddleware from './middlewares/axios_middleware';
 import client from './services/axios';
 import ActiveViewCardModal from './components/active_view_card_modal';
 import reducers from './reducers';
-
+import Navigation from './containers/navbar';
 import './style/style.styl';
-import './style/bootstrap.min.css';
-const createStoreWithMiddleware = applyMiddleware(promise, axiosMiddleware(client))(createStore);
 
+const createStoreWithMiddleware = applyMiddleware(promise, axiosMiddleware(client))(createStore);
+//<Route path="/" component={Navigation}/>
 ReactDOM.render(
   <Provider store={createStoreWithMiddleware(reducers)}>
     <div>
       <Toaster />
       <BrowserRouter>
-        <Switch>
-          <Route exact path="/card/create" component={CardCreate}/>
-          <Route exact path="/card/edit/:id" component={CardEdit}/>
-          <Route exact path="/" component={Board}/>
-          <Route exact path="/404" component={NotFound}/>
-          <Redirect to="/404" />
-        </Switch>
+        <div>
+          <Route path="*" component={Navigation}/>
+          <div className="app">
+            <Switch>
+              <Route exact path="/card/create" component={CardCreate}/>
+              <Route exact path="/card/edit/:id" component={CardEdit}/>
+              <Route exact path="/" component={Board}/>
+              <Route exact path="/404" component={NotFound}/>
+              <Redirect to="/404"/>
+            </Switch>
+          </div>
+        </div>
       </BrowserRouter>
       <ActiveViewCardModal />
     </div>

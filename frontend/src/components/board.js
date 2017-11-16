@@ -1,24 +1,27 @@
 import React, {Component} from 'react';
 import CardsIndex from "./cards_index";
-import Navbar from "./navbar";
+import ButtonToolbar from "../containers/button_tool_bar";
 import {connect} from 'react-redux';
 import {fetchCards} from '../actions';
 import {bindActionCreators} from 'redux';
 
 export const COLUMNS_CONFIG = {
 	backlog: {
-		title: "Бэклог"
+		title: "Backlog"
 	},
 	todo: {
-		title: "Сделать",
+		title: "ToDo",
 		maxLoad: 6,
 	},
 	in_progress: {
-		title: "В прогрессе",
+		title: "In Progress",
 		maxLoad: 4,
 	},
 	done: {
-		title: "Сделано",
+		title: "Done",
+	},
+	closed: {
+		title: "Closed",
 	}
 };
 
@@ -29,13 +32,13 @@ class Board extends Component {
   }
 
   render() {
-    const navLinks = [
-      { title: 'Создать', to: '/card/create' }
+    const buttons = [
+      { title: 'Create', to: '/card/create' }
     ];
 
     return (
-      <div className="container">
-        <Navbar links={navLinks} />
+      <div>
+        <ButtonToolbar buttons={buttons} />
         <div className="board">
             <CardsIndex cards={this.props.cards} configuration={COLUMNS_CONFIG}/>
         </div>
