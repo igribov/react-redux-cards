@@ -10,12 +10,12 @@ export const COLUMNS_CONFIG = {
     title: "Backlog"
   },
   todo: {
-    title: "ToDo",
-    maxLoad: 6,
+    title: "To Do",
+    maxLoad: 4,
   },
   in_progress: {
     title: "In Progress",
-    maxLoad: 4,
+    maxLoad: 2,
   },
   done: {
     title: "Done",

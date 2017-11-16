@@ -9,6 +9,12 @@ const middlewareConfig =  {
 
         return config
       }
+    ],
+    response: [
+      (res, req) => {
+        console.log(res, req);
+        return res;
+      }
     ]
   }
 };
