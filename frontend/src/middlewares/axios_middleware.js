@@ -4,12 +4,14 @@ import axiosMiddleware from 'redux-axios-middleware';
 const middlewareConfig =  {
   interceptors: {
     request: [
-      (getState, config) => {
-        config.headers['Authorization'] = 'Bearer ' + 'accesstoken123456789123456789012';
+      (getState, req) => {
+        req.headers['Authorization'] = 'Bearer ' + 'accesstoken123456789123456789012';
+        req.headers['Origin-Trial'] = 'Bearer ' + 'accesstoken123456789123456789012';
 
-        return config
-      }
-    ]
+        return req;
+      },
+    ],
+    //response: []
   }
 };
 

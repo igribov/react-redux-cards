@@ -13,14 +13,14 @@ import axiosMiddleware from './middlewares/axios_middleware';
 import client from './services/axios';
 import ActiveViewCardModal from './components/active_view_card_modal';
 import reducers from './reducers';
-import {registerServiceWorker} from './pwa/services';
+import {registerServiceWorker} from './sw/';
+import Navigation from './containers/navbar';
 
 registerServiceWorker();
 
 import './style/style.styl';
 
 const createStoreWithMiddleware = applyMiddleware(promise, axiosMiddleware(client))(createStore);
-/**/
 
 ReactDOM.render(
   <Provider store={createStoreWithMiddleware(reducers)}>

@@ -4,5 +4,4 @@ export const registerServiceWorker = function() {
   if (!navigator.serviceWorker) return;
 
   const registration = runtime.register();
-
 };

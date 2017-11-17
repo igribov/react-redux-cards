@@ -1,27 +1,38 @@
+import {openDatabase} from './idb/';
 const DEBUG = 1;
-const CACHE_NAME = `cards_${new Date().toISOString()}`;
 const { assets } = global.serviceWorkerOption;
-const ASSETS_ORIGINS = [location.origin, 'https://cdn.rawgit.com'];
+const CACHE_VERSION = `cards_${new Date().toISOString()}`;
+//const CACHE_VERSION = `cards_20`;
+const ASSETS_ORIGINS = [location.origin];
+const API_ORIGINS = [
+  location.origin,
+  'http://localhost:8000',
+  'https://cards-staging.herokuapp.com',
+  'https://cards-production.herokuapp.com'
+];
+const API_CARDS_ENDPOINT = 'api/card';
 
-console.log('CACHE_NAME', CACHE_NAME);
+console.log('CACHE_VERSION', CACHE_VERSION);
 const assetsToCache = ['./', ...assets];
+
+
 // When the service worker is first added.
 self.addEventListener('install', event => {
   // Perform install steps.
   if (DEBUG) {
-    console.log('[SW] Install event')
+    console.log('[SW] Install event__')
   }
+
+  //event.registerForeignFetch({
+    //scopes: [self.registration.scope], // or some sub-scope
+    //origins: ['*'] // or ['https://example.com']
+  //});
 
   event.waitUntil(
     global.caches
-      .open(CACHE_NAME)
+      .open(CACHE_VERSION)
       .then(cache => {
         return cache.addAll(assetsToCache)
-      })
-      .then(() => {
-        if (DEBUG) {
-          console.log('[SW] Cached assets: main', assetsToCache)
-        }
       })
       .catch(error => {
         console.error(error)
@@ -32,60 +43,158 @@ self.addEventListener('install', event => {
 
 self.addEventListener('fetch', event => {
   const request = event.request;
-  // Ignore not GET request.
-  if (request.method !== 'GET') {
-    if (DEBUG) {
-      console.log(`[SW] Ignore non GET request ${request.method}`);
-    }
-    return;
-  }
-
   const requestUrl = new URL(request.url);
   // Ignore difference origin.
   if (!ASSETS_ORIGINS.includes(requestUrl.origin)) {
-    if (DEBUG) {
-      console.log(`[SW] Ignore difference origin ${requestUrl.origin}`);
-    }
     return;
   }
-
+  // Ignore not GET request.
+  if (request.method !== 'GET') {
+    return;
+  }
   const resource = global.caches.match(request).then(response => {
     if (response) {
-      if (DEBUG) {
-        console.log(`[SW] fetch URL ${requestUrl.href} from cache`);
-      }
-
       return response;
     }
-
     // Load and cache known assets.
     return fetch(request)
       .then(responseNetwork => {
-        if (!responseNetwork || !responseNetwork.ok) {
-          if (DEBUG) {
-            console.log(
-              `[SW] URL [${requestUrl.toString()}] wrong responseNetwork: ${responseNetwork.status} ${responseNetwork.type}`
-            )
-          }
-        }
-
-        if (DEBUG) {
-          console.log(`[SW] URL ${requestUrl.href} fetched`);
-        }
-
         const responseCache = responseNetwork.clone();
-
-        global.caches.open(CACHE_NAME).then(cache => {
+        global.caches.open(CACHE_VERSION).then(cache => {
             return cache.put(request, responseCache);
-          }).then(() => {
-            if (DEBUG) {
-              console.log(`[SW] Cache asset: ${requestUrl.href}`);
-            }
-          })
-
+          });
         return responseNetwork;
       });
   })
 
   event.respondWith(resource);
-})
+});
+
+/* If Request to API then save cards in indexedDb */
+self.addEventListener('fetch', (event) => {
+  const {request} = event;
+  const Url = new URL(request.url);
+  // us request to API ?
+  if (!API_ORIGINS.includes(Url.origin)) {
+    return;
+  }
+  if (!Url.pathname.includes(API_CARDS_ENDPOINT)) {
+    return;
+  }
+  if (!['GET'].includes(request.method)) {
+    return;
+  }
+  _removeOldCards();
+  event.respondWith(_serveCards(request));
+});
+
+/* Serving cards objects */
+function _serveCards(request) {
+  return fetch(request).then(function(networkResponse) {
+    networkResponse.clone().json().then(cards => {
+      openDatabase().then(db => {
+        let tx = db.transaction('cards', 'readwrite');
+        let cardsStore = tx.objectStore('cards');
+        cards.forEach(card => cardsStore.put(card));
+
+        return tx.complete;
+      });
+    });
+    console.log('networkResponse --> ', networkResponse);
+    return networkResponse;
+  })
+  // todo do not use Request use interceptors in application
+  // .catch(() => {
+  //   console.log('__Network fetch error');
+  //
+  //   return openDatabase().then(db => {
+  //     let tx = db.transaction('cards');
+  //     let cardsStore = tx.objectStore('cards');
+  //
+  //     return cardsStore.getAll();
+  //   }).then(cards => {
+  //     cards.push({id: 1000, status: 'todo', title: 'Fakes', description: 'fake desc'});
+  //     const init = { "status" : 200 , "statusText" : "Ok" };
+  //     return new Response(JSON.stringify(cards), init);
+  //   });
+  // })
+}
+
+/*
+  Delete cards from index db
+  If count of cards more then IDB_CARDS_LIMIT
+  then delete backlog and closed at first
+  then delete until limit = IDB_CARDS_LIMIT
+*/
+function _removeOldCards() {
+
+  const IDB_CARDS_LIMIT = 6;
+  let idbPromise = openDatabase();
+
+  idbPromise.then(db => {
+    let tx = db.transaction('cards');
+    let cardsStore = tx.objectStore('cards');
+
+    return cardsStore.count();
+  })
+  .then(count => count >= IDB_CARDS_LIMIT)
+  .then(deleteCards => {
+
+    if (!deleteCards) return;
+    // delete cards with status backlog and closed
+    return idbPromise.then(db => {
+      let tx = db.transaction('cards');
+      let cardsStore = tx.objectStore('cards');
+      let statusIndex = cardsStore.index('status');
+
+      return Promise.all([statusIndex.getAllKeys('closed'), statusIndex.getAllKeys('backlog')]);
+    })
+    .then(keysToDelete => [...keysToDelete[0], ...keysToDelete[1]])
+    .then(keysToDelete => {
+      if (!keysToDelete) return;
+      // if cards with closed or backlog statuses in indexedDb then delete it
+      return idbPromise.then(db => {
+        let tx = db.transaction('cards', 'readwrite');
+        let cardsStore = tx.objectStore('cards');
+
+        return cardsStore.openCursor();
+      }).then(function deleteCard(cursor) {
+        if (!cursor) return;
+        if (keysToDelete.includes(cursor.value.id)) {
+          cursor.delete();
+        }
+        return cursor.continue().then(deleteCard);
+      })
+    })
+    .then(() => {
+      return idbPromise.then(db => {
+        let tx = db.transaction('cards', 'readwrite');
+        let cardsStore = tx.objectStore('cards');
+
+        return cardsStore.openCursor();
+      })
+      .then(cursor => cursor.advance(IDB_CARDS_LIMIT))
+      .then(function deleteCard(cursor) {
+        if (!cursor) return;
+        cursor.delete();
+
+        return cursor.continue().then(deleteCard);
+      })
+    })
+    .then(() => DEBUG && _logAllCards('after _removeOldCards'));
+  });
+}
+
+/* Log cards from index db */
+function _logAllCards(type='') {
+  openDatabase().then(db => {
+    let tx = db.transaction('cards', 'readwrite');
+    let cardsStore = tx.objectStore('cards');
+    let statusIndex = cardsStore.index('status');
+    return statusIndex.openCursor();
+  }).then(function logCard(cursor) {
+    if (!cursor) return;
+    console.log(`[LOG_CARD ${type}] : `, cursor.value);
+    return cursor.continue().then(logCard);
+  })
+}
