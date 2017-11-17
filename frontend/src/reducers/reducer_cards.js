@@ -1,5 +1,5 @@
 import _  from 'lodash';
-import {onCardsRequestFails, onCardRequestFails}  from '../idb/';
+import {onCardRequestFails}  from '../idb/';
 
 import {
   FETCH_CARDS_SUCCESS,
@@ -34,9 +34,8 @@ export default function CardsReduser(state = {}, action) {
     case DELETE_CARD_SUCCESS:
       return state;
 
-    case FETCH_CARDS_FAIL:
-      console.log('FETCH_CARDS_FAIL - ');
-      return _.mapKeys(onCardsRequestFails(), 'id');
+    //case FETCH_CARDS_FAIL:
+
 
     case FETCH_CARD_FAIL:
       let cachedCard = onCardRequestFails(action.meta.previousAction.payload.request.url);

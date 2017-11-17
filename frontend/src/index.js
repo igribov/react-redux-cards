@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
 import {createStore, applyMiddleware} from 'redux';
 import {BrowserRouter, Route, Switch, Redirect} from 'react-router-dom';
+import {idbCacheMiddleware} from './middlewares/middleware_idbcache';
 import promise from 'redux-promise';
 import Board from './components/board';
 import CardCreate from './components/card_create';
@@ -20,7 +21,7 @@ registerServiceWorker();
 
 import './style/style.styl';
 
-const createStoreWithMiddleware = applyMiddleware(promise, axiosMiddleware(client))(createStore);
+const createStoreWithMiddleware = applyMiddleware(axiosMiddleware(client), idbCacheMiddleware, promise)(createStore);
 
 ReactDOM.render(
   <Provider store={createStoreWithMiddleware(reducers)}>

@@ -1,5 +1,5 @@
 import {openDatabase} from './idb/';
-const DEBUG = 1;
+const DEBUG = 0;
 const { assets } = global.serviceWorkerOption;
 const CACHE_VERSION = `cards_${new Date().toISOString()}`;
 //const CACHE_VERSION = `cards_20`;
@@ -20,13 +20,8 @@ const assetsToCache = ['./', ...assets];
 self.addEventListener('install', event => {
   // Perform install steps.
   if (DEBUG) {
-    console.log('[SW] Install event__')
+    console.log('[SW] Install event')
   }
-
-  //event.registerForeignFetch({
-    //scopes: [self.registration.scope], // or some sub-scope
-    //origins: ['*'] // or ['https://example.com']
-  //});
 
   event.waitUntil(
     global.caches
@@ -103,21 +98,6 @@ function _serveCards(request) {
     console.log('networkResponse --> ', networkResponse);
     return networkResponse;
   })
-  // todo do not use Request use interceptors in application
-  // .catch(() => {
-  //   console.log('__Network fetch error');
-  //
-  //   return openDatabase().then(db => {
-  //     let tx = db.transaction('cards');
-  //     let cardsStore = tx.objectStore('cards');
-  //
-  //     return cardsStore.getAll();
-  //   }).then(cards => {
-  //     cards.push({id: 1000, status: 'todo', title: 'Fakes', description: 'fake desc'});
-  //     const init = { "status" : 200 , "statusText" : "Ok" };
-  //     return new Response(JSON.stringify(cards), init);
-  //   });
-  // })
 }
 
 /*
