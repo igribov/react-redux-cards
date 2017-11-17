@@ -6,6 +6,7 @@ const middlewareConfig =  {
     request: [
       (getState, req) => {
         req.headers['Authorization'] = 'Bearer ' + 'accesstoken123456789123456789012';
+        req.headers['Origin-Trial'] = 'Bearer ' + 'accesstoken123456789123456789012';
 
         return req;
       },

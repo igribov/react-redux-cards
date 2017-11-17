@@ -35,11 +35,11 @@ export default function CardsReduser(state = {}, action) {
       return state;
 
     case FETCH_CARDS_FAIL:
+      console.log('FETCH_CARDS_FAIL - ');
       return _.mapKeys(onCardsRequestFails(), 'id');
 
     case FETCH_CARD_FAIL:
       let cachedCard = onCardRequestFails(action.meta.previousAction.payload.request.url);
-      console.log(!cachedCard);
       if (!cachedCard) {
         return { 'error': action.error };
       }

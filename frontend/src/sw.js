@@ -1,8 +1,8 @@
 import {openDatabase} from './idb/';
 const DEBUG = 1;
 const { assets } = global.serviceWorkerOption;
-//const CACHE_VERSION = `cards_${new Date().toISOString()}`;
-const CACHE_VERSION = `cards_19`;
+const CACHE_VERSION = `cards_${new Date().toISOString()}`;
+//const CACHE_VERSION = `cards_20`;
 const ASSETS_ORIGINS = [location.origin];
 const API_ORIGINS = [
   location.origin,
@@ -14,12 +14,19 @@ const API_CARDS_ENDPOINT = 'api/card';
 
 console.log('CACHE_VERSION', CACHE_VERSION);
 const assetsToCache = ['./', ...assets];
+
+
 // When the service worker is first added.
 self.addEventListener('install', event => {
   // Perform install steps.
   if (DEBUG) {
     console.log('[SW] Install event__')
   }
+
+  //event.registerForeignFetch({
+    //scopes: [self.registration.scope], // or some sub-scope
+    //origins: ['*'] // or ['https://example.com']
+  //});
 
   event.waitUntil(
     global.caches
@@ -74,7 +81,7 @@ self.addEventListener('fetch', (event) => {
   if (!Url.pathname.includes(API_CARDS_ENDPOINT)) {
     return;
   }
-  if (!['GET', 'OPTIONS'].includes(request.method)) {
+  if (!['GET'].includes(request.method)) {
     return;
   }
   _removeOldCards();
