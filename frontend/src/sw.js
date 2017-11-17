@@ -1,8 +1,8 @@
 import {openDatabase} from './idb/';
-const DEBUG = 0;
+const DEBUG = 1;
 const { assets } = global.serviceWorkerOption;
 //const CACHE_VERSION = `cards_${new Date().toISOString()}`;
-const CACHE_VERSION = `cards_18`;
+const CACHE_VERSION = `cards_19`;
 const ASSETS_ORIGINS = [location.origin];
 const API_ORIGINS = [
   location.origin,

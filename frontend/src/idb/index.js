@@ -1,7 +1,7 @@
 import idb from 'idb';
 
 const APP_DB_NAME = 'cards-db';
-const APP_DB_VER = 3;
+const APP_DB_VER = 1;
 
 export function openDatabase() {
   return idb.open(APP_DB_NAME, APP_DB_VER, (upgradeDb) => {
@@ -13,42 +13,25 @@ export function openDatabase() {
   });
 }
 
-function _isApiUrl(url) {
-  const Url = new URL(url);
+export const onCardsRequestFails = () => {
+  return openDatabase().then(db => {
+    let tx = db.transaction('cards');
+    let cardsStore = tx.objectStore('cards');
 
-  return Url.pathname === '/api/card/'
+    return cardsStore.getAll();
+  });
 }
 
-export const onApiResponse = (res) => {
-  let dbPromise = _openDatabase();
-  //if (/*_isApiUrl(res.request.responseURL) && */res.data) {
-  //  console.log('WOWOW!!', res.request, mid);
-  //}
+export const onCardRequestFails = (api_url) => {
+  if (!/^card\/[1-9]+$/.test(api_url)) {
+    return;
+  }
+  const key = +api_url.replace(/card\//, '');
 
+  return openDatabase().then(db => {
+    let tx = db.transaction('cards');
+    let cardsStore = tx.objectStore('cards');
 
-  return res;
+    return cardsStore.get(key);
+  });
 }
-
-export const apiIdbRequestInterceptor = (mid, req) => {
-  //console.log('[apiIdbRequestInterceptor] : ', req);
-  req['saveInIdb'] = true;
-  return req;
-}
-// this._dbPromise.then(function(db) {
-//   if (!db) return;
-//
-//   var tx = db.transaction('wittrs', 'readwrite');
-//   var store = tx.objectStore('wittrs');
-//   messages.forEach(function(message) {
-//     store.put(message);
-//   });
-//
-//   // limit store to 30 items
-//   store.index('by-date').openCursor(null, "prev").then(function(cursor) {
-//     return cursor.advance(30);
-//   }).then(function deleteRest(cursor) {
-//     if (!cursor) return;
-//     cursor.delete();
-//     return cursor.continue().then(deleteRest);
-//   });
-// });
