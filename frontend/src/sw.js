@@ -109,6 +109,7 @@ function _serveCards(request) {
 function _removeOldCards() {
 
   const IDB_CARDS_LIMIT = 6;
+  let countOfCardsToDelete = 0;
   let idbPromise = openDatabase();
 
   idbPromise.then(db => {
@@ -117,9 +118,11 @@ function _removeOldCards() {
 
     return cardsStore.count();
   })
-  .then(count => count >= IDB_CARDS_LIMIT)
+  .then(count => {
+    countOfCardsToDelete = count - IDB_CARDS_LIMIT;
+    return countOfCardsToDelete > 0;
+  })
   .then(deleteCards => {
-
     if (!deleteCards) return;
     // delete cards with status backlog and closed
     return idbPromise.then(db => {
@@ -129,7 +132,7 @@ function _removeOldCards() {
 
       return Promise.all([statusIndex.getAllKeys('closed'), statusIndex.getAllKeys('backlog')]);
     })
-    .then(keysToDelete => [...keysToDelete[0], ...keysToDelete[1]])
+    .then(keysToDelete => [...keysToDelete[0], ...keysToDelete[1]].slice(0, countOfCardsToDelete))
     .then(keysToDelete => {
       if (!keysToDelete) return;
       // if cards with closed or backlog statuses in indexedDb then delete it
