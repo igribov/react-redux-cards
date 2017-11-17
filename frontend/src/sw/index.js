@@ -5,7 +5,3 @@ export const registerServiceWorker = function() {
 
   const registration = runtime.register();
 };
-
-self.addEventListener('fetch', (e) => {
-  console.log('fetch --> ', e);
-})

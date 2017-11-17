@@ -1,16 +1,10 @@
 import idb from 'idb';
 
 const APP_DB_NAME = 'cards-db';
-const APP_DB_VER = 1;
+const APP_DB_VER = 3;
 
-function _openDatabase() {
-  // If the browser doesn't support service worker,
-  // we don't care about having a database
-  if (!navigator.serviceWorker) {
-    return Promise.resolve();
-  }
-
-  return idb.open(APP_DB_NAME, APP_DB_VER, function(upgradeDb) {
+export function openDatabase() {
+  return idb.open(APP_DB_NAME, APP_DB_VER, (upgradeDb) => {
     switch(upgradeDb.oldVersion) {
       case 0:
         const peopleStore = upgradeDb.createObjectStore('cards', {keyPath: 'id'});
@@ -36,7 +30,7 @@ export const onApiResponse = (res) => {
 }
 
 export const apiIdbRequestInterceptor = (mid, req) => {
-  console.log('[apiIdbRequestInterceptor] : ', req);
+  //console.log('[apiIdbRequestInterceptor] : ', req);
   req['saveInIdb'] = true;
   return req;
 }

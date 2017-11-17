@@ -16,7 +16,7 @@ import reducers from './reducers';
 import {registerServiceWorker} from './sw/';
 import Navigation from './containers/navbar';
 
-//registerServiceWorker();
+registerServiceWorker();
 
 import './style/style.styl';
 
