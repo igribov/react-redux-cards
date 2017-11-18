@@ -1,8 +1,16 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import CardForm from './card_form';
-import {fetchCard, deleteCard} from '../actions';
+import {
+  fetchCard,
+  fetchCardFromCache,
+  deleteCard,
+  deleteCardFromCache,
+  saveCardToCache
+} from '../actions';
+
 import NotFound from './not_found';
+import {bindActionCreators} from 'redux';
 import ButtonToolbar from "../containers/button_tool_bar";
 
 class CardEdit extends Component {
@@ -10,13 +18,15 @@ class CardEdit extends Component {
   componentDidMount() {
     if (!this.props.card) {
       const {id} = this.props.match.params;
-      this.props.fetchCard(id);
+      this.props.fetchCardFromCache(id).then(() => this.props.fetchCard(id));
     }
   }
 
   onDeleteButtonClick() {
-    this.props.deleteCard(this.props.card)
-      .then(() => this.props.history.push('/'));
+    const {props} = this;
+    this.props.deleteCard(props.card)
+      .then(() => props.deleteCardFromCache(props.card))
+      .then(() => props.history.push('/'));
   }
 
   render() {
@@ -36,6 +46,11 @@ class CardEdit extends Component {
       }
     ];
 
+    const onAfterSubmit = (card) => {
+      this.props.saveCardToCache(card)
+        .then(() => this.props.history.push('/'));
+    };
+
     return (
       <div className="container-fluid">
         <div className="container-fluid">
@@ -44,7 +59,7 @@ class CardEdit extends Component {
         <CardForm
           updateForm={true}
           initialValues={this.props.card}
-          onAfterSubmit={() => this.props.history.push('/')}/>
+          onAfterSubmit={onAfterSubmit}/>
       </div>
     );
   }
@@ -57,4 +72,14 @@ function mapStateToProps({cards}, {match: {params: {id}}}) {
   };
 }
 
-export default connect(mapStateToProps, {fetchCard, deleteCard})(CardEdit);
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    fetchCard,
+    fetchCardFromCache,
+    deleteCard,
+    deleteCardFromCache,
+    saveCardToCache
+  }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(CardEdit);

@@ -1,37 +1,33 @@
 import idb from 'idb';
 
 const APP_DB_NAME = 'cards-db';
+const DB_CARDS_TABLE = 'cards';
 const APP_DB_VER = 1;
 
 export function openDatabase() {
   return idb.open(APP_DB_NAME, APP_DB_VER, (upgradeDb) => {
     switch(upgradeDb.oldVersion) {
       case 0:
-        const peopleStore = upgradeDb.createObjectStore('cards', {keyPath: 'id'});
+        const peopleStore = upgradeDb.createObjectStore(DB_CARDS_TABLE, {keyPath: 'id'});
         peopleStore.createIndex('status', 'status');
     }
   });
 }
 
-export const onCardsRequestFails = () => {
-  return openDatabase().then(db => {
-    let tx = db.transaction('cards');
-    let cardsStore = tx.objectStore('cards');
+export const fetchCardsFromIndexedDb = () =>
+  openDatabase().then(db => db.transaction(DB_CARDS_TABLE).objectStore(DB_CARDS_TABLE).getAll());
 
-    return cardsStore.getAll();
-  });
-}
+export const fetchCardFromIndexedDb = (key) => openDatabase().then(db =>
+  db.transaction(DB_CARDS_TABLE).objectStore(DB_CARDS_TABLE).get(+key));
 
-export const onCardRequestFails = (api_url) => {
-  if (!/^card\/[1-9]+$/.test(api_url)) {
-    return;
-  }
-  const key = +api_url.replace(/card\//, '');
+export const putCardIntoIndexedDb = (card) => openDatabase().then(db => {
+  const tx = db.transaction(DB_CARDS_TABLE, 'readwrite');
+  tx.objectStore(DB_CARDS_TABLE).put(card);
+  return tx.complete;
+});
 
-  return openDatabase().then(db => {
-    let tx = db.transaction('cards');
-    let cardsStore = tx.objectStore('cards');
-
-    return cardsStore.get(key);
-  });
-}
+export const deleteCardFromIndexedDb = (card) => openDatabase().then(db => {
+  const tx = db.transaction(DB_CARDS_TABLE, 'readwrite');
+  tx.objectStore(DB_CARDS_TABLE).delete(card);
+  return tx.complete;
+});

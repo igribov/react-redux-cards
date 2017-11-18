@@ -1,8 +1,17 @@
+import {
+  fetchCardsFromIndexedDb,
+  fetchCardFromIndexedDb,
+  deleteCardFromIndexedDb,
+  putCardIntoIndexedDb,
+} from '../idb/';
+
 const FETCH_CARDS = 'FETCH_CARDS';
+export const FETCH_CARDS_FROM_CACHE = 'FETCH_CARDS_FROM_CACHE';
 export const FETCH_CARDS_SUCCESS = 'FETCH_CARDS_SUCCESS';
 export const FETCH_CARDS_FAIL = 'FETCH_CARDS_FAIL';
 
 const FETCH_CARD = 'FETCH_CARD';
+export const FETCH_CARD_FROM_CACHE = 'FETCH_CARD_FROM_CACHE';
 export const FETCH_CARD_SUCCESS = 'FETCH_CARD_SUCCESS';
 export const FETCH_CARD_FAIL = 'FETCH_CARD_FAIL';
 
@@ -11,10 +20,12 @@ export const UPDATE_CARD_SUCCESS = 'UPDATE_CARD_SUCCESS';
 export const UPDATE_CARD_FAIL = 'UPDATE_CARD_FAIL';
 
 const DELETE_CARD = 'DELETE_CARD';
+export const DELETE_CARD_FROM_CACHE = 'DELETE_CARD_FROM_CACHE';
 export const DELETE_CARD_SUCCESS = 'DELETE_CARD_SUCCESS';
 export const DELETE_CARD_FAIL = 'DELETE_CARD_FAIL';
 
 const CREATE_CARD = 'CREATE_CARD';
+export const SAVE_CARD_TO_CACHE = 'SAVE_CARD_TO_CACHE';
 export const CREATE_CARD_SUCCESS = 'CREATE_CARD_SUCCESS';
 export const CREATE_CARD_FAIL = 'CREATE_CARD_FAIL';
 
@@ -31,6 +42,17 @@ export function fetchCards() {
   };
 }
 
+export function fetchCardsFromCache() {
+  return {
+    type: FETCH_CARDS_FROM_CACHE,
+    payload: fetchCardsFromIndexedDb().then((cards) => {
+      return {
+        data: cards
+      };
+    })
+  };
+}
+
 export function fetchCard(id) {
 
   return {
@@ -40,6 +62,19 @@ export function fetchCard(id) {
         url:'card/' + id
       }
     }
+  };
+}
+
+export function fetchCardFromCache(id) {
+
+  return {
+    type: FETCH_CARD_FROM_CACHE,
+    payload: fetchCardFromIndexedDb(id).then(card => {
+      console.log('fetchCardFromCache', card);
+      return {
+        data: card
+      };
+    })
   };
 }
 
@@ -72,7 +107,6 @@ export function updateCard(card, callback) {
 }
 
 export function deleteCard(card) {
-
   return {
     type: DELETE_CARD,
     payload: {
@@ -81,6 +115,20 @@ export function deleteCard(card) {
         url:`card/${card.id}`
       }
     }
+  };
+}
+
+export function deleteCardFromCache(card) {
+  return {
+    type: DELETE_CARD_FROM_CACHE,
+    payload: deleteCardFromIndexedDb(card.id)
+  };
+}
+
+export function saveCardToCache(card) {
+  return {
+    type: SAVE_CARD_TO_CACHE,
+    payload: putCardIntoIndexedDb(card)
   };
 }
 

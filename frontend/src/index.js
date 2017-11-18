@@ -21,7 +21,7 @@ registerServiceWorker();
 
 import './style/style.styl';
 
-const createStoreWithMiddleware = applyMiddleware(axiosMiddleware(client), idbCacheMiddleware, promise)(createStore);
+const createStoreWithMiddleware = applyMiddleware(axiosMiddleware(client), promise)(createStore);
 
 ReactDOM.render(
   <Provider store={createStoreWithMiddleware(reducers)}>

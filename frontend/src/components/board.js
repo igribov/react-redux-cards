@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import CardsIndex from "./cards_index";
 import ButtonToolbar from "../containers/button_tool_bar";
 import {connect} from 'react-redux';
-import {fetchCards} from '../actions';
+import {fetchCards, fetchCardsFromCache} from '../actions';
 import {bindActionCreators} from 'redux';
 
 export const COLUMNS_CONFIG = {
@@ -28,7 +28,7 @@ export const COLUMNS_CONFIG = {
 class Board extends Component {
 
   componentDidMount() {
-    this.props.fetchCards();
+    this.props.fetchCardsFromCache().then(this.props.fetchCards);
   }
 
   render() {
@@ -52,7 +52,7 @@ function mapStateToProps({cards}) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({fetchCards}, dispatch);
+  return bindActionCreators({fetchCards, fetchCardsFromCache}, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Board);

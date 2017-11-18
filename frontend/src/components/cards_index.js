@@ -5,7 +5,7 @@ import {DragDropContext} from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import {default as TouchBackend} from 'react-dnd-touch-backend';
 import BoardColumn from './board_column';
-import {updateCard} from '../actions';
+import {updateCard, saveCardToCache} from '../actions';
 import {bindActionCreators} from 'redux';
 import {IS_MOBILE} from '../services/mobile_detector';
 
@@ -27,6 +27,7 @@ class CardsIndex extends Component {
       if (!res.error && res.payload) {
         card = _.merge(card, res.payload.data);
       }
+      this.props.saveCardToCache(card)
     });
   }
 
@@ -67,7 +68,7 @@ function mapStateToProps({cards}) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({updateCard}, dispatch);
+  return bindActionCreators({updateCard, saveCardToCache}, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(DragDropContext(IS_MOBILE ? TouchBackend : HTML5Backend)(CardsIndex));

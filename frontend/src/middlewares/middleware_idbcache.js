@@ -7,13 +7,15 @@ import {
   FETCH_CARD_SUCCESS
 } from '../actions/';
 
-import {onCardsRequestFails, onCardRequestFails}  from '../idb/';
+import {fetchCardsFromIndexedDb, onCardRequestFails}  from '../idb/';
 
 export const idbCacheMiddleware = store => next => action => {
+  return next(action);
+
   switch(action.type) {
 
     case FETCH_CARD_FAIL:
-      return next(onCardsRequestFails().then(cahcedCards => {
+      return next(fetchCardsFromIndexedDb().then(cahcedCards => {
         if (!action.meta) {
           return {
             payload: {error: true},
@@ -36,7 +38,7 @@ export const idbCacheMiddleware = store => next => action => {
         }
       }));
     case FETCH_CARDS_FAIL:
-      return next(onCardsRequestFails().then(cahcedCards => {
+      return next(fetchCardsFromCache().then(cahcedCards => {
         return {
           payload: { data: _.mapKeys(cahcedCards, 'id') },
           type: FETCH_CARDS_SUCCESS

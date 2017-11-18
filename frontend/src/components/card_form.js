@@ -27,15 +27,16 @@ class CardForm extends Component {
     const methodName = values.id ? 'update' : 'create';
 
     return this.props[`${methodName}Card`](values)
-      .then(({error}) => {
-        if(error && error.response.status == 400) {
+      .then(action => {
+        const {error} = action;
+        if(error && !error.response.ok) {
           const formErrors = _.reduce(error.response.data, (res, item) => {
             return { ...res, [item.property_path] : item.message };
           }, {});
 
           throw new SubmissionError(formErrors);
         }
-        this.props.onAfterSubmit();
+        this.props.onAfterSubmit(action.payload.data);
       });
   }
 

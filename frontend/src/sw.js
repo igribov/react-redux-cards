@@ -1,8 +1,8 @@
 import {openDatabase} from './idb/';
 const DEBUG = 1;
 const { assets } = global.serviceWorkerOption;
-//const CACHE_VERSION = `cards_${new Date().toISOString()}`;
-const CACHE_VERSION = `cards_2`;
+const CACHE_VERSION = `cards_${new Date().toISOString()}`;
+//const CACHE_VERSION = `cards_2`;
 //const ASSETS_ORIGINS = [location.origin];
 const ASSETS_ORIGINS = [];
 const API_ORIGINS = [
@@ -120,7 +120,7 @@ function _serveOneCard(request) {
 /* Serving cards objects */
 function _serveCards(request) {
   let countOfServedCards = 0;
-  const CARDS_SAVE_LIMIT = 6;
+  const CARDS_SAVE_LIMIT = 20;
   return fetch(request).then(function(networkResponse) {
     // if fetch successed then remove all cards from indexDb
     // then save from response
@@ -131,7 +131,7 @@ function _serveCards(request) {
           let cardsStore = tx.objectStore('cards');
           cards.forEach(card => {
             if (countOfServedCards > CARDS_SAVE_LIMIT) return;
-            if (['closed','backlog'].includes(card.status)) return;
+            //if (['closed','backlog'].includes(card.status)) return;
 
             cardsStore.put(card);
             console.log('[SW] save card : ', card);
@@ -169,8 +169,8 @@ function _removeOldCards() {
 
 }
 
-/* Log cards from index db */
-function _logAllCards(type='') {
+/* Log cards from indexed db */
+function _logAllCards(type = '') {
   openDatabase().then(db => {
     let tx = db.transaction('cards', 'readwrite');
     let cardsStore = tx.objectStore('cards');
