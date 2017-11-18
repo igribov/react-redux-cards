@@ -1,16 +1,17 @@
 import {openDatabase} from './idb/';
-const DEBUG = 0;
+const DEBUG = 1;
 const { assets } = global.serviceWorkerOption;
-const CACHE_VERSION = `cards_${new Date().toISOString()}`;
-//const CACHE_VERSION = `cards_20`;
-const ASSETS_ORIGINS = [location.origin];
+//const CACHE_VERSION = `cards_${new Date().toISOString()}`;
+const CACHE_VERSION = `cards_2`;
+//const ASSETS_ORIGINS = [location.origin];
+const ASSETS_ORIGINS = [];
 const API_ORIGINS = [
   location.origin,
   'http://localhost:8000',
   'https://cards-staging.herokuapp.com',
   'https://cards-production.herokuapp.com'
 ];
-const API_CARDS_ENDPOINT = 'api/card';
+const API_CARDS_LIST_ENDPOINT = '/api/card/';
 
 console.log('CACHE_VERSION', CACHE_VERSION);
 const assetsToCache = ['./', ...assets];
@@ -73,99 +74,99 @@ self.addEventListener('fetch', (event) => {
   if (!API_ORIGINS.includes(Url.origin)) {
     return;
   }
-  if (!Url.pathname.includes(API_CARDS_ENDPOINT)) {
+  if (!_isUrlOfCardApiEndpoint(Url.pathname)) {
     return;
   }
+
   if (!['GET'].includes(request.method)) {
     return;
   }
-  _removeOldCards();
-  event.respondWith(_serveCards(request));
+
+  if (Url.pathname == API_CARDS_LIST_ENDPOINT) {
+    event.respondWith(_serveCards(request));
+    return;
+  }
+  event.respondWith(_serveOneCard(request));
 });
 
-/* Serving cards objects */
-function _serveCards(request) {
+
+function _isUrlOfCardApiEndpoint(url) {
+  return url === '/api/card/' || /^\/api\/card\/[0-9]+$/.test(url);
+}
+
+/* Serving one card object */
+function _serveOneCard(request) {
+  console.log('_serveOneCard____');
   return fetch(request).then(function(networkResponse) {
-    networkResponse.clone().json().then(cards => {
+    // if fetch successed then remove all cards from indexDb
+    // then save from response
+    if (!networkResponse.ok) {
+      return;
+    }
+    networkResponse.clone().json().then(card => {
+      if (['closed','backlog'].includes(card.status)) return;
       openDatabase().then(db => {
         let tx = db.transaction('cards', 'readwrite');
         let cardsStore = tx.objectStore('cards');
-        cards.forEach(card => cardsStore.put(card));
-
+        cardsStore.put(card);
+        console.log('[SW] save card : ', card);
         return tx.complete;
-      });
+      })
     });
-    console.log('networkResponse --> ', networkResponse);
     return networkResponse;
-  })
+  }).catch(err => console.error('[SW] Network error:', err));
+}
+
+/* Serving cards objects */
+function _serveCards(request) {
+  let countOfServedCards = 0;
+  const CARDS_SAVE_LIMIT = 6;
+  return fetch(request).then(function(networkResponse) {
+    // if fetch successed then remove all cards from indexDb
+    // then save from response
+    _removeOldCards().then(
+      networkResponse.clone().json().then(cards =>
+        openDatabase().then(db => {
+          let tx = db.transaction('cards', 'readwrite');
+          let cardsStore = tx.objectStore('cards');
+          cards.forEach(card => {
+            if (countOfServedCards > CARDS_SAVE_LIMIT) return;
+            if (['closed','backlog'].includes(card.status)) return;
+
+            cardsStore.put(card);
+            console.log('[SW] save card : ', card);
+            countOfServedCards++;
+          });
+
+          return tx.complete;
+        })
+      )
+    );
+
+    return networkResponse;
+  }).catch(err => console.error('[SW] Network error:', err));
 }
 
 /*
   Delete cards from index db
   If count of cards more then IDB_CARDS_LIMIT
-  then delete backlog and closed at first
-  then delete until limit = IDB_CARDS_LIMIT
 */
 function _removeOldCards() {
 
-  const IDB_CARDS_LIMIT = 6;
-  let countOfCardsToDelete = 0;
-  let idbPromise = openDatabase();
-
-  idbPromise.then(db => {
-    let tx = db.transaction('cards');
+  return openDatabase().then(db => {
+    let tx = db.transaction('cards', 'readwrite');
     let cardsStore = tx.objectStore('cards');
 
-    return cardsStore.count();
+    return cardsStore.openCursor();
   })
-  .then(count => {
-    countOfCardsToDelete = count - IDB_CARDS_LIMIT;
-    return countOfCardsToDelete > 0;
+  .then(function deleteCard(cursor) {
+    if (!cursor) return;
+    cursor.delete();
+
+    return cursor.continue().then(deleteCard);
   })
-  .then(deleteCards => {
-    if (!deleteCards) return;
-    // delete cards with status backlog and closed
-    return idbPromise.then(db => {
-      let tx = db.transaction('cards');
-      let cardsStore = tx.objectStore('cards');
-      let statusIndex = cardsStore.index('status');
+  //.then(() => DEBUG && _logAllCards('after _removeOldCards'));
 
-      return Promise.all([statusIndex.getAllKeys('closed'), statusIndex.getAllKeys('backlog')]);
-    })
-    .then(keysToDelete => [...keysToDelete[0], ...keysToDelete[1]].slice(0, countOfCardsToDelete))
-    .then(keysToDelete => {
-      if (!keysToDelete) return;
-      // if cards with closed or backlog statuses in indexedDb then delete it
-      return idbPromise.then(db => {
-        let tx = db.transaction('cards', 'readwrite');
-        let cardsStore = tx.objectStore('cards');
-
-        return cardsStore.openCursor();
-      }).then(function deleteCard(cursor) {
-        if (!cursor) return;
-        if (keysToDelete.includes(cursor.value.id)) {
-          cursor.delete();
-        }
-        return cursor.continue().then(deleteCard);
-      })
-    })
-    .then(() => {
-      return idbPromise.then(db => {
-        let tx = db.transaction('cards', 'readwrite');
-        let cardsStore = tx.objectStore('cards');
-
-        return cardsStore.openCursor();
-      })
-      .then(cursor => cursor.advance(IDB_CARDS_LIMIT))
-      .then(function deleteCard(cursor) {
-        if (!cursor) return;
-        cursor.delete();
-
-        return cursor.continue().then(deleteCard);
-      })
-    })
-    .then(() => DEBUG && _logAllCards('after _removeOldCards'));
-  });
 }
 
 /* Log cards from index db */

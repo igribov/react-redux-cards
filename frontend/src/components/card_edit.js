@@ -9,7 +9,7 @@ class CardEdit extends Component {
 
   componentDidMount() {
     if (!this.props.card) {
-      const id = this.props.match.params.id;
+      const {id} = this.props.match.params;
       this.props.fetchCard(id);
     }
   }
@@ -20,9 +20,7 @@ class CardEdit extends Component {
   }
 
   render() {
-    if (this.props.error) return <NotFound />;
-
-    if (!this.props.card && !this.props.error) return <div className="container">Loading ...</div>;
+    if (!this.props.card) return <NotFound />;
 
     const buttons = [
       {

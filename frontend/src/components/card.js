@@ -25,6 +25,7 @@ class Card extends Component {
 				className="list-group-item drag-and-drop"
 				key={card.id}>
 				<div className="task-card">
+					<span className="card__id">{card.id}</span>
 					<span className="card__title">{card.title}</span>
 					<span className={"badge badge-default card__status card__status-" + card.status}>
             			{card.status}

@@ -15,8 +15,10 @@ export default function ToasterReduser(state = {}, action) {
   switch (action.type) {
     case UPDATE_CARD_FAIL:
     case CREATE_CARD_FAIL:
-      //console.log('UPDATE_CARD_FAIL=>', {error: action.error.response.data});
-      return { errors: action.error.response.data };
+
+      return action.error.response ?
+        { errors: action.error.response.data } :
+        { error: { message: action.error.data }};
 
     case UPDATE_CARD_SUCCESS:
     case CREATE_CARD_SUCCESS:

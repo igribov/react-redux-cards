@@ -8,11 +8,17 @@ import 'react-toastify/dist/ReactToastify.min.css';
 class Toaster extends Component {
 
   render() {
-    const {errors, success} = this.props;
+    const {errors, error, success} = this.props;
 
-    if(errors) {
+    console.log('render --> ', this.props);
+
+    if(errors && typeof errors.length != 'undefined') {
       const message = errors.map(err => err.message).join('');
       toast.error(message);
+    }
+
+    if(error) {
+      toast.error(error.message);
     }
 
     if(success) {
@@ -28,10 +34,7 @@ class Toaster extends Component {
 }
 
 function mapStateToProps({toaster}) {
-    return {
-      errors: toaster.errors,
-      success: toaster.success
-    };
+    return toaster;
 }
 
 export default connect(mapStateToProps)(Toaster);

@@ -22,7 +22,6 @@ export default function CardsReduser(state = {}, action) {
       return _.mapKeys(action.payload.data, 'id');
 
     case FETCH_CARD_SUCCESS:
-      //console.log('FETCH_CARD=>', { ...state, [action.payload.data.id]: action.payload.data});
       return {...state, [action.payload.data.id]: action.payload.data};
 
     case UPDATE_CARD_SUCCESS:
@@ -33,16 +32,6 @@ export default function CardsReduser(state = {}, action) {
 
     case DELETE_CARD_SUCCESS:
       return state;
-
-    //case FETCH_CARDS_FAIL:
-
-
-    case FETCH_CARD_FAIL:
-      let cachedCard = onCardRequestFails(action.meta.previousAction.payload.request.url);
-      if (!cachedCard) {
-        return { 'error': action.error };
-      }
-      return {...state, [cachedCard.id]: cachedCard};
 
     case CREATE_CARD_FAIL:
     case UPDATE_CARD_FAIL:
