@@ -1,3 +1,8 @@
+server_status:
+    resource: "@ServerStatusBundle/Controller/"
+    type:     annotation
+    prefix:   /server/
+
 user:
     resource: "@UserBundle/Controller/"
     type:     rest

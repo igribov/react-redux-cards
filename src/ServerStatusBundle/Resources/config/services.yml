@@ -1,0 +1,8 @@
+services:
+    redirect_subscriber:
+        class: ServerStatusBundle\EventHandler\Kernel\ServerStatusSubscriber
+        #arguments:
+           #- '@redirect.handler'
+           #- '@logger'
+        tags:
+           - { name: kernel.event_subscriber }
