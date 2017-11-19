@@ -70,7 +70,6 @@ export function fetchCardFromCache(id) {
   return {
     type: FETCH_CARD_FROM_CACHE,
     payload: fetchCardFromIndexedDb(id).then(card => {
-      console.log('fetchCardFromCache', card);
       return {
         data: card
       };

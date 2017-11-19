@@ -10,8 +10,6 @@ class Toaster extends Component {
   render() {
     const {errors, error, success} = this.props;
 
-    console.log('render --> ', this.props);
-
     if(errors && typeof errors.length != 'undefined') {
       const message = errors.map(err => err.message).join('');
       toast.error(message);

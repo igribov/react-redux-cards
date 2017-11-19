@@ -1,5 +1,4 @@
 import _  from 'lodash';
-import {onCardRequestFails}  from '../idb/';
 
 import {
   FETCH_CARDS_FROM_CACHE,
@@ -23,12 +22,9 @@ export default function CardsReduser(state = {}, action) {
 
     case FETCH_CARDS_FROM_CACHE:
     case FETCH_CARDS_SUCCESS:
-      console.log('FETCH_CARDS=>', action);
       return _.mapKeys(action.payload.data, 'id');
 
     case FETCH_CARD_FROM_CACHE:
-      console.log('FETCH_CARD_FROM_CACHE', action);
-      return state;
     case FETCH_CARD_SUCCESS:
       return {...state, [action.payload.data.id]: action.payload.data};
 
@@ -39,11 +35,6 @@ export default function CardsReduser(state = {}, action) {
       return {...state, [action.payload.data.id]: action.payload.data};
 
     case DELETE_CARD_SUCCESS:
-      return state;
-
-    case CREATE_CARD_FAIL:
-    case UPDATE_CARD_FAIL:
-    case DELETE_CARD_FAIL:
       return state;
 
     default:

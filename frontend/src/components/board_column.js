@@ -33,7 +33,8 @@ class BoardColumn extends Component {
 
 const cardDropTarget = {
   canDrop(props, monitor) {
-    return props.cards.length < (props.maxLoad || Infinity);
+    return true;
+    //return props.cards.length < (props.maxLoad || Infinity);
   },
 
   drop(props, monitor, component) {

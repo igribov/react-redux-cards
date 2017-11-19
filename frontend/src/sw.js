@@ -1,10 +1,10 @@
 import {openDatabase} from './idb/';
-const DEBUG = 1;
+const DEBUG = 0;
 const { assets } = global.serviceWorkerOption;
 const CACHE_VERSION = `cards_${new Date().toISOString()}`;
-//const CACHE_VERSION = `cards_2`;
-//const ASSETS_ORIGINS = [location.origin];
-const ASSETS_ORIGINS = [];
+//const CACHE_VERSION = 'cards_1';
+const ASSETS_ORIGINS = [location.origin];
+//const ASSETS_ORIGINS = [];
 const API_ORIGINS = [
   location.origin,
   'http://localhost:8000',
@@ -13,7 +13,7 @@ const API_ORIGINS = [
 ];
 const API_CARDS_LIST_ENDPOINT = '/api/card/';
 
-console.log('CACHE_VERSION', CACHE_VERSION);
+if(DEBUG) console.log('CACHE_VERSION -> ', CACHE_VERSION);
 const assetsToCache = ['./', ...assets];
 
 
@@ -23,7 +23,6 @@ self.addEventListener('install', event => {
   if (DEBUG) {
     console.log('[SW] Install event')
   }
-
   event.waitUntil(
     global.caches
       .open(CACHE_VERSION)
@@ -96,7 +95,6 @@ function _isUrlOfCardApiEndpoint(url) {
 
 /* Serving one card object */
 function _serveOneCard(request) {
-  console.log('_serveOneCard____');
   return fetch(request).then(function(networkResponse) {
     // if fetch successed then remove all cards from indexDb
     // then save from response
@@ -109,7 +107,7 @@ function _serveOneCard(request) {
         let tx = db.transaction('cards', 'readwrite');
         let cardsStore = tx.objectStore('cards');
         cardsStore.put(card);
-        console.log('[SW] save card : ', card);
+        if(DEBUG) console.log('[SW]save card to indexedDB:', card);
         return tx.complete;
       })
     });
@@ -131,10 +129,8 @@ function _serveCards(request) {
           let cardsStore = tx.objectStore('cards');
           cards.forEach(card => {
             if (countOfServedCards > CARDS_SAVE_LIMIT) return;
-            //if (['closed','backlog'].includes(card.status)) return;
-
             cardsStore.put(card);
-            console.log('[SW] save card : ', card);
+            if(DEBUG) console.log('[SW]save card to indexedDB:', card);
             countOfServedCards++;
           });
 
@@ -152,7 +148,6 @@ function _serveCards(request) {
   If count of cards more then IDB_CARDS_LIMIT
 */
 function _removeOldCards() {
-
   return openDatabase().then(db => {
     let tx = db.transaction('cards', 'readwrite');
     let cardsStore = tx.objectStore('cards');
@@ -164,21 +159,12 @@ function _removeOldCards() {
     cursor.delete();
 
     return cursor.continue().then(deleteCard);
-  })
-  //.then(() => DEBUG && _logAllCards('after _removeOldCards'));
-
+  });
 }
 
-/* Log cards from indexed db */
-function _logAllCards(type = '') {
-  openDatabase().then(db => {
-    let tx = db.transaction('cards', 'readwrite');
-    let cardsStore = tx.objectStore('cards');
-    let statusIndex = cardsStore.index('status');
-    return statusIndex.openCursor();
-  }).then(function logCard(cursor) {
-    if (!cursor) return;
-    console.log(`[LOG_CARD ${type}] : `, cursor.value);
-    return cursor.continue().then(logCard);
-  })
-}
+/* Listen message event */
+self.addEventListener('message', function(event) {
+  if (event.data.action === 'skipWaiting') {
+    self.skipWaiting();
+  }
+});

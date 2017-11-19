@@ -28,8 +28,8 @@ class Card extends Component {
 					<span className="card__id">{card.id}</span>
 					<span className="card__title">{card.title}</span>
 					<span className={"badge badge-default card__status card__status-" + card.status}>
-            			{card.status}
-          			</span>
+            {card.status}
+          </span>
 					&nbsp;
 					<Link className="btn btn-default edit-link" to={`/card/edit/${card.id}`}>&#x270E;</Link>
 					<Link className="btn btn-default edit-view" to="" onClick={this.onViewButtonClick.bind(this)}>&#x1f441;</Link>

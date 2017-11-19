@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {Button} from 'reactstrap';
 import {NavLink} from 'react-router-dom';
 import {LinkContainer} from 'react-router-bootstrap';
@@ -8,7 +8,7 @@ export default (props) => (
     {
       props.buttons.map(buttonConf => (
         <LinkContainer key={buttonConf.to} to={buttonConf.to}>
-          <Button 
+          <Button
             color={buttonConf.color || "secondary"}
             onClick={buttonConf.onClick}>
             {buttonConf.title}

@@ -3,8 +3,7 @@ import {Navbar, Nav, NavItem, NavbarBrand, NavbarToggler, Collapse} from 'reacts
 import {NavLink} from 'react-router-dom'
 import {LinkContainer} from 'react-router-bootstrap'
 
-
-export default class Navigation extends React.Component {
+class Navigation extends Component {
   constructor(props) {
     super(props);
 
@@ -19,6 +18,7 @@ export default class Navigation extends React.Component {
       collapsed: !this.state.collapsed
     });
   }
+
   render() {
     return (
       <div>
@@ -39,3 +39,5 @@ export default class Navigation extends React.Component {
     );
   }
 }
+
+export default Navigation;
