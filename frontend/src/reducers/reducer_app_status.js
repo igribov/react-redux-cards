@@ -15,12 +15,9 @@ import {
   SERVICE_WORKER_UPDATE_READY
 } from '../actions/sw';
 
-export default function AppStatusReduser(state={}, action) {
+let serverOnline = true;
 
-  let returnState = {
-    serverOnline: true,
-    newVersionReady: false
-  };
+export default function AppStatusReduser(state={}, action) {
 
   switch (action.type) {
     case FETCH_CARDS_FAIL:
@@ -28,21 +25,23 @@ export default function AppStatusReduser(state={}, action) {
     case CREATE_CARD_FAIL:
     case UPDATE_CARD_FAIL:
     case DELETE_CARD_FAIL:
-      returnState.serverOnline = false;
-      return returnState;
+      serverOnline = false;
+      return {serverOnline, newVersionReady: false};
 
     case FETCH_CARDS_SUCCESS:
     case FETCH_CARD_SUCCESS:
     case UPDATE_CARD_SUCCESS:
     case CREATE_CARD_SUCCESS:
     case DELETE_CARD_SUCCESS:
-      return returnState;
+      serverOnline = true;
+      return {serverOnline, newVersionReady: false};
 
     case SERVICE_WORKER_UPDATE_READY:
-      returnState.newVersionReady = action.payload;
-      return returnState;
+      serverOnline = true;
+      return {serverOnline, newVersionReady: action.payload};
 
     default:
-      return returnState;
+      console.log('AppStatusReduser default:', action);
+      return {serverOnline, newVersionReady: false};
   }
 }

@@ -64,6 +64,7 @@ class App extends Component {
 
   render() {
     const {appStatus} = this.props;
+    console.log('!!appStatus --> ', appStatus);
     return (
       <div>
         <Toaster />
