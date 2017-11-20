@@ -6,16 +6,15 @@ const CACHE_VERSION = `cards_${new Date().toISOString()}`;
 const ASSETS_ORIGINS = [location.origin];
 //const ASSETS_ORIGINS = [];
 const API_ORIGINS = [
-  location.origin,
   'http://localhost:8000',
   'https://cards-staging.herokuapp.com',
   'https://cards-production.herokuapp.com'
 ];
 const API_CARDS_LIST_ENDPOINT = '/api/card/';
+const IGNORE_PATHS = '/server';
 
 if(DEBUG) console.log('CACHE_VERSION -> ', CACHE_VERSION);
 const assetsToCache = ['./', ...assets];
-
 
 // When the service worker is first added.
 self.addEventListener('install', event => {
@@ -39,14 +38,19 @@ self.addEventListener('install', event => {
 self.addEventListener('fetch', event => {
   const request = event.request;
   const requestUrl = new URL(request.url);
-  // Ignore difference origin.
-  if (!ASSETS_ORIGINS.includes(requestUrl.origin)) {
-    return;
-  }
   // Ignore not GET request.
   if (request.method !== 'GET') {
     return;
   }
+  // Ignore difference origin.
+  if (!ASSETS_ORIGINS.includes(requestUrl.origin)) {
+    return;
+  }
+  // Ignore
+  if (IGNORE_PATHS.includes(requestUrl.pathname)) {
+    return;
+  }
+
   const resource = global.caches.match(request).then(response => {
     if (response) {
       return response;
