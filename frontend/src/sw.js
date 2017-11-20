@@ -1,7 +1,7 @@
 import {openDatabase} from './idb/';
 const DEBUG = 0;
 const { assets } = global.serviceWorkerOption;
-const CACHE_VERSION = `cards_v1`;
+const CACHE_VERSION = `cards_${new Date().toISOString()}`;
 const ASSETS_ORIGINS = [location.origin];
 const SERVER_ROUTE_REGEXP = new RegExp('^/(api|server)');
 const API_CARDS_LIST_ENDPOINT = '/api/card/';
