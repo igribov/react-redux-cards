@@ -26,14 +26,22 @@ export const putCardIntoIndexedDb = (card) => openDatabase().then(db => {
   return tx.complete;
 });
 
-export const putCardsIntoIndexedDb = (cards) => openDatabase().then(db => {
-  const tx = db.transaction(DB_CARDS_TABLE, 'readwrite');
-  cards.forEach(card => tx.objectStore(DB_CARDS_TABLE).put(card));
-  return tx.complete;
-});
+export const putCardsIntoIndexedDb = (cards) => clearCardsInIndexedDb().then(
+  () => openDatabase().then(db => {
+    const tx = db.transaction(DB_CARDS_TABLE, 'readwrite');
+    cards.forEach(card => tx.objectStore(DB_CARDS_TABLE).put(card));
+    return tx.complete;
+  })
+);
 
 export const deleteCardFromIndexedDb = (card) => openDatabase().then(db => {
   const tx = db.transaction(DB_CARDS_TABLE, 'readwrite');
   tx.objectStore(DB_CARDS_TABLE).delete(card);
+  return tx.complete;
+});
+
+export const clearCardsInIndexedDb = () => openDatabase().then(db => {
+  const tx = db.transaction(DB_CARDS_TABLE, 'readwrite');
+  tx.objectStore(DB_CARDS_TABLE).clear();
   return tx.complete;
 });

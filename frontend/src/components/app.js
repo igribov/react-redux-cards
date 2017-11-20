@@ -37,12 +37,12 @@ class App extends Component {
 
     if (reg.waiting) {
       this.props.onServiceWorkerUpdateReady(reg.waiting);
-      return;
     }
+
     if (reg.installing) {
       this._trackInstalling(reg.installing);
-      return;
     }
+
     reg.addEventListener('updatefound', () => {
       this._trackInstalling(reg.installing);
     });
