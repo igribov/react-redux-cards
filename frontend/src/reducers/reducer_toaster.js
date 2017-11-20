@@ -18,6 +18,7 @@ export default function ToasterReduser(state = {}, action) {
     case CREATE_CARD_FAIL:
     case CREATE_CARD_FAIL:
     case DELETE_CARD_FAIL:
+      console.log('CARD_FAIL:', action);
       if (action.error.response && action.error.response.data) {
         return { errors: action.error.response.data };
       }
