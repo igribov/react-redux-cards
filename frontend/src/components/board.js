@@ -30,7 +30,12 @@ class Board extends Component {
   componentDidMount() {
     this.props.fetchCardsFromCache()
       .then(this.props.fetchCards)
-      .then(({payload: {data}}) => this.props.saveCardsToCache(data));
+      .then(res => {
+        if(res.error) {
+          return;
+        }
+        this.props.saveCardsToCache(res.payload.data);
+      });
   }
 
   render() {

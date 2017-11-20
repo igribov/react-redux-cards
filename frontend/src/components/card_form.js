@@ -117,7 +117,7 @@ class CardForm extends Component {
   }
 
   render() {
-    const {handleSubmit, crateForm, updateForm} = this.props;
+    const {handleSubmit, crateForm, updateForm, disable} = this.props;
     // todo delete id field from form
     return (
       <form onSubmit={handleSubmit(this.onSubmit)}>
@@ -148,7 +148,7 @@ class CardForm extends Component {
           label="Description"
           name="description"
           component={this.renderTextarea} />
-        <button type="submit" className="btn btn-primary">{updateForm ? 'Update' : 'Create'}</button>
+        <button disabled={disable} type="submit" className="btn btn-primary">{updateForm ? 'Update' : 'Create'}</button>
         &nbsp;
         <Link to="/" className="btn btn-danger">Cancel</Link>
       </form>

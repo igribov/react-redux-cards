@@ -78,7 +78,7 @@ class App extends Component {
             <div className="app container-fluid">
               <Switch>
                 <Route exact path="/card/create" component={CardCreate}/>
-                <Route exact path="/card/edit/:id" component={CardEdit}/>
+                <Route exact path="/card/edit/:id" render={(props)=>(<CardEdit {...props} disable={!appStatus.serverOnline}/>)}/>
                 <Route exact path="/" component={Board}/>
                 <Route exact path="/404" component={NotFound}/>
                 <Redirect to="/404"/>

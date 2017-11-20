@@ -14,7 +14,6 @@ const buttons = [
 ];
 
 const CardCreate = (props) => {
-
   const onAfterSubmit = (card) => {
     props.saveCardToCache(card)
       .then(() => props.history.push('/'));

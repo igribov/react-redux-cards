@@ -37,16 +37,20 @@ class CardEdit extends Component {
         title: 'Back',
         to: '/',
         color: 'primary'
-      },
-      {
+      }
+    ];
+
+    if (!this.props.disable) {
+      buttons.push({
         title: 'Delete',
         to: '#',
         onClick: this.onDeleteButtonClick.bind(this),
         color: 'danger'
-      }
-    ];
+      });
+    }
 
     const onAfterSubmit = (card) => {
+      if (this.props.disable) return;
       this.props.saveCardToCache(card)
         .then(() => this.props.history.push('/'));
     };
@@ -58,6 +62,7 @@ class CardEdit extends Component {
         </div>
         <CardForm
           updateForm={true}
+          disable={this.props.disable}
           initialValues={this.props.card}
           onAfterSubmit={onAfterSubmit}/>
       </div>
