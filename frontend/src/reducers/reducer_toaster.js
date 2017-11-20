@@ -20,7 +20,7 @@ export default function ToasterReduser(state = {}, action) {
     case DELETE_CARD_FAIL:
       console.log('API_FAILED:', action);
       return action.error.response ?
-        { errors: action.error.response.data } :
+        { errors: action.error.response.data ? action.error.response.data : action.error.response.statusText } :
         { error: { message: action.error.data }};
 
     case DELETE_CARD_SUCCESS:
