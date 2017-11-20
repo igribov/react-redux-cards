@@ -27,7 +27,7 @@ export default function AppStatusReduser(state={}, action) {
     case CREATE_CARD_FAIL:
     case UPDATE_CARD_FAIL:
     case DELETE_CARD_FAIL:
-      if (action.error && action.error.status === 0) {
+      if (action.error && !action.response) {
         serverOnline = false;
       }
       return {serverOnline, newVersionReady};
