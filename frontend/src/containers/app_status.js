@@ -16,7 +16,7 @@ const AppStatus = (props) => {
       <div className="d-block p-3 text-center text-white bg-primary b4b">
         <span>New version is ready</span>
         <Button
-          color="primary"
+          color="default"
           onClick={props.newVersionReady.onConfirm}
           >
           Change

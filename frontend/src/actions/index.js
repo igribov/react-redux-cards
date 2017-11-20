@@ -3,12 +3,14 @@ import {
   fetchCardFromIndexedDb,
   deleteCardFromIndexedDb,
   putCardIntoIndexedDb,
+  putCardsIntoIndexedDb
 } from '../idb/';
 
 const FETCH_CARDS = 'FETCH_CARDS';
 export const FETCH_CARDS_FROM_CACHE = 'FETCH_CARDS_FROM_CACHE';
 export const FETCH_CARDS_SUCCESS = 'FETCH_CARDS_SUCCESS';
 export const FETCH_CARDS_FAIL = 'FETCH_CARDS_FAIL';
+export const SAVE_CARDS_TO_CACHE = 'SAVE_CARDS_TO_CACHE';
 
 const FETCH_CARD = 'FETCH_CARD';
 export const FETCH_CARD_FROM_CACHE = 'FETCH_CARD_FROM_CACHE';
@@ -128,6 +130,13 @@ export function saveCardToCache(card) {
   return {
     type: SAVE_CARD_TO_CACHE,
     payload: putCardIntoIndexedDb(card)
+  };
+}
+
+export function saveCardsToCache(cards) {
+  return {
+    type: SAVE_CARDS_TO_CACHE,
+    payload: putCardsIntoIndexedDb(cards)
   };
 }
 

@@ -13,7 +13,7 @@ import AppStatus from '../containers/app_status';
 import CardEdit from './card_edit';
 import ActiveViewCardModal from './active_view_card_modal';
 import Navigation from './navbar';
-import {onServiceWorkerUpdateReady} from '../actions/sw';
+import {onServiceWorkerUpdateReady, onServiceWorkerUpdated} from '../actions/sw';
 import {bindActionCreators} from 'redux';
 
 class App extends Component {
@@ -34,7 +34,7 @@ class App extends Component {
   }
 
   addListeners(reg) {
-    const that = this;
+
     if (reg.waiting) {
       this.props.onServiceWorkerUpdateReady(reg.waiting);
       return;
@@ -43,12 +43,13 @@ class App extends Component {
       this._trackInstalling(reg.installing);
       return;
     }
-    reg.addEventListener('updatefound', function() {
-      that._trackInstalling(reg.installing);
+    reg.addEventListener('updatefound', () => {
+      this._trackInstalling(reg.installing);
     });
 
     //let refreshing;
-    navigator.serviceWorker.addEventListener('controllerchange', function() {
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      this.props.onServiceWorkerUpdated();
       window.location.reload();
     });
 
@@ -96,7 +97,10 @@ function mapStateToProps({appStatus, toaster}) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({onServiceWorkerUpdateReady}, dispatch);
+  return bindActionCreators({
+    onServiceWorkerUpdateReady,
+    onServiceWorkerUpdated
+  }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

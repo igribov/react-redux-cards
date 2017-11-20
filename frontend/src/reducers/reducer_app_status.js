@@ -12,10 +12,12 @@ import {
 } from '../actions';
 
 import {
-  SERVICE_WORKER_UPDATE_READY
+  SERVICE_WORKER_UPDATE_READY,
+  SERVICE_WORKER_UPDATED
 } from '../actions/sw';
 
 let serverOnline = true;
+let newVersionReady = false;
 
 export default function AppStatusReduser(state={}, action) {
 
@@ -25,10 +27,10 @@ export default function AppStatusReduser(state={}, action) {
     case CREATE_CARD_FAIL:
     case UPDATE_CARD_FAIL:
     case DELETE_CARD_FAIL:
-      if (action.error.request.status !== 400) {
+      if (action.error && action.error.status === 0) {
         serverOnline = false;
       }
-      return {serverOnline, newVersionReady: false};
+      return {serverOnline, newVersionReady};
 
     case FETCH_CARDS_SUCCESS:
     case FETCH_CARD_SUCCESS:
@@ -36,13 +38,17 @@ export default function AppStatusReduser(state={}, action) {
     case CREATE_CARD_SUCCESS:
     case DELETE_CARD_SUCCESS:
       serverOnline = true;
-      return {serverOnline, newVersionReady: false};
+      return {serverOnline, newVersionReady};
 
     case SERVICE_WORKER_UPDATE_READY:
       serverOnline = true;
-      return {serverOnline, newVersionReady: action.payload};
+      newVersionReady = action.payload;
+      return {serverOnline, newVersionReady};
+
+    case SERVICE_WORKER_UPDATED:
+      newVersionReady = false;
 
     default:
-      return {serverOnline, newVersionReady: false};
+      return {serverOnline, newVersionReady};
   }
 }
