@@ -44,7 +44,7 @@ self.addEventListener('fetch', event => {
     return;
   }
   // Ignore server API request and "/server" route
-  if (SERVER_ROUTE_REGEXP.test(requestUrl.pathname))) {
+  if (SERVER_ROUTE_REGEXP.test(requestUrl.pathname)) {
     return;
   }
 
