@@ -1,7 +1,7 @@
 import {openDatabase} from './idb/';
 const DEBUG = 0;
 const { assets } = global.serviceWorkerOption;
-const CACHE_VERSION = `cards_${new Date().toISOString()}`;
+const CACHE_VERSION = `cards_v1`;
 const ASSETS_ORIGINS = [location.origin];
 const SERVER_ROUTE_REGEXP = new RegExp('^/(api|server)');
 const API_CARDS_LIST_ENDPOINT = '/api/card/';
@@ -12,7 +12,6 @@ const assetsToCache = ['./', ...assets];
 
 // When the service worker is first added.
 self.addEventListener('install', event => {
-  // Perform install steps.
   if (DEBUG) {
     console.log('[SW] Install event')
   }
