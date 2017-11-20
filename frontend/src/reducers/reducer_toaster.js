@@ -23,7 +23,7 @@ export default function ToasterReduser(state = {}, action) {
         return { errors: action.error.response.data };
       }
       if (action.error.response && action.error.response.statusText) {
-        return { error: action.error.response.statusText };
+        return { error: { message: action.error.response.statusText }};
       }
       return { error: { message: 'Error occured!' }};
 
