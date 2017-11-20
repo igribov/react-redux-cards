@@ -16,6 +16,9 @@ export default function ToasterReduser(state = {}, action) {
   switch (action.type) {
     case UPDATE_CARD_FAIL:
     case CREATE_CARD_FAIL:
+    case CREATE_CARD_FAIL:
+    case DELETE_CARD_FAIL:
+      console.log('API_FAILED:', action);
       return action.error.response ?
         { errors: action.error.response.data } :
         { error: { message: action.error.data }};
