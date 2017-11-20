@@ -5,11 +5,7 @@ const CACHE_VERSION = `cards_${new Date().toISOString()}`;
 //const CACHE_VERSION = 'cards_1';
 const ASSETS_ORIGINS = [location.origin];
 //const ASSETS_ORIGINS = [];
-const API_ORIGINS = [
-  'http://localhost:8000',
-  'https://cards-staging.herokuapp.com',
-  'https://cards-production.herokuapp.com'
-];
+const SERVER_ROUTE_REGEXP = new RegExp('^/(api|server)');
 const API_CARDS_LIST_ENDPOINT = '/api/card/';
 const IGNORE_PATHS = '/server';
 
@@ -35,6 +31,7 @@ self.addEventListener('install', event => {
   )
 });
 
+// cache ASSETS only
 self.addEventListener('fetch', event => {
   const request = event.request;
   const requestUrl = new URL(request.url);
@@ -46,8 +43,8 @@ self.addEventListener('fetch', event => {
   if (!ASSETS_ORIGINS.includes(requestUrl.origin)) {
     return;
   }
-  // Ignore
-  if (IGNORE_PATHS.includes(requestUrl.pathname)) {
+  // Ignore server API request and "/server" route
+  if (SERVER_ROUTE_REGEXP.test(requestUrl.pathname))) {
     return;
   }
 
@@ -72,19 +69,16 @@ self.addEventListener('fetch', event => {
 /* If Request to API then save cards in indexedDb */
 self.addEventListener('fetch', (event) => {
   const {request} = event;
-  const Url = new URL(request.url);
-  // us request to API ?
-  if (!API_ORIGINS.includes(Url.origin)) {
-    return;
-  }
-  if (!_isUrlOfCardApiEndpoint(Url.pathname)) {
-    return;
-  }
 
   if (!['GET'].includes(request.method)) {
     return;
   }
-
+  const Url = new URL(request.url);
+  // is request to cards API ?
+  if (!_isUrlOfCardApiEndpoint(Url.pathname)) {
+    return;
+  }
+  // save list of objects or one object
   if (Url.pathname == API_CARDS_LIST_ENDPOINT) {
     event.respondWith(_serveCards(request));
     return;
@@ -92,7 +86,7 @@ self.addEventListener('fetch', (event) => {
   event.respondWith(_serveOneCard(request));
 });
 
-
+/* helper */
 function _isUrlOfCardApiEndpoint(url) {
   return url === '/api/card/' || /^\/api\/card\/[0-9]+$/.test(url);
 }
@@ -111,7 +105,7 @@ function _serveOneCard(request) {
         let tx = db.transaction('cards', 'readwrite');
         let cardsStore = tx.objectStore('cards');
         cardsStore.put(card);
-        if(DEBUG) console.log('[SW]save card to indexedDB:', card);
+        if (DEBUG) console.log('[SW]save card to indexedDB:', card);
         return tx.complete;
       })
     });
