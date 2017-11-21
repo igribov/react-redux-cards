@@ -8,7 +8,6 @@ import client from './services/axios';
 import reducers from './reducers';
 import App from './components/app';
 
-
 import './style/style.styl';
 
 const createStoreWithMiddleware = applyMiddleware(axiosMiddleware(client), promise)(createStore);

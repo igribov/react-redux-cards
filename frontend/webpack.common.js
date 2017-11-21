@@ -20,13 +20,13 @@ module.exports = {
     filename: 'public/js/[name].js'
   },
   module: {
-    preLoaders: [
+    /*preLoaders: [
         {
           test: /\.(js|jsx)?$/,
           loader: 'eslint',
           exclude: /node_modules/
         }
-    ],
+    ],*/
     loaders: [
       {
         test: /\.(js|jsx)$/,
