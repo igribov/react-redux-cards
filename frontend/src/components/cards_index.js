@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import _ from 'lodash';
 import {connect} from 'react-redux';
 import {DragDropContext} from 'react-dnd';
@@ -27,7 +28,7 @@ class CardsIndex extends Component {
       if (!res.error && res.payload) {
         card = _.merge(card, res.payload.data);
       }
-      this.props.saveCardToCache(card)
+      this.props.saveCardToCache(card);
     });
   }
 
@@ -48,20 +49,27 @@ class CardsIndex extends Component {
     const boardConfiguration = this.props.configuration;
 
     _.each(boardConfiguration, (conf, statusCode) => {
-      groupedData[statusCode] = _.filter(cards, card => (card.status === statusCode))
+      groupedData[statusCode] = _.filter(cards, card => (card.status === statusCode));
     });
 
     return (
-        <div className="row">
-          {
-            _.map(groupedData, (data, statusCode) => {
-              return this.renderBoardColumn(data, {status: statusCode, ...boardConfiguration[statusCode]})
-            })
-          }
-        </div>
+      <div className="row">
+        {
+          _.map(groupedData, (data, statusCode) => {
+            return this.renderBoardColumn(data, {status: statusCode, ...boardConfiguration[statusCode]});
+          })
+        }
+      </div>
     );
   }
 }
+
+CardsIndex.propTypes = {
+  cards: PropTypes.object,
+  configuration: PropTypes.object,
+  updateCard: PropTypes.func,
+  saveCardToCache: PropTypes.func
+};
 
 function mapStateToProps({cards}) {
   return {cards};

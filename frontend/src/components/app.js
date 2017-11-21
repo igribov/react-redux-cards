@@ -1,9 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import runtime from 'serviceworker-webpack-plugin/lib/runtime'
-import registerEvents from 'serviceworker-webpack-plugin/lib/browser/registerEvents'
-import applyUpdate from 'serviceworker-webpack-plugin/lib/browser/applyUpdate'
-import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
+import runtime from 'serviceworker-webpack-plugin/lib/runtime';
 import {BrowserRouter, Route, Switch, Redirect} from 'react-router-dom';
 import Board from './board';
 import CardCreate from './card_create';
@@ -29,7 +27,7 @@ class App extends Component {
       'serviceWorker' in navigator &&
       (window.location.protocol === 'https:' || window.location.hostname === 'localhost')
     ) {
-      const registration = runtime.register().then(this.addListeners);
+      runtime.register().then(this.addListeners);
     }
   }
 
@@ -71,7 +69,7 @@ class App extends Component {
         <AppStatus
           serverOnline={appStatus.serverOnline}
           newVersionReady={appStatus.newVersionReady}
-          />
+        />
         <BrowserRouter>
           <div>
             <Route path="*" component={Navigation}/>
@@ -102,5 +100,11 @@ function mapDispatchToProps(dispatch) {
     onServiceWorkerUpdated
   }, dispatch);
 }
+
+App.propTypes = {
+  onServiceWorkerUpdateReady: PropTypes.func,
+  onServiceWorkerUpdated: PropTypes.func,
+  appStatus: PropTypes.object
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

@@ -20,6 +20,13 @@ module.exports = {
     filename: 'public/js/[name].js'
   },
   module: {
+    preLoaders: [
+        {
+          test: /\.(js|jsx)?$/,
+          loader: 'eslint',
+          exclude: /node_modules/
+        }
+    ],
     loaders: [
       {
         test: /\.(js|jsx)$/,
@@ -45,6 +52,10 @@ module.exports = {
   },
   resolve: {
     extensions: ['', '.js', '.jsx','.css', '.styl', '.pug']
+  },
+  eslint: {
+    failOnWarning: true,
+    failOnError: true
   },
   plugins: [
     new ServiceWorkerWebpackPlugin({

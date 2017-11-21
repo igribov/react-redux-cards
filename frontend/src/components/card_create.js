@@ -1,16 +1,17 @@
 import React from 'react';
-import ButtonToolbar from "../containers/button_tool_bar";
+import ButtonToolbar from '../containers/button_tool_bar';
 import { connect } from 'react-redux';
 import CardForm from './card_form';
 import {saveCardToCache} from '../actions';
 import {bindActionCreators} from 'redux';
+import PropTypes from 'prop-types';
 
 const buttons = [
-    {
-      title: 'Back',
-      to: '/',
-      color: 'primary'
-    }
+  {
+    title: 'Back',
+    to: '/',
+    color: 'primary'
+  }
 ];
 
 const CardCreate = (props) => {
@@ -27,6 +28,10 @@ const CardCreate = (props) => {
       <CardForm onAfterSubmit={onAfterSubmit} />
     </div>
   );
+};
+
+CardCreate.propTypes = {
+  saveCardToCache: PropTypes.func
 };
 
 function mapDispatchToProps(dispatch) {

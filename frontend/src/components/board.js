@@ -1,27 +1,28 @@
 import React, {Component} from 'react';
-import CardsIndex from "./cards_index";
-import ButtonToolbar from "../containers/button_tool_bar";
+import CardsIndex from './cards_index';
+import ButtonToolbar from '../containers/button_tool_bar';
 import {connect} from 'react-redux';
 import {fetchCards, fetchCardsFromCache, saveCardsToCache} from '../actions';
 import {bindActionCreators} from 'redux';
+import PropTypes from 'prop-types';
 
 export const COLUMNS_CONFIG = {
   backlog: {
-    title: "Backlog"
+    title: 'Backlog'
   },
   todo: {
-    title: "To Do",
+    title: 'To Do',
     maxLoad: 4,
   },
   in_progress: {
-    title: "In Progress",
+    title: 'In Progress',
     maxLoad: 2,
   },
   done: {
-    title: "Done",
+    title: 'Done',
   },
   closed: {
-    title: "Closed",
+    title: 'Closed',
   }
 };
 
@@ -31,7 +32,7 @@ class Board extends Component {
     this.props.fetchCardsFromCache()
       .then(this.props.fetchCards)
       .then(res => {
-        if(res.error) {
+        if (res.error) {
           return;
         }
         this.props.saveCardsToCache(res.payload.data);
@@ -53,6 +54,13 @@ class Board extends Component {
     );
   }
 }
+
+Board.propTypes = {
+  fetchCardsFromCache: PropTypes.func,
+  fetchCards: PropTypes.func,
+  saveCardsToCache: PropTypes.func,
+  cards: PropTypes.object
+};
 
 function mapStateToProps({cards}) {
   return {cards};

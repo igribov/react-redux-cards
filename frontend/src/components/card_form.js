@@ -3,7 +3,8 @@ import {Field, reduxForm, SubmissionError} from 'redux-form';
 import {Link} from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import {connect} from 'react-redux';
-//import moment from 'moment';
+import moment from 'moment';
+import PropTypes from 'prop-types';
 import _ from 'lodash';
 import 'react-datepicker/dist/react-datepicker.css';
 import { createCard, updateCard } from '../actions';
@@ -117,7 +118,7 @@ class CardForm extends Component {
   }
 
   render() {
-    const {handleSubmit, crateForm, updateForm, disable} = this.props;
+    const {handleSubmit, updateForm, disable} = this.props;
     // todo delete id field from form
     return (
       <form onSubmit={handleSubmit(this.onSubmit)}>
@@ -168,6 +169,13 @@ function validate(values) {
   // if errors is empty, the form is ready to submit
   return errors;
 }
+
+CardForm.propTypes = {
+  onAfterSubmit: PropTypes.func,
+  handleSubmit: PropTypes.func,
+  updateForm: PropTypes.bool,
+  disable: PropTypes.bool
+};
 
 export default reduxForm({
   validate,

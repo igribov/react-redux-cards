@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
 import {createStore, applyMiddleware} from 'redux';
-import {idbCacheMiddleware} from './middlewares/middleware_idbcache';
 import promise from 'redux-promise';
 import axiosMiddleware from './middlewares/axios_middleware';
 import client from './services/axios';
@@ -18,5 +17,5 @@ ReactDOM.render(
   <Provider store={createStoreWithMiddleware(reducers)}>
     <App />
   </Provider>
-  , document.querySelector('#app')
+  , self.document.querySelector('#app')
 );

@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import PropTypes from 'prop-types';
 import { ToastContainer, toast } from 'react-toastify';
-
 import 'react-toastify/dist/ReactToastify.min.css';
 
 class Toaster extends Component {
@@ -10,29 +9,31 @@ class Toaster extends Component {
   render() {
     const {errors, error, success} = this.props;
 
-    if(errors && typeof errors.length != 'undefined') {
+    if (errors && typeof errors.length != 'undefined') {
       const message = errors.map(err => err.message).join('');
       toast.error(message);
     }
 
-    if(error) {
+    if (error) {
       toast.error(error.message);
     }
 
-    if(success) {
+    if (success) {
       toast.success(success.message);
     }
 
-    return <ToastContainer
-          position="top-right"
-          autoClose={1000}
-          newestOnTop={true}
-          pauseOnHover/>
+    return <ToastContainer position="top-right" autoClose={1000} newestOnTop={true} pauseOnHover />;
   }
 }
 
 function mapStateToProps({toaster}) {
-    return toaster;
+  return toaster;
 }
+
+Toaster.propTypes = {
+  errors: PropTypes.array,
+  error: PropTypes.object,
+  success: PropTypes.object
+};
 
 export default connect(mapStateToProps)(Toaster);
