@@ -1,20 +1,11 @@
 export const SERVICE_WORKER_UPDATE_READY = 'SERVICE_WORKER_UPDATE_READY';
-export const SERVICE_WORKER_UPDATED = 'SERVICE_WORKER_UPDATED';
+import applyUpdate from 'serviceworker-webpack-plugin/lib/browser/applyUpdate';
 
-export function onServiceWorkerUpdateReady(worker) {
-
-  const confirm = () => worker.postMessage({action: 'skipWaiting'});
+export function onServiceWorkerUpdateReady() {
 
 	return {
 		type: SERVICE_WORKER_UPDATE_READY,
-		payload: {onConfirm: confirm}
+		payload: {onConfirm: applyUpdate}
 	};
 
-}
-
-export function onServiceWorkerUpdated() {
-  
-	return {
-		type: SERVICE_WORKER_UPDATED,
-	};
 }

@@ -12,8 +12,7 @@ import {
 } from '../actions';
 
 import {
-  SERVICE_WORKER_UPDATE_READY,
-  SERVICE_WORKER_UPDATED
+  SERVICE_WORKER_UPDATE_READY
 } from '../actions/sw';
 
 let serverOnline = true;
@@ -27,7 +26,6 @@ export default function AppStatusReduser(state={}, action) {
     case CREATE_CARD_FAIL:
     case UPDATE_CARD_FAIL:
     case DELETE_CARD_FAIL:
-      console.log('AppStatusReduser_CARD_FAIL:', action);
       if (action.error && action.error.response.status !== 400) {
         serverOnline = false;
       }
@@ -45,9 +43,6 @@ export default function AppStatusReduser(state={}, action) {
       serverOnline = true;
       newVersionReady = action.payload;
       return {serverOnline, newVersionReady};
-
-    case SERVICE_WORKER_UPDATED:
-      newVersionReady = false;
 
     default:
       return {serverOnline, newVersionReady};

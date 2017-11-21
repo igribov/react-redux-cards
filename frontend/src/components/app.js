@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import runtime from 'serviceworker-webpack-plugin/lib/runtime';
+import registerEvents from 'serviceworker-webpack-plugin/lib/browser/registerEvents'
 import {BrowserRouter, Route, Switch, Redirect} from 'react-router-dom';
 import Board from './board';
 import CardCreate from './card_create';
@@ -11,7 +12,7 @@ import AppStatus from '../containers/app_status';
 import CardEdit from './card_edit';
 import ActiveViewCardModal from './active_view_card_modal';
 import Navigation from './navbar';
-import {onServiceWorkerUpdateReady, onServiceWorkerUpdated} from '../actions/sw';
+import {onServiceWorkerUpdateReady} from '../actions/sw';
 import {bindActionCreators} from 'redux';
 
 class App extends Component {
@@ -27,29 +28,50 @@ class App extends Component {
       'serviceWorker' in navigator &&
       (window.location.protocol === 'https:' || window.location.hostname === 'localhost')
     ) {
-      runtime.register().then(this.addListeners);
+      const reg = runtime.register();
+      this.addListeners(reg);
     }
   }
 
   addListeners(reg) {
 
-    if (reg.waiting) {
-      this.props.onServiceWorkerUpdateReady(reg.waiting);
-    }
-
-    if (reg.installing) {
-      this._trackInstalling(reg.installing);
-    }
-
-    reg.addEventListener('updatefound', () => {
-      this._trackInstalling(reg.installing);
+    registerEvents(reg, {
+      onInstalled: () => {
+        console.log('onInstalled')
+      },
+      onUpdateReady: () => {
+        console.log('onUpdateReady : ', reg)
+        this.props.onServiceWorkerUpdateReady();
+      },
+      onUpdated: () => {
+        window.location.reload();
+      },
     });
+
+    //console.log('addListeners', reg);
+
+    // if (reg.waiting) {
+    //   console.log('waiting', reg.waiting);
+    //   this.props.onServiceWorkerUpdateReady(reg.waiting);
+    //   return;
+    // }
+
+    /*if (reg.installing) {
+      console.log('installing', reg.installing);
+      this._trackInstalling(reg.installing);
+      return;
+    }*/
+
+    // reg.addEventListener('updatefound', () => {
+    //   console.log('updatefound');
+    //   this._trackInstalling(reg.installing);
+    // });
 
     //let refreshing;
-    navigator.serviceWorker.addEventListener('controllerchange', () => {
+    /*navigator.serviceWorker.addEventListener('controllerchange', () => {
       this.props.onServiceWorkerUpdated();
       window.location.reload();
-    });
+    });*/
 
   }
 
@@ -97,13 +119,11 @@ function mapStateToProps({appStatus, toaster}) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     onServiceWorkerUpdateReady,
-    onServiceWorkerUpdated
   }, dispatch);
 }
 
 App.propTypes = {
   onServiceWorkerUpdateReady: PropTypes.func,
-  onServiceWorkerUpdated: PropTypes.func,
   appStatus: PropTypes.object
 };
 
