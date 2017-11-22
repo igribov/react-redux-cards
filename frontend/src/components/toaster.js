@@ -6,23 +6,38 @@ import 'react-toastify/dist/ReactToastify.min.css';
 
 class Toaster extends Component {
 
+  constructor(props) {
+    super(props);
+    this.dismissToast = this.dismissToast.bind(this);
+  }
+
+  dismissToast(toastId, delay) {
+    setTimeout(() => toast.dismiss(toastId), delay);
+  }
+
   render() {
     const {errors, error, success} = this.props;
+    const autoClose = this.props.autoClose || 2000;
 
     if (errors && typeof errors.length != 'undefined') {
       const message = errors.map(err => err.message).join('');
-      toast.error(message);
+      this.dismissToast(toast.error(message), autoClose);
     }
 
     if (error) {
-      toast.error(error.message);
+      this.dismissToast(toast.error(error.message), autoClose);
     }
 
     if (success) {
-      toast.success(success.message);
+      this.dismissToast(toast.success(success.message), autoClose);
     }
 
-    return <ToastContainer position="top-right" autoClose={1000} newestOnTop={true} pauseOnHover />;
+    return (
+      <ToastContainer
+        position="top-right"
+        autoClose={autoClose}
+        newestOnTop={true}/>
+    );
   }
 }
 
@@ -33,7 +48,8 @@ function mapStateToProps({toaster}) {
 Toaster.propTypes = {
   errors: PropTypes.array,
   error: PropTypes.object,
-  success: PropTypes.object
+  success: PropTypes.object,
+  autoClose: PropTypes.number
 };
 
 export default connect(mapStateToProps)(Toaster);
