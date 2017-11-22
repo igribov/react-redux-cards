@@ -26,6 +26,7 @@ export default function AppStatusReduser(state, action) {
   case CREATE_CARD_FAIL :
   case UPDATE_CARD_FAIL :
   case DELETE_CARD_FAIL :
+    console.log('Server status:', action);
     if (
       // on dev on localhost depends of CORS
       (action.error && action.error.status === 0)
