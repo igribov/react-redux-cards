@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import CardsIndex from './cards_index';
-import ButtonToolbar from '../containers/button_tool_bar';
 import {connect} from 'react-redux';
 import {fetchCards, fetchCardsFromCache, saveCardsToCache} from '../actions';
 import {bindActionCreators} from 'redux';
@@ -40,15 +39,9 @@ class Board extends Component {
   }
 
   render() {
-    const buttons = [
-      {title: 'Create', to: '/card/create'}
-    ];
 
     return (
       <div className="container-fluid">
-        <div className="container-fluid">
-          <ButtonToolbar buttons={buttons}/>
-        </div>
         <CardsIndex cards={this.props.cards} configuration={COLUMNS_CONFIG}/>
       </div>
     );
@@ -59,7 +52,8 @@ Board.propTypes = {
   fetchCardsFromCache: PropTypes.func,
   fetchCards: PropTypes.func,
   saveCardsToCache: PropTypes.func,
-  cards: PropTypes.object
+  cards: PropTypes.object,
+  serverOnline: PropTypes.bool
 };
 
 function mapStateToProps({cards}) {

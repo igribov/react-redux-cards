@@ -45,7 +45,7 @@ Card.propTypes = {
   setActiveViewCard: PropTypes.func,
   card: PropTypes.object,
   openDialog: PropTypes.func,
-  isDragging: PropTypes.func,
+  isDragging: PropTypes.bool,
   connectDragSource: PropTypes.func
 };
 

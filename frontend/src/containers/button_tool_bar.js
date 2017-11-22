@@ -6,12 +6,12 @@ import {LinkContainer} from 'react-router-bootstrap';
 const ButtonToolBar = props => (
   <div className="row">
     {
-      props.buttons.map(buttonConf => (
-        <LinkContainer key={buttonConf.to} to={buttonConf.to}>
+      props.buttons.map(buttons => (
+        <LinkContainer key={buttons.to} to={buttons.to}>
           <Button
-            color={buttonConf.color || 'secondary'}
-            onClick={buttonConf.onClick}>
-            {buttonConf.title}
+            color={buttons.color || 'secondary'}
+            onClick={buttons.onClick}>
+            {buttons.title}
           </Button>
         </LinkContainer>))
     }

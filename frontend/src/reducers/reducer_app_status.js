@@ -26,7 +26,13 @@ export default function AppStatusReduser(state, action) {
   case CREATE_CARD_FAIL :
   case UPDATE_CARD_FAIL :
   case DELETE_CARD_FAIL :
-    if (action.error && action.error.response.status !== 400) {
+    if (
+      // on dev on localhost depends of CORS
+      (action.error && action.error.status === 0)
+      ||
+      // on production
+      (action.error && action.error.response && action.error.response.status !== 400)
+    ) {
       serverOnline = false;
     }
     return {serverOnline, newVersionReady};

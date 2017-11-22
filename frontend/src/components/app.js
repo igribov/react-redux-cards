@@ -9,6 +9,7 @@ import CardCreate from './card_create';
 import NotFound from './not_found';
 import Toaster from './toaster';
 import AppStatus from '../containers/app_status';
+import ButtonToolBar from '../containers/button_tool_bar';
 import CardEdit from './card_edit';
 import ActiveViewCardModal from './active_view_card_modal';
 import Navigation from './navbar';
@@ -58,8 +59,23 @@ class App extends Component {
     });
   }
 
+  renderBoard() {
+
+    const buttons = [
+      {title: 'Create', to: '/card/create'}
+    ];
+    const {serverOnline} = this.props.appStatus;
+    return (
+      <div className="container-fluid">
+        { serverOnline ? <div className="container-fluid"><ButtonToolBar buttons={buttons}/></div> : null }
+        <Board serverOnline={!serverOnline}/>
+      </div>
+    );
+  }
+
   render() {
     const {appStatus} = this.props;
+
     return (
       <div>
         <Toaster />
@@ -74,7 +90,7 @@ class App extends Component {
               <Switch>
                 <Route exact path="/card/create" component={CardCreate}/>
                 <Route exact path="/card/edit/:id" render={(props)=>(<CardEdit {...props} disable={!appStatus.serverOnline}/>)}/>
-                <Route exact path="/" component={Board}/>
+                <Route exact path="/" render={this.renderBoard.bind(this)}/>
                 <Route exact path="/404" component={NotFound}/>
                 <Redirect to="/404"/>
               </Switch>

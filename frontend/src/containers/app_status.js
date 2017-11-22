@@ -28,8 +28,11 @@ const AppStatus = (props) => {
 };
 
 AppStatus.propTypes = {
-  serverOnline: PropTypes.func,
-  newVersionReady: PropTypes.object,
+  serverOnline: PropTypes.bool,
+  newVersionReady: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.bool,
+  ]),
 };
 
 
