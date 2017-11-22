@@ -9,8 +9,8 @@ import { dialogReducer } from 'redux-dialog';
 const rootReducer = combineReducers({
   cards: CardsReduser,
   form: formReducer,
-	dialogReducer: dialogReducer,
-	activeViewCard: ActiveViewCardReduser,
+  dialogReducer: dialogReducer,
+  activeViewCard: ActiveViewCardReduser,
   toaster: ToasterReduser,
   appStatus: AppStatusReduser
 });

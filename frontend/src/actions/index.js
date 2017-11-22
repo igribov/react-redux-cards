@@ -93,7 +93,7 @@ export function createCard(card) {
   };
 }
 
-export function updateCard(card, callback) {
+export function updateCard(card) {
 
   return {
     type: UPDATE_CARD,
@@ -142,8 +142,8 @@ export function saveCardsToCache(cards) {
 
 export function setActiveViewCard(card) {
 
-	return {
-		type: SET_ACTIVE_VIEW_CARD,
-		payload: card
-	};
+  return {
+    type: SET_ACTIVE_VIEW_CARD,
+    payload: card
+  };
 }

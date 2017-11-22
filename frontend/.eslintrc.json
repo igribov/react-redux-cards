@@ -16,6 +16,13 @@
         "react"
     ],
     "rules": {
+        "space-before-blocks": "error",
+        "keyword-spacing": "error",
+        "no-case-declarations": "warn",
+        "no-fallthrough": ["error", { "commentPattern": "break[\\s\\w]*omitted" }],
+        "switch-colon-spacing": [
+          "error", {"after": false, "before": true}
+        ],
         "indent": ["error", 2],
         "linebreak-style": [
             "error",

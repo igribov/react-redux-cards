@@ -1,6 +1,6 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {Button} from 'reactstrap';
-import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
 
 const AppStatus = (props) => {
   if (props.serverOnline === false) {
@@ -17,20 +17,20 @@ const AppStatus = (props) => {
         <span>New version is ready</span>
         <Button
           color="default"
-          onClick={props.newVersionReady.onConfirm}
-          >
+          onClick={props.newVersionReady.onConfirm}>
           Change
         </Button>
       </div>
     );
   }
 
-  return (
-    <div
-      className="invisible">
-    </div>
-  );
-}
+  return <div className="invisible"></div>;
+};
+
+AppStatus.propTypes = {
+  serverOnline: PropTypes.func,
+  newVersionReady: PropTypes.object,
+};
 
 
 export default AppStatus;

@@ -1,4 +1,3 @@
-import axiosService from '../services/axios';
 import axiosMiddleware from 'redux-axios-middleware';
 
 const middlewareConfig =  {

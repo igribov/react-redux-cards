@@ -30,7 +30,7 @@ class CardForm extends Component {
     return this.props[`${methodName}Card`](values)
       .then(action => {
         const {error} = action;
-        if(error && !error.response.ok) {
+        if (error && !error.response.ok) {
           const formErrors = _.reduce(error.response.data, (res, item) => {
             return { ...res, [item.property_path] : item.message };
           }, {});

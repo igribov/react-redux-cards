@@ -4,12 +4,15 @@ const APP_DB_NAME = 'cards-db';
 const DB_CARDS_TABLE = 'cards';
 const APP_DB_VER = 1;
 
+/*eslint no-case-declarations: "off"*/
 export function openDatabase() {
   return idb.open(APP_DB_NAME, APP_DB_VER, (upgradeDb) => {
-    switch(upgradeDb.oldVersion) {
-      case 0:
-        const peopleStore = upgradeDb.createObjectStore(DB_CARDS_TABLE, {keyPath: 'id'});
-        peopleStore.createIndex('status', 'status');
+    switch (upgradeDb.oldVersion) {
+    case 0 :
+      const peopleStore = upgradeDb.createObjectStore(DB_CARDS_TABLE, {keyPath: 'id'});
+      peopleStore.createIndex('status', 'status');
+      // break omitted
+    default :
     }
   });
 }

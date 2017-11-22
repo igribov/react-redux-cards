@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import runtime from 'serviceworker-webpack-plugin/lib/runtime';
-import registerEvents from 'serviceworker-webpack-plugin/lib/browser/registerEvents'
+import registerEvents from 'serviceworker-webpack-plugin/lib/browser/registerEvents';
 import {BrowserRouter, Route, Switch, Redirect} from 'react-router-dom';
 import Board from './board';
 import CardCreate from './card_create';
@@ -37,41 +37,16 @@ class App extends Component {
 
     registerEvents(reg, {
       onInstalled: () => {
-        console.log('onInstalled')
+        console.log('[SW] Installed');
       },
       onUpdateReady: () => {
-        console.log('onUpdateReady : ', reg)
+        console.log('[SW] UpdateReady');
         this.props.onServiceWorkerUpdateReady();
       },
       onUpdated: () => {
         window.location.reload();
       },
     });
-
-    //console.log('addListeners', reg);
-
-    // if (reg.waiting) {
-    //   console.log('waiting', reg.waiting);
-    //   this.props.onServiceWorkerUpdateReady(reg.waiting);
-    //   return;
-    // }
-
-    /*if (reg.installing) {
-      console.log('installing', reg.installing);
-      this._trackInstalling(reg.installing);
-      return;
-    }*/
-
-    // reg.addEventListener('updatefound', () => {
-    //   console.log('updatefound');
-    //   this._trackInstalling(reg.installing);
-    // });
-
-    //let refreshing;
-    /*navigator.serviceWorker.addEventListener('controllerchange', () => {
-      this.props.onServiceWorkerUpdated();
-      window.location.reload();
-    });*/
 
   }
 

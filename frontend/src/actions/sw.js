@@ -3,9 +3,9 @@ import applyUpdate from 'serviceworker-webpack-plugin/lib/browser/applyUpdate';
 
 export function onServiceWorkerUpdateReady() {
 
-	return {
-		type: SERVICE_WORKER_UPDATE_READY,
-		payload: {onConfirm: applyUpdate}
-	};
+  return {
+    type: SERVICE_WORKER_UPDATE_READY,
+    payload: {onConfirm: applyUpdate}
+  };
 
 }

@@ -20,7 +20,7 @@ const CardCreate = (props) => {
       .then(() => props.history.push('/'));
   };
 
-  return(
+  return (
     <div className="container-fluid">
       <div className="container-fluid">
         <ButtonToolbar buttons={buttons}/>

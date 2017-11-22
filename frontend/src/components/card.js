@@ -4,7 +4,7 @@ import {Link} from 'react-router-dom';
 import {openDialog, closeDialog} from 'redux-dialog';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {setActiveViewCard} from'../actions';
+import {setActiveViewCard} from '../actions';
 import PropTypes from 'prop-types';
 
 class Card extends Component {
