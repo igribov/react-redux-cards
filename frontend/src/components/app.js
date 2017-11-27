@@ -53,7 +53,7 @@ class App extends Component {
 
   _trackInstalling(worker) {
     worker.addEventListener('statechange', () => {
-      if (worker.state == 'installed') {
+      if (worker.state === 'installed') {
         this.props.onServiceWorkerUpdateReady(worker);
       }
     });
@@ -67,7 +67,7 @@ class App extends Component {
     const {serverOnline} = this.props.appStatus;
     return (
       <div className="container-fluid">
-        { serverOnline ? <div className="container-fluid"><ButtonToolBar buttons={buttons}/></div> : null }
+        {serverOnline ? <div className="container-fluid"><ButtonToolBar buttons={buttons}/></div> : null}
         <Board serverOnline={!serverOnline}/>
       </div>
     );
@@ -78,7 +78,7 @@ class App extends Component {
 
     return (
       <div>
-        <Toaster />
+        <Toaster/>
         <AppStatus
           serverOnline={appStatus.serverOnline}
           newVersionReady={appStatus.newVersionReady}
@@ -89,7 +89,8 @@ class App extends Component {
             <div className="app container-fluid">
               <Switch>
                 <Route exact path="/card/create" component={CardCreate}/>
-                <Route exact path="/card/edit/:id" render={(props)=>(<CardEdit {...props} disable={!appStatus.serverOnline}/>)}/>
+                <Route exact path="/card/edit/:id"
+                       render={(props) => (<CardEdit {...props} disable={!appStatus.serverOnline}/>)}/>
                 <Route exact path="/" render={this.renderBoard.bind(this)}/>
                 <Route exact path="/404" component={NotFound}/>
                 <Redirect to="/404"/>
@@ -97,7 +98,7 @@ class App extends Component {
             </div>
           </div>
         </BrowserRouter>
-        <ActiveViewCardModal />
+        <ActiveViewCardModal/>
       </div>
     );
   }
