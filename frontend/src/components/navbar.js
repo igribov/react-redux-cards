@@ -22,7 +22,7 @@ class Navigation extends Component {
   render() {
     return (
       <div>
-        <Navbar color="faded" light className="navbar-toggleable-md">
+        <Navbar color="primary" light className="navbar-toggleable-md">
           <LinkContainer to="/">
             <NavbarBrand className="mr-auto">Cards App</NavbarBrand>
           </LinkContainer>
